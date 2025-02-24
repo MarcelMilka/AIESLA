@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-//          findNavController()
             val navController = rememberNavController()
 
             Scaffold(
@@ -40,12 +39,35 @@ class MainActivity : ComponentActivity() {
 
                                 welcomeScreen(
                                     onSignIn = {  },
-                                    onSignUp = {  },
-                                    onContinueWithoutAccount = {  }
+                                    onSignUp = {
+
+                                        navController.navigate(route = Navigation.SignedOut.SignUp.RouteSignUp)
+                                    },
+                                    onContinueWithoutAccount = {
+
+                                        navController.navigate(route = Navigation.SignedIn.RouteSignedIn)
+                                    }
                                 )
                             }
-                        }
 
+                            navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
+
+                                composable<Navigation.SignedOut.SignUp.SignUpScreen> {
+
+                                    Text("sign up screen")
+                                }
+
+                                composable<Navigation.SignedOut.SignUp.SignUpWitEmailAndPasswordScreen> {
+
+                                    Text("sign up with email and password screen")
+                                }
+
+                                composable<Navigation.SignedOut.SignUp.ConfirmYourRegistrationScreen> {
+
+                                    Text("confirm your registration screen")
+                                }
+                            }
+                        }
 
                         navigation<Navigation.SignedIn.RouteSignedIn>(startDestination = Navigation.SignedIn.PodcastsScreen) {
 

@@ -13,20 +13,22 @@ sealed class Navigation {
         @Serializable
         data object WelcomeScreen: SignedOut()
 
-        sealed class RouteSignUp: SignedOut() {
+        sealed class SignUp: SignedOut() {
 
             @Serializable
-            data object SignUpScreen: RouteSignUp()
+            data object RouteSignUp: SignUp()
 
             @Serializable
-            data object SignUpWitEmailAndPasswordScreen: RouteSignUp()
+            data object SignUpScreen: SignUp()
 
             @Serializable
-            data object ConfirmYourRegistrationScreen: RouteSignUp()
+            data object SignUpWitEmailAndPasswordScreen: SignUp()
+
+            @Serializable
+            data object ConfirmYourRegistrationScreen: SignUp()
 
         }
     }
-
 
     sealed class SignedIn: Navigation() {
 
