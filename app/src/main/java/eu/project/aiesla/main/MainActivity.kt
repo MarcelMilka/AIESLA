@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import eu.project.aiesla.main.routeSignedOut.welcomeScreen.ui.welcomeScreen
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +38,11 @@ class MainActivity : ComponentActivity() {
 
                             composable<Navigation.SignedOut.WelcomeScreen> {
 
-                                Text("welcome screen")
+                                welcomeScreen(
+                                    onSignIn = {  },
+                                    onSignUp = {  },
+                                    onContinueWithoutAccount = {  }
+                                )
                             }
                         }
 
