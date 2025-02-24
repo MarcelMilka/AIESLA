@@ -1,4 +1,4 @@
-package eu.project.aiesla.ui.theme
+package eu.project.aiesla.sharedUi.theme
 
 import androidx.compose.ui.graphics.Color
 
