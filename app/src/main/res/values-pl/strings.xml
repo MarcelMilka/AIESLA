@@ -1,0 +1,7 @@
+<resources>
+    <string name="welcome_title">Wygląda na to, że jesteś tutaj pierwszy raz.</string>
+
+    <string name="sign_in">Zaloguj się.</string>
+    <string name="sign_up">Załóż konto.</string>
+    <string name="continue_without_account">Kontynuuj bez konta.</string>
+</resources>

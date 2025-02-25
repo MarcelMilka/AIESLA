@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import eu.project.aiesla.R
 import eu.project.aiesla.sharedUi.sharedElements.button.bigPrimaryAuthenticationOptionButton
 import eu.project.aiesla.sharedUi.sharedElements.button.smallSecondaAuthenticationOptionButton
 import eu.project.aiesla.sharedUi.sharedElements.verticalDividerS
@@ -24,15 +26,27 @@ fun welcomeScreenLowerSegment(
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            bigPrimaryAuthenticationOptionButton("Sign in.") { onSignIn() }
+            bigPrimaryAuthenticationOptionButton(
+                content = stringResource(R.string.sign_in)
+            ) {
+                onSignIn()
+            }
 
             verticalDividerS()
 
-            bigPrimaryAuthenticationOptionButton("Sign up.") { onSignUp() }
+            bigPrimaryAuthenticationOptionButton(
+                content = stringResource(R.string.sign_up)
+            ) {
+                onSignUp()
+            }
 
             verticalDividerS()
 
-            smallSecondaAuthenticationOptionButton("Continue without account") { onContinueWithoutAccount() }
+            smallSecondaAuthenticationOptionButton(
+                content = stringResource(R.string.continue_without_account)
+            ) {
+                onContinueWithoutAccount()
+            }
         }
     )
 }

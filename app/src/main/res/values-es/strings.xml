@@ -1,0 +1,7 @@
+<resources>
+    <string name="welcome_title">Parece que es la primera vez en la aplicación.</string>
+
+    <string name="sign_in">Acceso.</string>
+    <string name="sign_up">Registro.</string>
+    <string name="continue_without_account">Continuar sin una cuenta.</string>
+</resources>

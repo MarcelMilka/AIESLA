@@ -1,0 +1,8 @@
+<resources>
+    <string name="welcome_title">Det virker som det er første gang i appen.</string>
+
+    <string name="sign_in">Logg på.</string>
+    <string name="sign_up">Registrer deg.</string>
+    <string name="continue_without_account">Fortsett uten konto.</string>
+
+</resources>

@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">AIESLA</string>
+    <string name="app_name" translatable="false">AIESLA</string>
+
+    <string name="welcome_title">It seems like it\'s the first time in the app.</string>
+
+    <string name="sign_in">Sign in.</string>
+    <string name="sign_up">Sign up.</string>
+    <string name="continue_without_account">Continue without account.</string>
 </resources>
