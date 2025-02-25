@@ -9,6 +9,7 @@ espressoCore = "3.6.1"
 kotlin = "1.9.20"
 lifecycleRuntimeKtx = "2.8.7"
 composeNavigation = "2.8.7" ## 2.8.0-alpha08
+playServicesAuth = "21.3.0"
 serialization = "1.6.3"
 
 [libraries]
@@ -30,6 +31,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 junit = { module = "junit:junit", version.ref = "junit" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
