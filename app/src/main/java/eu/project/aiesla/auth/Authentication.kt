@@ -9,4 +9,6 @@ interface Authentication {
     suspend fun signInWithEmailAndPassword(email: String, password: String): ResultOfSignInProcess
 
     suspend fun sendSignUpVerificationEmail(): ResultOfVerificationProcess
+
+    suspend fun signOut()
 }

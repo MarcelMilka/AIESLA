@@ -28,6 +28,15 @@ sealed class Navigation {
             data object ConfirmYourRegistrationScreen: SignUp()
 
         }
+
+        sealed class SignIn: SignedOut() {
+
+            @Serializable
+            data object RouteSignIn: SignUp()
+
+            @Serializable
+            data object SignInScreen: SignUp()
+        }
     }
 
     sealed class SignedIn: Navigation() {

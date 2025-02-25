@@ -1,11 +1,13 @@
 package eu.project.aiesla.auth
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.*
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseAuthentication: Authentication {
+class FirebaseAuthentication @Inject constructor(): Authentication {
 
     private val auth: FirebaseAuth = Firebase.auth
 
@@ -21,11 +23,13 @@ class FirebaseAuthentication: Authentication {
 
                     if (task.isSuccessful) {
 
+                        Log.d("Halla!", "signUpWithEmailAndPassword: ok")
                         continuation.resume(value = ResultOfSignUpProcess.Ok)
                     }
 
                     else {
 
+                        Log.d("Halla!", "signUpWithEmailAndPassword: not ok")
                         continuation.resume(value = ResultOfSignUpProcess.UnidentifiedException)
                     }
                 }
@@ -42,11 +46,13 @@ class FirebaseAuthentication: Authentication {
 
                     if (task.isSuccessful) {
 
+                        Log.d("Halla!", "sendSignUpVerificationEmail: ok")
                         continuation.resume(value = ResultOfVerificationProcess.Ok)
                     }
 
                     else {
 
+                        Log.d("Halla!", "sendSignUpVerificationEmail: not ok")
                         continuation.resume(value = ResultOfVerificationProcess.UnidentifiedException)
                     }
                 }
@@ -74,5 +80,10 @@ class FirebaseAuthentication: Authentication {
                     }
                 }
         }
+    }
+
+    override suspend fun signOut() {
+
+        auth.signOut()
     }
 }

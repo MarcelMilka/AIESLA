@@ -6,6 +6,12 @@ plugins {
 
 //  Firebase
     id("com.google.gms.google-services")
+
+//  Kapt
+    id("kotlin-kapt")
+
+//  Hilt
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -67,4 +73,12 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+
+//  Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }
