@@ -1,21 +1,39 @@
 package eu.project.aiesla.auth
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AuthenticationManager @Inject constructor(
     private val firebaseAuthentication: FirebaseAuthentication
 ){
 
+    private var _authenticationState = MutableStateFlow<AuthenticationState>(
+        AuthenticationState.Idle
+    )
+    val authenticationState: StateFlow<AuthenticationState> = _authenticationState
+
+    init {
+
+        when (this.isSignedIn()) {
+            true -> _authenticationState.value =  AuthenticationState.SignedIn
+            false -> _authenticationState.value =  AuthenticationState.SignedOut
+        }
+    }
+
     fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
-    fun signUp(credentials: Credentials) {
+    fun signUp(credentials: EmailAndPasswordCredentials) {
 
         CoroutineScope(Dispatchers.IO)
             .launch {
 
                 val signUpProcess = async {
 
+                    _authenticationState.emit(value = AuthenticationState.SigningUp)
                     firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
                 }
 
@@ -31,23 +49,26 @@ class AuthenticationManager @Inject constructor(
                         when (verificationProcess.await()) {
 
                             ResultOfVerificationProcess.Ok -> {
-                                // navigate to "ConfirmYourRegistrationScreen"
+
+                                _authenticationState.emit(value = AuthenticationState.WaitingForVerification)
                             }
 
                             ResultOfVerificationProcess.UnidentifiedException -> {
-                                // navigate to "AnErrorOccurRedWhileSendingVerificationEmailScreen"
+
+                                _authenticationState.emit(value = AuthenticationState.FailedToSendVerificationEmail)
                             }
                         }
                     }
 
                     ResultOfSignUpProcess.UnidentifiedException -> {
-                        // display "an error occurred, ${error}"
+
+                        _authenticationState.emit(value = AuthenticationState.FailedToSignUp)
                     }
                 }
             }
     }
 
-    fun signIn(credentials: Credentials) {
+    fun signIn(credentials: EmailAndPasswordCredentials) {
 
         CoroutineScope(Dispatchers.IO)
             .launch {

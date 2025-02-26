@@ -1,7 +1,6 @@
 package eu.project.aiesla.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,10 +15,12 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.project.aiesla.auth.AuthenticationManager
-import eu.project.aiesla.main.routeSignedOut.signInScreen.impl.signInScreenImpl
-import eu.project.aiesla.main.routeSignedOut.signUpScreen.impl.signUpScreenImpl
+import eu.project.aiesla.main.routeSignedOut.checkYourEmail.impl.checkYourEmailImpl
+import eu.project.aiesla.main.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
+import eu.project.aiesla.main.routeSignedOut.verifyYourEmail.impl.verifyYourEmailImpl
+import eu.project.aiesla.main.routeSignedOut.signIn.impl.signInImpl
+import eu.project.aiesla.main.routeSignedOut.signUp.impl.signUpImpl
 import eu.project.aiesla.main.routeSignedOut.welcomeScreen.impl.welcomeScreenImpl
-import eu.project.aiesla.main.routeSignedOut.welcomeScreen.ui.welcomeScreen
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 import javax.inject.Inject
 
@@ -55,38 +56,30 @@ class MainActivity : ComponentActivity() {
 
                             navigation<Navigation.SignedOut.RouteSignedOut>(startDestination = Navigation.SignedOut.WelcomeScreen) {
 
-                                welcomeScreenImpl(
-                                    navHostController = navController,
-                                )
+                                welcomeScreenImpl(navHostController = navController)
 
                                 navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
 
-                                    signUpScreenImpl(
+                                    signUpImpl(
                                         navHostController = navController,
-                                        onSignUp = { credentials ->
-
-                                            Log.d("Halla!", "sign up")
-                                            authenticationManager.signUp(credentials = credentials)
-                                        }
+                                        authenticationManager = authenticationManager
                                     )
 
-                                    composable<Navigation.SignedOut.SignUp.SignUpWitEmailAndPasswordScreen> {
-
-                                        Text("sign up with email and password screen")
-                                    }
-
-                                    composable<Navigation.SignedOut.SignUp.ConfirmYourRegistrationScreen> {
-
-                                        Text("confirm your registration screen")
-                                    }
+                                    verifyYourEmailImpl()
                                 }
 
                                 navigation<Navigation.SignedOut.SignIn.RouteSignIn>(startDestination = Navigation.SignedOut.SignIn.SignInScreen) {
 
-                                    signInScreenImpl(
+                                    signInImpl(
                                         navHostController = navController,
-                                        onSignIn = { authenticationManager.signIn(it) }
+                                        authenticationManager = authenticationManager
                                     )
+
+                                    recoverYourPasswordImpl(
+                                        navHostController = navController
+                                    )
+
+                                    checkYourEmailImpl()
                                 }
                             }
 

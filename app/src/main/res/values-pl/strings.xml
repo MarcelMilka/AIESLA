@@ -1,7 +1,11 @@
 <resources>
-    <string name="welcome_title">Wygląda na to, że jesteś tutaj pierwszy raz.</string>
 
     <string name="sign_in">Zaloguj się.</string>
     <string name="sign_up">Załóż konto.</string>
     <string name="continue_without_account">Kontynuuj bez konta.</string>
+    <string name="verify_your_email">E-mail weryfikacyjny został wysłany na Twój adres e-mail.</string>
+    <string name="check_your_email">Instrukcja odzyskiwania hasła została wysłana na Twój adres e-mail.</string>
+    <string name="recover_your_password">Odzyskaj swoje hasło.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Hasło</string>
 </resources>

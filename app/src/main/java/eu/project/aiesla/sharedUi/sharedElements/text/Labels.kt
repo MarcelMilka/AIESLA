@@ -1,10 +1,13 @@
 package eu.project.aiesla.sharedUi.sharedElements.text
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import eu.project.aiesla.sharedUi.theme.White50
 import eu.project.aiesla.sharedUi.theme.quickSandMedium
 
 @Composable
@@ -30,5 +33,20 @@ fun primaryLabel(content: String) {
         fontFamily = quickSandMedium,
         textAlign = TextAlign.Center,
         softWrap = true
+    )
+}
+
+
+@Composable
+fun primaryCenteredLabel50(content: String) {
+
+    Text(
+        text = content,
+        color = White50,
+        fontSize = 16.sp,
+        fontFamily = quickSandMedium,
+        textAlign = TextAlign.Center,
+        softWrap = true,
+        modifier = Modifier.fillMaxWidth()
     )
 }

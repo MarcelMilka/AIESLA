@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">AIESLA</string>
 
-    <string name="welcome_title">It seems like it\'s the first time in the app.</string>
-
     <string name="sign_in">Sign in.</string>
     <string name="sign_up">Sign up.</string>
     <string name="continue_without_account">Continue without account.</string>
+    <string name="verify_your_email">A verification email has been sent to your email address.</string>
+    <string name="check_your_email">A password recovery instruction has been sent to your email.</string>
+    <string name="recover_your_password">Recover your password.</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
 </resources>

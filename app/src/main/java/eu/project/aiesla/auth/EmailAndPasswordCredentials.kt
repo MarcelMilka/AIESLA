@@ -1,6 +1,6 @@
 package eu.project.aiesla.auth
 
-data class Credentials(
+data class EmailAndPasswordCredentials(
     val email: String,
     val password: String
 )

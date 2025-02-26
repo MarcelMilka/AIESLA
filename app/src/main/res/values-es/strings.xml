@@ -1,7 +1,14 @@
 <resources>
-    <string name="welcome_title">Parece que es la primera vez en la aplicación.</string>
 
     <string name="sign_in">Acceso.</string>
     <string name="sign_up">Registro.</string>
     <string name="continue_without_account">Continuar sin una cuenta.</string>
+    <string name="verify_your_email">Se ha enviado un correo de verificación a tu dirección de correo electrónico.
+    </string>
+    <string name="check_your_email">Se ha enviado una instrucción de recuperación de contraseña a tu correo
+        electrónico.
+    </string>
+    <string name="recover_your_password">Recupera tu contraseña.</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
 </resources>
