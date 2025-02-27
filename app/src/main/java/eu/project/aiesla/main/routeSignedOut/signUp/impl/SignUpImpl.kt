@@ -23,7 +23,13 @@ fun NavGraphBuilder.signUpImpl(
 //                )
 
                 navHostController.navigate(
-                    route = Navigation.SignedOut.SignUp.VerifyYourEmailScreen
+                    route = Navigation.SignedOut.SignUp.VerifyYourEmailScreen,
+                    builder = {
+                        this.popUpTo(
+                            route = Navigation.SignedOut.WelcomeScreen,
+                            popUpToBuilder = { inclusive = false }
+                        )
+                    }
                 )
             },
         )

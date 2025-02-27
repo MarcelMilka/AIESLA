@@ -51,7 +51,7 @@ fun recoverYourPasswordScreen(
 
                 content = {
 
-                    // email text field, password text field, password requirements, button sign up
+                    // email text field, button recover your password
                     Column(
                         modifier = Modifier
                             .width(IntrinsicSize.Max)
@@ -78,6 +78,7 @@ fun recoverYourPasswordScreen(
 
                                     primaryAuthenticationTextButton(
                                         content = stringResource(R.string.recover_your_password),
+                                        testTag = "button 'Recover your password.'",
                                         onClick = {
 
                                             onRecoverPassword(

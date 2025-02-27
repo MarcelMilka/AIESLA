@@ -116,6 +116,7 @@ fun signUpScreen(
 
                                     primaryAuthenticationTextButton(
                                         content = stringResource(R.string.sign_up),
+                                        testTag = "button 'Sign up.'",
                                         onClick = {
 
                                             onSignUp(

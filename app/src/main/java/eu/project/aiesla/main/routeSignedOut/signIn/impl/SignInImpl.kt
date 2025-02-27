@@ -15,7 +15,18 @@ fun NavGraphBuilder.signInImpl(
     composable<Navigation.SignedOut.SignIn.SignInScreen> {
 
         signInScreen(
-            onSignIn = {  },
+            onSignIn = {
+
+                navHostController.navigate(
+                    route = Navigation.SignedIn.RouteSignedIn,
+                    builder = {
+                        this.popUpTo(
+                            route = Navigation.SignedOut.RouteSignedOut,
+                            popUpToBuilder = { inclusive = true }
+                        )
+                    }
+                )
+            },
             onRecoverPassword = {
 
                 navHostController.navigate(

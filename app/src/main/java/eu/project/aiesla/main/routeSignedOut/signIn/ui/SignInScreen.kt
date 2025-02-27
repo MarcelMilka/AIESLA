@@ -94,6 +94,7 @@ fun signInScreen(
 
                                     primaryAuthenticationTextButton(
                                         content = stringResource(R.string.sign_in),
+                                        testTag = "button 'Sign in.'",
                                         onClick = {
 
                                             onSignIn(
@@ -112,6 +113,7 @@ fun signInScreen(
                     // recover your password
                     secondaryAuthenticationTextButton(
                         content = stringResource(R.string.recover_your_password),
+                        testTag = "button 'Recover your password.'",
                         onClick = {onRecoverPassword()}
                     )
                 }

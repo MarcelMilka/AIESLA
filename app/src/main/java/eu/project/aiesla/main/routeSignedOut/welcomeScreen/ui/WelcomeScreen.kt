@@ -63,6 +63,7 @@ fun welcomeScreen(
                             // sign in
                             primaryAuthenticationTextButton(
                                 content = stringResource(R.string.sign_in),
+                                testTag = "button 'Sign in.'",
                                 onClick = {onSignIn()}
                             )
 
@@ -71,6 +72,7 @@ fun welcomeScreen(
                             // sign up
                             primaryAuthenticationTextButton(
                                 content = stringResource(R.string.sign_up),
+                                testTag = "button 'Sign up.'",
                                 onClick = {onSignUp()}
                             )
                         }
@@ -79,6 +81,7 @@ fun welcomeScreen(
                     // continue without account
                     secondaryAuthenticationTextButton(
                         content = stringResource(R.string.continue_without_account),
+                        testTag = "button 'Continue without account.'",
                         onClick = {onContinueWithoutAccount()}
                     )
                 }

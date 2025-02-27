@@ -16,7 +16,13 @@ fun NavGraphBuilder.recoverYourPasswordImpl(
             onRecoverPassword = {
 
                 navHostController.navigate(
-                    route = Navigation.SignedOut.SignIn.CheckYourEmailScreen
+                    route = Navigation.SignedOut.SignIn.CheckYourEmailScreen,
+                    builder = {
+                        this.popUpTo(
+                            route = Navigation.SignedOut.WelcomeScreen,
+                            popUpToBuilder = { inclusive = false }
+                        )
+                    }
                 )
             }
         )
