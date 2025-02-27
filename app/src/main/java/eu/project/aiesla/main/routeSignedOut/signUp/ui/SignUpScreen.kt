@@ -32,8 +32,8 @@ fun signUpScreen(
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
-    val emailFocusRequester = rememberSaveable { FocusRequester() }
-    val passwordFocusRequester = rememberSaveable { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
 
     var allCharactersCount by rememberSaveable { mutableStateOf(0) }
     var uppercaseCount by rememberSaveable { mutableStateOf(0) }

@@ -58,16 +58,6 @@ class MainActivity : ComponentActivity() {
 
                                 welcomeScreenImpl(navHostController = navController)
 
-                                navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
-
-                                    signUpImpl(
-                                        navHostController = navController,
-                                        authenticationManager = authenticationManager
-                                    )
-
-                                    verifyYourEmailImpl()
-                                }
-
                                 navigation<Navigation.SignedOut.SignIn.RouteSignIn>(startDestination = Navigation.SignedOut.SignIn.SignInScreen) {
 
                                     signInImpl(
@@ -80,6 +70,16 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                     checkYourEmailImpl()
+                                }
+
+                                navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
+
+                                    signUpImpl(
+                                        navHostController = navController,
+                                        authenticationManager = authenticationManager
+                                    )
+
+                                    verifyYourEmailImpl()
                                 }
                             }
 
