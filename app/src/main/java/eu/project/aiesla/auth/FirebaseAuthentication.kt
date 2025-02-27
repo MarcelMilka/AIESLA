@@ -82,6 +82,26 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
         }
     }
 
+    override suspend fun sendPasswordRecoveryEmail(email: EmailCredential): ResultOfPasswordRecoveryProcess {
+
+        return suspendCoroutine { continuation ->
+
+            auth.sendPasswordResetEmail(email.email)
+                .addOnCompleteListener { task ->
+
+                    if (task.isSuccessful) {
+
+                        continuation.resume(value = ResultOfPasswordRecoveryProcess.Ok)
+                    }
+
+                    else {
+
+                        continuation.resume(value = ResultOfPasswordRecoveryProcess.UnidentifiedException)
+                    }
+                }
+        }
+    }
+
     override suspend fun signOut() {
 
         auth.signOut()

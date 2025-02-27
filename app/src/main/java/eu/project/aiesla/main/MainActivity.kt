@@ -66,7 +66,8 @@ class MainActivity : ComponentActivity() {
                                     )
 
                                     recoverYourPasswordImpl(
-                                        navHostController = navController
+                                        navHostController = navController,
+                                        authenticationManager = authenticationManager
                                     )
 
                                     checkYourEmailImpl()

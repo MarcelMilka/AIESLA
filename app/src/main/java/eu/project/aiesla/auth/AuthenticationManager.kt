@@ -92,6 +92,21 @@ class AuthenticationManager @Inject constructor(
             }
     }
 
+    fun sendPasswordRecoveryEmail(email: EmailCredential) {
+
+        CoroutineScope(Dispatchers.IO)
+            .launch {
+
+                val resultOfPasswordRecoveryProcess =
+                    firebaseAuthentication.sendPasswordRecoveryEmail(email = email)
+
+                when (resultOfPasswordRecoveryProcess) {
+                    ResultOfPasswordRecoveryProcess.Ok -> {}
+                    ResultOfPasswordRecoveryProcess.UnidentifiedException -> {}
+                }
+            }
+    }
+
     fun signOut() {
 
         CoroutineScope(Dispatchers.IO).launch {

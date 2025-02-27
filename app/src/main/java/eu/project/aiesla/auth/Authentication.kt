@@ -10,5 +10,7 @@ interface Authentication {
 
     suspend fun sendSignUpVerificationEmail(): ResultOfVerificationProcess
 
+    suspend fun sendPasswordRecoveryEmail(email: EmailCredential): ResultOfPasswordRecoveryProcess
+
     suspend fun signOut()
 }
