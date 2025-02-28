@@ -6,7 +6,6 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +16,10 @@ class ProductionAuthenticationManager @Inject constructor(
 ): AuthenticationManager {
 
     private var _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
-    override val signInProcess: StateFlow<SignInProcess> = _signInProcess.asStateFlow()
+    override val signInProcess = _signInProcess.asStateFlow()
+
+    private var _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
+    override val signUpProcess = _signUpProcess.asStateFlow()
 
     override fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
@@ -57,7 +59,9 @@ class ProductionAuthenticationManager @Inject constructor(
 
                 val signUpProcess = async {
 
+                    _signUpProcess.emit(value = SignUpProcess.Pending)
                     firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
+                    ResultOfSignUpProcess.Ok
                 }
 
                 when (signUpProcess.await()) {
@@ -73,16 +77,27 @@ class ProductionAuthenticationManager @Inject constructor(
 
                             ResultOfVerificationProcess.Ok -> {
 
+                                _signUpProcess.emit(value = SignUpProcess.Successful)
                             }
 
                             ResultOfVerificationProcess.UnidentifiedException -> {
 
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.EXEMPLARY_CAUSE
+                                    )
+                                )
                             }
                         }
                     }
 
                     ResultOfSignUpProcess.UnidentifiedException -> {
 
+                        _signUpProcess.emit(
+                            value = SignUpProcess.Unsuccessful(
+                                cause = UnsuccessfulSignUpProcessCause.EXEMPLARY_CAUSE
+                            )
+                        )
                     }
                 }
             }
