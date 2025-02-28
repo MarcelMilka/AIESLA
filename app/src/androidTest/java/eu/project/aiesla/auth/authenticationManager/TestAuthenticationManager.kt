@@ -3,6 +3,7 @@ package eu.project.aiesla.auth.authenticationManager
 import android.util.Log
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.auth.results.SignUpProcess
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,11 @@ class TestAuthenticationManager: AuthenticationManager {
     private val _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
     override val signUpProcess: StateFlow<SignUpProcess>
         get() = _signUpProcess
+
+    private val _passwordRecoveryProcess = MutableStateFlow<PasswordRecoveryProcess>(PasswordRecoveryProcess.Idle)
+    override val passwordRecoveryProcess: StateFlow<PasswordRecoveryProcess>
+        get() = _passwordRecoveryProcess
+
 
     override fun isSignedIn(): Boolean = false
 
@@ -43,7 +49,15 @@ class TestAuthenticationManager: AuthenticationManager {
             }
     }
 
-    override fun sendPasswordRecoveryEmail(email: EmailCredential) {}
+    override fun sendPasswordRecoveryEmail(email: EmailCredential) {
+
+        Log.d("Halla!", "sendPasswordRecoveryEmail: ")
+
+        CoroutineScope(Dispatchers.Default)
+            .launch {
+                _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
+            }
+    }
 
     override fun signOut() {}
 }

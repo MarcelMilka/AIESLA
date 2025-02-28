@@ -6,6 +6,7 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,6 +21,10 @@ class ProductionAuthenticationManager @Inject constructor(
 
     private var _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
     override val signUpProcess = _signUpProcess.asStateFlow()
+
+    private var _passwordRecoveryProcess = MutableStateFlow<PasswordRecoveryProcess>(PasswordRecoveryProcess.Idle)
+    override val passwordRecoveryProcess = _passwordRecoveryProcess.asStateFlow()
+
 
     override fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
@@ -108,12 +113,23 @@ class ProductionAuthenticationManager @Inject constructor(
         CoroutineScope(Dispatchers.IO)
             .launch {
 
+                _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Pending)
                 val resultOfPasswordRecoveryProcess =
                     firebaseAuthentication.sendPasswordRecoveryEmail(email = email)
 
                 when (resultOfPasswordRecoveryProcess) {
-                    ResultOfPasswordRecoveryProcess.Ok -> {}
-                    ResultOfPasswordRecoveryProcess.UnidentifiedException -> {}
+                    ResultOfPasswordRecoveryProcess.Ok -> {
+
+                        _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
+                    }
+                    ResultOfPasswordRecoveryProcess.UnidentifiedException -> {
+
+                        _passwordRecoveryProcess.emit(
+                            value = PasswordRecoveryProcess.Unsuccessful(
+                                cause = UnsuccessfulPasswordRecoveryCause.EXEMPLARY_CAUSE
+                            )
+                        )
+                    }
                 }
             }
     }
