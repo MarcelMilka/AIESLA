@@ -1,4 +1,4 @@
-package eu.project.aiesla.auth
+package eu.project.aiesla.auth.results
 
 enum class ResultOfSignUpProcess {
     Ok,

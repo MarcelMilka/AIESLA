@@ -13,13 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
-import eu.project.aiesla.auth.EmailAndPasswordCredentials
+import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.theme.DarkBackground
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import eu.project.aiesla.R
-import eu.project.aiesla.auth.PasswordRequirements
+import eu.project.aiesla.auth.credentials.PasswordRequirements
 import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationTextButton
 import eu.project.aiesla.sharedUi.sharedElements.text.primaryCenteredLabel50
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField

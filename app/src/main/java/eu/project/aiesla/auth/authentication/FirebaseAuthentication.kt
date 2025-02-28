@@ -1,8 +1,13 @@
-package eu.project.aiesla.auth
+package eu.project.aiesla.auth.authentication
 
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.*
+import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
+import eu.project.aiesla.auth.results.ResultOfSignInProcess
+import eu.project.aiesla.auth.results.ResultOfSignUpProcess
+import eu.project.aiesla.auth.results.ResultOfVerificationProcess
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

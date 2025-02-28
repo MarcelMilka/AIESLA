@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import eu.project.aiesla.auth.AuthenticationManager
+import eu.project.aiesla.auth.authenticationManager.AuthenticationManagerProduction
 import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.checkYourEmailImpl
 import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.signIn.impl.signInImpl
@@ -21,7 +21,7 @@ import eu.project.aiesla.sharedConstants.navigation.Navigation
 
 @Composable
 fun core(
-    authenticationManager: AuthenticationManager
+    authenticationManager: AuthenticationManagerProduction
 ) {
 
     val navController = rememberNavController()

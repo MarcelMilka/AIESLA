@@ -1,38 +1,33 @@
-package eu.project.aiesla.auth
+package eu.project.aiesla.auth.authenticationManager
 
+import eu.project.aiesla.auth.authentication.FirebaseAuthentication
+import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
+import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthenticationManager @Inject constructor(
+class AuthenticationManagerProduction @Inject constructor(
     private val firebaseAuthentication: FirebaseAuthentication
-){
+): AuthenticationManager {
 
-    private var _authenticationState = MutableStateFlow<AuthenticationState>(
-        AuthenticationState.Idle
-    )
-    val authenticationState: StateFlow<AuthenticationState> = _authenticationState
+    private var _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
+    val signInProcess = _signInProcess.asStateFlow()
 
-    init {
+    override fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
-        when (this.isSignedIn()) {
-            true -> _authenticationState.value =  AuthenticationState.SignedIn
-            false -> _authenticationState.value =  AuthenticationState.SignedOut
-        }
-    }
-
-    fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
-
-    fun signIn(credentials: EmailAndPasswordCredentials) {
+    override fun signIn(credentials: EmailAndPasswordCredentials) {
 
         CoroutineScope(Dispatchers.IO)
             .launch {
 
                 val signInProcess = async {
 
+                    _signInProcess.emit(value = SignInProcess.Pending)
                     firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
                 }
 
@@ -40,24 +35,27 @@ class AuthenticationManager @Inject constructor(
 
                     ResultOfSignInProcess.Ok -> {
 
-                        // navigate to SignedInRoute
+                        _signInProcess.emit(value = SignInProcess.Successful)
                     }
                     ResultOfSignInProcess.UnidentifiedException -> {
 
-                        // display information "something went wrong"
+                        _signInProcess.emit(
+                            value = SignInProcess.Unsuccessful(
+                                cause = UnsuccessfulSignInProcessCause.EXEMPLARY_CAUSE
+                            )
+                        )
                     }
                 }
             }
     }
 
-    fun signUp(credentials: EmailAndPasswordCredentials) {
+    override fun signUp(credentials: EmailAndPasswordCredentials) {
 
         CoroutineScope(Dispatchers.IO)
             .launch {
 
                 val signUpProcess = async {
 
-                    _authenticationState.emit(value = AuthenticationState.SigningUp)
                     firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
                 }
 
@@ -74,25 +72,22 @@ class AuthenticationManager @Inject constructor(
 
                             ResultOfVerificationProcess.Ok -> {
 
-                                _authenticationState.emit(value = AuthenticationState.WaitingForVerification)
                             }
 
                             ResultOfVerificationProcess.UnidentifiedException -> {
 
-                                _authenticationState.emit(value = AuthenticationState.FailedToSendVerificationEmail)
                             }
                         }
                     }
 
                     ResultOfSignUpProcess.UnidentifiedException -> {
 
-                        _authenticationState.emit(value = AuthenticationState.FailedToSignUp)
                     }
                 }
             }
     }
 
-    fun sendPasswordRecoveryEmail(email: EmailCredential) {
+    override fun sendPasswordRecoveryEmail(email: EmailCredential) {
 
         CoroutineScope(Dispatchers.IO)
             .launch {
@@ -107,7 +102,7 @@ class AuthenticationManager @Inject constructor(
             }
     }
 
-    fun signOut() {
+    override fun signOut() {
 
         CoroutineScope(Dispatchers.IO).launch {
 

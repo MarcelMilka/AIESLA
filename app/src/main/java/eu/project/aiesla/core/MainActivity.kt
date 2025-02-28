@@ -5,13 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
-import eu.project.aiesla.auth.AuthenticationManager
+import eu.project.aiesla.auth.authenticationManager.AuthenticationManagerProduction
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject lateinit var authenticationManager: AuthenticationManager
+    @Inject lateinit var authenticationManager: AuthenticationManagerProduction
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

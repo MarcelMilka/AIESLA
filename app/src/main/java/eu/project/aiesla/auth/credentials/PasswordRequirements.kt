@@ -1,4 +1,4 @@
-package eu.project.aiesla.auth
+package eu.project.aiesla.auth.credentials
 
 object PasswordRequirements {
     const val MIN_CHARACTERS_COUNT = 8

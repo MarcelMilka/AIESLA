@@ -1,4 +1,10 @@
-package eu.project.aiesla.auth
+package eu.project.aiesla.auth.authentication
+
+import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
+import eu.project.aiesla.auth.results.ResultOfSignInProcess
+import eu.project.aiesla.auth.results.ResultOfSignUpProcess
+import eu.project.aiesla.auth.results.ResultOfVerificationProcess
 
 interface Authentication {
 
