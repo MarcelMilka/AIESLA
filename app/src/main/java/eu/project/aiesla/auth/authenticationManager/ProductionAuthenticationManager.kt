@@ -1,22 +1,23 @@
 package eu.project.aiesla.auth.authenticationManager
 
-import eu.project.aiesla.auth.authentication.FirebaseAuthentication
+import eu.project.aiesla.auth.authentication.Authentication
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthenticationManagerProduction @Inject constructor(
-    private val firebaseAuthentication: FirebaseAuthentication
+class ProductionAuthenticationManager @Inject constructor(
+    private val firebaseAuthentication: Authentication
 ): AuthenticationManager {
 
     private var _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
-    val signInProcess = _signInProcess.asStateFlow()
+    override val signInProcess: StateFlow<SignInProcess> = _signInProcess.asStateFlow()
 
     override fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 

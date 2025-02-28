@@ -2,23 +2,19 @@ package eu.project.aiesla.core.routeSignedOut.signIn.impl
 
 import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import eu.project.aiesla.auth.authenticationManager.AuthenticationManagerProduction
+import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.core.routeSignedOut.signIn.ui.signInScreen
 import eu.project.aiesla.sharedConstants.navigation.Navigation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 fun NavGraphBuilder.signInImpl(
     navHostController: NavHostController,
-    authenticationManager: AuthenticationManagerProduction,
+    authenticationManager: AuthenticationManager,
 ) {
 
     composable<Navigation.SignedOut.SignIn.SignInScreen> {

@@ -2,14 +2,33 @@ package eu.project.aiesla.navigation.routeSignedOut
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.core.MainActivity
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
+@HiltAndroidTest
 class RouteSignUpTest {
 
-    @get:Rule val ctr = createAndroidComposeRule<MainActivity>()
+    @get:Rule(order = 0)
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val ctr = createAndroidComposeRule<MainActivity>()
+
+    @Inject
+    lateinit var authenticationManager: AuthenticationManager
+
+    @Before
+    fun before() {
+
+        hiltRule.inject()
+    }
 
     @Test fun `WelcomeScreen to SignUpScreen and navigate back`() = runTest {
 
