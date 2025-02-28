@@ -26,6 +26,30 @@ class AuthenticationManager @Inject constructor(
 
     fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
+    fun signIn(credentials: EmailAndPasswordCredentials) {
+
+        CoroutineScope(Dispatchers.IO)
+            .launch {
+
+                val signInProcess = async {
+
+                    firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
+                }
+
+                when (signInProcess.await()) {
+
+                    ResultOfSignInProcess.Ok -> {
+
+                        // navigate to SignedInRoute
+                    }
+                    ResultOfSignInProcess.UnidentifiedException -> {
+
+                        // display information "something went wrong"
+                    }
+                }
+            }
+    }
+
     fun signUp(credentials: EmailAndPasswordCredentials) {
 
         CoroutineScope(Dispatchers.IO)
@@ -63,30 +87,6 @@ class AuthenticationManager @Inject constructor(
                     ResultOfSignUpProcess.UnidentifiedException -> {
 
                         _authenticationState.emit(value = AuthenticationState.FailedToSignUp)
-                    }
-                }
-            }
-    }
-
-    fun signIn(credentials: EmailAndPasswordCredentials) {
-
-        CoroutineScope(Dispatchers.IO)
-            .launch {
-
-                val signInProcess = async {
-
-                    firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
-                }
-
-                when (signInProcess.await()) {
-
-                    ResultOfSignInProcess.Ok -> {
-
-                        // navigate to SignedInRoute
-                    }
-                    ResultOfSignInProcess.UnidentifiedException -> {
-
-                        // display information "something went wrong"
                     }
                 }
             }

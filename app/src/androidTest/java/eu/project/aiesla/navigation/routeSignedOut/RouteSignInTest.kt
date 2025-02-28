@@ -2,7 +2,7 @@ package eu.project.aiesla.navigation.routeSignedOut
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import eu.project.aiesla.main.MainActivity
+import eu.project.aiesla.core.MainActivity
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
