@@ -28,16 +28,16 @@ sealed class Navigation {
         sealed class SignIn: SignedOut() {
 
             @Serializable
-            data object RouteSignIn: SignUp()
+            data object RouteSignIn: SignIn()
 
             @Serializable
-            data object SignInScreen: SignUp()
+            data object SignInScreen: SignIn()
 
             @Serializable
-            data object RecoverYourPasswordScreen: SignUp()
+            data object RecoverYourPasswordScreen: SignIn()
 
             @Serializable
-            data object CheckYourEmailScreen: SignUp()
+            data object CheckYourEmailScreen: SignIn()
         }
     }
 

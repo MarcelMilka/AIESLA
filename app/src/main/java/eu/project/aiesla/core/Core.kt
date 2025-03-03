@@ -24,7 +24,7 @@ fun core(
     authenticationManager: AuthenticationManager
 ) {
 
-    val navController = rememberNavController()
+    val navHostController = rememberNavController()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -33,7 +33,7 @@ fun core(
         content = {
 
             NavHost(
-                navController = navController,
+                navController = navHostController,
                 startDestination =
                     when (authenticationManager.isSignedIn()) {
 
@@ -44,17 +44,17 @@ fun core(
 
                     navigation<Navigation.SignedOut.RouteSignedOut>(startDestination = Navigation.SignedOut.WelcomeScreen) {
 
-                        welcomeScreenImpl(navHostController = navController)
+                        welcomeScreenImpl(navHostController = navHostController)
 
                         navigation<Navigation.SignedOut.SignIn.RouteSignIn>(startDestination = Navigation.SignedOut.SignIn.SignInScreen) {
 
                             signInImpl(
-                                navHostController = navController,
+                                navHostController = navHostController,
                                 authenticationManager = authenticationManager
                             )
 
                             recoverYourPasswordImpl(
-                                navHostController = navController,
+                                navHostController = navHostController,
                                 authenticationManager = authenticationManager
                             )
 
@@ -64,7 +64,7 @@ fun core(
                         navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
 
                             signUpImpl(
-                                navHostController = navController,
+                                navHostController = navHostController,
                                 authenticationManager = authenticationManager
                             )
 
