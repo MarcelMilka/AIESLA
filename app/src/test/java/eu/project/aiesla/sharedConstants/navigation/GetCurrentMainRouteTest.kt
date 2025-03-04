@@ -33,25 +33,25 @@ class GetCurrentMainRouteTest {
     }
 
     @Test
-    fun `getCurrentMainRoute returns RouteIsUnknown when route is unknown`() {
+    fun `getCurrentMainRoute returns Error when route is unknown`() {
 
         val navDestination: NavDestination = mockk()
         every { navDestination.route } returns "invalid.route.notMatching"
 
         assertEquals(
-            CurrentMainRoute.RouteIsUnknown,
+            CurrentMainRoute.Error,
             navDestination.getCurrentMainRoute()
         )
     }
 
     @Test
-    fun `getCurrentMainRoute returns RouteIsNull when route is null`() {
+    fun `getCurrentMainRoute returns Error when route is null`() {
 
         val navDestination: NavDestination = mockk()
         every { navDestination.route } returns null
 
         assertEquals(
-            CurrentMainRoute.RouteIsNull,
+            CurrentMainRoute.Error,
             navDestination.getCurrentMainRoute()
         )
     }

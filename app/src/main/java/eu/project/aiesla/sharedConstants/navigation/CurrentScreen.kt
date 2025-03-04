@@ -17,16 +17,17 @@ enum class CurrentScreen {
         CheckYourEmailScreen,
 
     // signed in
-    PodcastsScreen,
+    HomeScreen,
+
+    StudyScreen,
 
     // in case something goes wrong
-    RouteIsUnknown,
-    RouteIsNull
+    Error
 }
 
 fun NavDestination.getCurrentScreen(): CurrentScreen {
 
-    val route = this.route ?: return CurrentScreen.RouteIsNull
+    val route = this.route ?: return CurrentScreen.Error
 
     return when {
 
@@ -43,8 +44,14 @@ fun NavDestination.getCurrentScreen(): CurrentScreen {
             route.contains(Navigation.SignedOut.SignUp.VerifyYourEmailScreen::class.java.simpleName) -> CurrentScreen.VerifyYourEmailScreen
 
         // signed in
-        route.contains(Navigation.SignedIn.PodcastsScreen::class.java.simpleName) -> CurrentScreen.PodcastsScreen
 
-        else -> CurrentScreen.RouteIsUnknown
+            // home
+            route.contains(Navigation.SignedIn.Home.HomeScreen::class.java.simpleName) -> CurrentScreen.HomeScreen
+
+            // study
+            route.contains(Navigation.SignedIn.Study.StudyScreen::class.java.simpleName) -> CurrentScreen.StudyScreen
+
+
+        else -> CurrentScreen.Error
     }
 }

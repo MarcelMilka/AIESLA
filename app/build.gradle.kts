@@ -89,6 +89,7 @@ dependencies {
     kaptTest(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     kaptAndroidTest(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 //  MockK
     testImplementation(libs.mockk)

@@ -46,7 +46,22 @@ sealed class Navigation {
         @Serializable
         data object RouteSignedIn: SignedIn()
 
-        @Serializable
-        data object PodcastsScreen: SignedIn()
+        sealed class Home: SignedIn() {
+
+            @Serializable
+            data object RouteHome: Home()
+
+            @Serializable
+            data object HomeScreen: Home()
+        }
+
+        sealed class Study: SignedIn() {
+
+            @Serializable
+            data object RouteStudy: Study()
+
+            @Serializable
+            data object StudyScreen: Study()
+        }
     }
 }

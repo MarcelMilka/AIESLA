@@ -51,24 +51,31 @@ class GetCurrentScreenTest {
     }
 
     @Test
-    fun `getCurrentScreen properly detects PodcastsScreen route`() {
+    fun `getCurrentScreen properly detects HomeScreen route`() {
         val navDestination: NavDestination = mockk()
-        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.PodcastsScreen"
-        assertEquals(CurrentScreen.PodcastsScreen, navDestination.getCurrentScreen())
+        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Home.HomeScreen"
+        assertEquals(CurrentScreen.HomeScreen, navDestination.getCurrentScreen())
     }
 
     @Test
-    fun `getCurrentScreen returns RouteIsUnknown when route is unknown`() {
+    fun `getCurrentScreen properly detects StudyScreen route`() {
+        val navDestination: NavDestination = mockk()
+        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Study.StudyScreen"
+        assertEquals(CurrentScreen.StudyScreen, navDestination.getCurrentScreen())
+    }
+
+    @Test
+    fun `getCurrentScreen returns Error when route is unknown`() {
         val navDestination: NavDestination = mockk()
         every { navDestination.route } returns "invalid.route.notMatching"
-        assertEquals(CurrentScreen.RouteIsUnknown, navDestination.getCurrentScreen())
+        assertEquals(CurrentScreen.Error, navDestination.getCurrentScreen())
     }
 
     @Test
-    fun `getCurrentScreen returns RouteIsNull when route is null`() {
+    fun `getCurrentScreen returns Error when route is null`() {
         val navDestination: NavDestination = mockk()
         every { navDestination.route } returns null
-        assertEquals(CurrentScreen.RouteIsNull, navDestination.getCurrentScreen())
+        assertEquals(CurrentScreen.Error, navDestination.getCurrentScreen())
     }
 }
 

@@ -11,12 +11,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
+import eu.project.aiesla.core.routeSignedIn.home.impl.homeImpl
+import eu.project.aiesla.core.routeSignedIn.study.impl.studyImpl
 import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.checkYourEmailImpl
 import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.signIn.impl.signInImpl
 import eu.project.aiesla.core.routeSignedOut.signUp.impl.signUpImpl
 import eu.project.aiesla.core.routeSignedOut.verifyYourEmail.impl.verifyYourEmailImpl
 import eu.project.aiesla.core.routeSignedOut.welcomeScreen.impl.welcomeScreenImpl
+import eu.project.aiesla.core.screenDock.impl.screenDockImpl
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
 @Composable
@@ -29,7 +32,10 @@ fun core(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {  },
-        bottomBar = {  },
+        bottomBar = {
+
+            screenDockImpl(navHostController = navHostController)
+        },
         content = {
 
             NavHost(
@@ -72,13 +78,16 @@ fun core(
                         }
                     }
 
-                    navigation<Navigation.SignedIn.RouteSignedIn>(startDestination = Navigation.SignedIn.PodcastsScreen) {
+                    navigation<Navigation.SignedIn.RouteSignedIn>(startDestination = Navigation.SignedIn.Home.RouteHome) {
 
-                        composable<Navigation.SignedIn.PodcastsScreen> {
+                        navigation<Navigation.SignedIn.Home.RouteHome>(startDestination = Navigation.SignedIn.Home.HomeScreen) {
 
-                            Text("podcasts screen")
+                            homeImpl()
+                        }
 
-                            Button(onClick = {authenticationManager.signOut()}, content = {})
+                        navigation<Navigation.SignedIn.Study.RouteStudy>(startDestination = Navigation.SignedIn.Study.StudyScreen) {
+
+                            studyImpl()
                         }
                     }
                 }

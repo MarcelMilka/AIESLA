@@ -2,6 +2,7 @@ package eu.project.aiesla.core.screenDock.vm
 
 import eu.project.aiesla.core.screenDock.model.ScreenDockViewState
 import eu.project.aiesla.sharedConstants.navigation.CurrentMainRoute
+import eu.project.aiesla.sharedConstants.navigation.CurrentScreen
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -56,26 +57,18 @@ class ScreenDockViewModelTest {
         )
 
         //
-        screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn)
+        screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
         advanceUntilIdle()
         assertEquals(
-            ScreenDockViewState.Visible,
+            ScreenDockViewState.Visible(CurrentScreen.HomeScreen),
             screenDockViewModel.screenDockViewState.value
         )
 
         //
-        screenDockViewModel.updateViewState(CurrentMainRoute.RouteIsUnknown)
+        screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.WelcomeScreen)
         advanceUntilIdle()
         assertEquals(
-            ScreenDockViewState.Visible,
-            screenDockViewModel.screenDockViewState.value
-        )
-
-        //
-        screenDockViewModel.updateViewState(CurrentMainRoute.RouteIsNull)
-        advanceUntilIdle()
-        assertEquals(
-            ScreenDockViewState.Visible,
+            ScreenDockViewState.Visible(CurrentScreen.WelcomeScreen),
             screenDockViewModel.screenDockViewState.value
         )
     }
