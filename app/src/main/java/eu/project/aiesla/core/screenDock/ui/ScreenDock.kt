@@ -36,7 +36,8 @@ fun screenDock(
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .padding(start = Padding.P20.dp, bottom = Padding.P20.dp, end = Padding.P20.dp),
+            .padding(start = Padding.P20.dp, bottom = Padding.P20.dp, end = Padding.P20.dp)
+            .testTag("screenDock"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {

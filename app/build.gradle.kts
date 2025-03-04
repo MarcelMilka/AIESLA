@@ -98,7 +98,11 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.agent)
 
+//  Testing coroutines
     testImplementation(libs.kotlinx.coroutines.test)
+
+//  Testing flows
+    testImplementation(libs.turbine)
 }
 
 kapt {

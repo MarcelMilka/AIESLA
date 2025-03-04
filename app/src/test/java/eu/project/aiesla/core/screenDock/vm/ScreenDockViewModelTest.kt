@@ -1,14 +1,11 @@
 package eu.project.aiesla.core.screenDock.vm
 
+import app.cash.turbine.test
 import eu.project.aiesla.core.screenDock.model.ScreenDockViewState
 import eu.project.aiesla.sharedConstants.navigation.CurrentMainRoute
 import eu.project.aiesla.sharedConstants.navigation.CurrentScreen
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -46,30 +43,75 @@ class ScreenDockViewModelTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `updateViewState works properly`() = runTest {
 
-        //
-        assertEquals(
-            ScreenDockViewState.Invisible,
-            screenDockViewModel.screenDockViewState.value
-        )
+        screenDockViewModel.screenDockViewState.test {
 
-        //
-        screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
-        advanceUntilIdle()
-        assertEquals(
-            ScreenDockViewState.Visible(CurrentScreen.HomeScreen),
-            screenDockViewModel.screenDockViewState.value
-        )
+            // 1: Invisible by default
+            assertEquals(ScreenDockViewState.Invisible, this.awaitItem())
 
-        //
-        screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.WelcomeScreen)
-        advanceUntilIdle()
-        assertEquals(
-            ScreenDockViewState.Visible(CurrentScreen.WelcomeScreen),
-            screenDockViewModel.screenDockViewState.value
-        )
+            // 2: Visible, HomeScreen
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
+            assertEquals(ScreenDockViewState.Visible(CurrentScreen.HomeScreen), this.awaitItem())
+
+            // 3: Visible, StudyScreen
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.StudyScreen)
+            assertEquals(ScreenDockViewState.Visible(CurrentScreen.StudyScreen), awaitItem())
+        }
+    }
+
+    @Test
+    fun `Error is set when main route is Error`() = runTest {
+
+        screenDockViewModel.screenDockViewState.test {
+
+            // 1: Invisible by default
+            assertEquals(ScreenDockViewState.Invisible, this.awaitItem())
+
+            // 2: Visible, HomeScreen
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
+            assertEquals(ScreenDockViewState.Visible(CurrentScreen.HomeScreen), this.awaitItem())
+
+            // 3: Error
+            screenDockViewModel.updateViewState(CurrentMainRoute.Error, CurrentScreen.StudyScreen)
+            assertEquals(ScreenDockViewState.Error, awaitItem())
+        }
+    }
+
+    @Test
+    fun `Error is set when screen is Error`() = runTest {
+
+        screenDockViewModel.screenDockViewState.test {
+
+            // 1: Invisible by default
+            assertEquals(ScreenDockViewState.Invisible, this.awaitItem())
+
+            // 2: Visible, HomeScreen
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
+            assertEquals(ScreenDockViewState.Visible(CurrentScreen.HomeScreen), this.awaitItem())
+
+            // 3: Error
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.Error)
+            assertEquals(ScreenDockViewState.Error, awaitItem())
+        }
+    }
+
+    @Test
+    fun `Error is set when both main route and screen are Error`() = runTest {
+
+        screenDockViewModel.screenDockViewState.test {
+
+            // 1: Invisible by default
+            assertEquals(ScreenDockViewState.Invisible, this.awaitItem())
+
+            // 2: Visible, HomeScreen
+            screenDockViewModel.updateViewState(CurrentMainRoute.SignedIn, CurrentScreen.HomeScreen)
+            assertEquals(ScreenDockViewState.Visible(CurrentScreen.HomeScreen), this.awaitItem())
+
+            // 3: Error
+            screenDockViewModel.updateViewState(CurrentMainRoute.Error, CurrentScreen.Error)
+            assertEquals(ScreenDockViewState.Error, awaitItem())
+        }
     }
 }
