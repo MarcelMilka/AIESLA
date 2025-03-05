@@ -13,7 +13,7 @@ import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
 import eu.project.aiesla.sharedUi.theme.DarkBackground
 
 @Composable
-fun checkYourEmailScreen() {
+fun passwordRecoveryEmailInformationScreen() {
 
     Column(
         modifier = Modifier

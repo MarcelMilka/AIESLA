@@ -8,13 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
-import eu.project.aiesla.core.routeSignedIn.homeScreen.impl.homeImpl
-import eu.project.aiesla.core.routeSignedIn.studyScreen.impl.studyImpl
-import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.checkYourEmailImpl
+import eu.project.aiesla.core.routeSignedIn.homeScreen.subscreens.home.impl.homeImpl
+import eu.project.aiesla.core.routeSignedIn.studyScreen.subscreens.subjects.impl.subjectsImpl
+import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.passwordRecoveryEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.signIn.impl.signInImpl
 import eu.project.aiesla.core.routeSignedOut.signUp.impl.signUpImpl
-import eu.project.aiesla.core.routeSignedOut.verifyYourEmail.impl.verifyYourEmailImpl
+import eu.project.aiesla.core.routeSignedOut.signUpEmailInformation.impl.signUpEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.welcomeScreen.impl.welcomeScreenImpl
 import eu.project.aiesla.core.screenDock.impl.screenDockImpl
 import eu.project.aiesla.sharedConstants.navigation.Navigation
@@ -61,7 +61,7 @@ fun core(
                                 authenticationManager = authenticationManager
                             )
 
-                            checkYourEmailImpl()
+                            passwordRecoveryEmailInformationImpl()
                         }
 
                         navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
@@ -71,20 +71,20 @@ fun core(
                                 authenticationManager = authenticationManager
                             )
 
-                            verifyYourEmailImpl()
+                            signUpEmailInformationImpl()
                         }
                     }
 
-                    navigation<Navigation.SignedIn.RouteSignedIn>(startDestination = Navigation.SignedIn.Home.RouteHome) {
+                    navigation<Navigation.SignedIn.RouteSignedIn>(startDestination = Navigation.SignedIn.Home.RouteHomeScreen) {
 
-                        navigation<Navigation.SignedIn.Home.RouteHome>(startDestination = Navigation.SignedIn.Home.HomeScreen) {
+                        navigation<Navigation.SignedIn.Home.RouteHomeScreen>(startDestination = Navigation.SignedIn.Home.HomeSubscreen) {
 
                             homeImpl()
                         }
 
-                        navigation<Navigation.SignedIn.Study.RouteStudy>(startDestination = Navigation.SignedIn.Study.StudyScreen) {
+                        navigation<Navigation.SignedIn.Study.RouteStudyScreen>(startDestination = Navigation.SignedIn.Study.SubjectsSubscreen) {
 
-                            studyImpl()
+                            subjectsImpl()
                         }
                     }
                 }

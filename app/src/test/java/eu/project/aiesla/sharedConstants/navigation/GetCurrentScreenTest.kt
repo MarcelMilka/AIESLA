@@ -30,10 +30,10 @@ class GetCurrentScreenTest {
     }
 
     @Test
-    fun `getCurrentScreen properly detects CheckYourEmailScreen route`() {
+    fun `getCurrentScreen properly detects PasswordRecoveryEmailInformationScreen route`() {
         val navDestination: NavDestination = mockk()
-        every { navDestination.route } returns "eu.project.aiesla.sharedConstants.navigation.Navigation.SignedOut.SignIn.CheckYourEmailScreen"
-        assertEquals(CurrentScreen.CheckYourEmailScreen, navDestination.getCurrentScreen())
+        every { navDestination.route } returns "eu.project.aiesla.sharedConstants.navigation.Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen"
+        assertEquals(CurrentScreen.PasswordRecoveryEmailInformationScreen, navDestination.getCurrentScreen())
     }
 
     @Test
@@ -44,23 +44,23 @@ class GetCurrentScreenTest {
     }
 
     @Test
-    fun `getCurrentScreen properly detects VerifyYourEmailScreen route`() {
+    fun `getCurrentScreen properly detects SignUpEmailInformationScreen route`() {
         val navDestination: NavDestination = mockk()
-        every { navDestination.route } returns "eu.project.aiesla.sharedConstants.navigation.Navigation.SignedOut.SignUp.VerifyYourEmailScreen"
-        assertEquals(CurrentScreen.VerifyYourEmailScreen, navDestination.getCurrentScreen())
+        every { navDestination.route } returns "eu.project.aiesla.sharedConstants.navigation.Navigation.SignedOut.SignUp.SignUpEmailInformationScreen"
+        assertEquals(CurrentScreen.SignUpEmailInformationScreen, navDestination.getCurrentScreen())
     }
 
     @Test
     fun `getCurrentScreen properly detects HomeScreen route`() {
         val navDestination: NavDestination = mockk()
-        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Home.HomeScreen"
+        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Home.HomeSubscreen"
         assertEquals(CurrentScreen.HomeScreen, navDestination.getCurrentScreen())
     }
 
     @Test
     fun `getCurrentScreen properly detects StudyScreen route`() {
         val navDestination: NavDestination = mockk()
-        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Study.StudyScreen"
+        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Study.SubjectsSubscreen"
         assertEquals(CurrentScreen.StudyScreen, navDestination.getCurrentScreen())
     }
 

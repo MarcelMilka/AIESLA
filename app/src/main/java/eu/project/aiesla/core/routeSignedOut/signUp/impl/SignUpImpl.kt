@@ -36,7 +36,7 @@ fun NavGraphBuilder.signUpImpl(
                     Log.d("Halla!", "Successful asda ")
 
                     navHostController.navigate(
-                        route = Navigation.SignedOut.SignUp.VerifyYourEmailScreen,
+                        route = Navigation.SignedOut.SignUp.SignUpEmailInformationScreen,
                         builder = {
                             this.popUpTo(
                                 route = Navigation.SignedOut.WelcomeScreen,

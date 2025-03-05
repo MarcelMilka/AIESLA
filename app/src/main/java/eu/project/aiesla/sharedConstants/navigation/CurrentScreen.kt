@@ -9,12 +9,12 @@ enum class CurrentScreen {
 
         // sign in
         SignUpScreen,
-        VerifyYourEmailScreen,
+        SignUpEmailInformationScreen,
 
         // sign up
         SignInScreen,
         RecoverYourPasswordScreen,
-        CheckYourEmailScreen,
+        PasswordRecoveryEmailInformationScreen,
 
     // signed in
     HomeScreen,
@@ -37,19 +37,19 @@ fun NavDestination.getCurrentScreen(): CurrentScreen {
             // sign in
             route.contains(Navigation.SignedOut.SignIn.SignInScreen::class.java.simpleName) -> CurrentScreen.SignInScreen
             route.contains(Navigation.SignedOut.SignIn.RecoverYourPasswordScreen::class.java.simpleName) -> CurrentScreen.RecoverYourPasswordScreen
-            route.contains(Navigation.SignedOut.SignIn.CheckYourEmailScreen::class.java.simpleName) -> CurrentScreen.CheckYourEmailScreen
+            route.contains(Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen::class.java.simpleName) -> CurrentScreen.PasswordRecoveryEmailInformationScreen
 
             // sign up
             route.contains(Navigation.SignedOut.SignUp.SignUpScreen::class.java.simpleName) -> CurrentScreen.SignUpScreen
-            route.contains(Navigation.SignedOut.SignUp.VerifyYourEmailScreen::class.java.simpleName) -> CurrentScreen.VerifyYourEmailScreen
+            route.contains(Navigation.SignedOut.SignUp.SignUpEmailInformationScreen::class.java.simpleName) -> CurrentScreen.SignUpEmailInformationScreen
 
         // signed in
 
             // home
-            route.contains(Navigation.SignedIn.Home.HomeScreen::class.java.simpleName) -> CurrentScreen.HomeScreen
+            route.contains(Navigation.SignedIn.Home.HomeSubscreen::class.java.simpleName) -> CurrentScreen.HomeScreen
 
             // study
-            route.contains(Navigation.SignedIn.Study.StudyScreen::class.java.simpleName) -> CurrentScreen.StudyScreen
+            route.contains(Navigation.SignedIn.Study.SubjectsSubscreen::class.java.simpleName) -> CurrentScreen.StudyScreen
 
 
         else -> CurrentScreen.Error

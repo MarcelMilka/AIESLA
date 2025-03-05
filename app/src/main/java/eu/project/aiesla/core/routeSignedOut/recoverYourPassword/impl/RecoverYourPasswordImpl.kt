@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess
-import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.ui.recoverYourPasswordScreen
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
@@ -35,7 +34,7 @@ fun NavGraphBuilder.recoverYourPasswordImpl(
                     Log.d("Halla!", "Successful")
 
                     navHostController.navigate(
-                        route = Navigation.SignedOut.SignIn.CheckYourEmailScreen,
+                        route = Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen,
                         builder = {
                             this.popUpTo(
                                 route = Navigation.SignedOut.WelcomeScreen,

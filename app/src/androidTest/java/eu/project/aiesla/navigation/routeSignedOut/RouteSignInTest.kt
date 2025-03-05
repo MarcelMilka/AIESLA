@@ -2,12 +2,10 @@ package eu.project.aiesla.navigation.routeSignedOut
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.core.MainActivity
-import eu.project.aiesla.core.core
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -83,7 +81,7 @@ class RouteSignInTest {
         buttonSignIn.performClick()
         ctr.awaitIdle()
 
-        ctr.onNodeWithText("podcasts screen").assertIsDisplayed()
+        ctr.onNodeWithText("Home subscreen").assertIsDisplayed()
 
         // navigate back (leave the app)
         ctr.activityRule.scenario.onActivity { activity ->

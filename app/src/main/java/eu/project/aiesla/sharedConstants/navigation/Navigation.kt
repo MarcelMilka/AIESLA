@@ -25,7 +25,7 @@ sealed class Navigation {
             data object RecoverYourPasswordScreen: SignIn()
 
             @Serializable
-            data object CheckYourEmailScreen: SignIn()
+            data object PasswordRecoveryEmailInformationScreen: SignIn()
         }
 
         sealed class SignUp: SignedOut() {
@@ -37,7 +37,7 @@ sealed class Navigation {
             data object SignUpScreen: SignUp()
 
             @Serializable
-            data object VerifyYourEmailScreen: SignUp()
+            data object SignUpEmailInformationScreen: SignUp()
         }
     }
 
@@ -49,19 +49,25 @@ sealed class Navigation {
         sealed class Home: SignedIn() {
 
             @Serializable
-            data object RouteHome: Home()
+            data object RouteHomeScreen: Home()
 
             @Serializable
-            data object HomeScreen: Home()
+            data object HomeSubscreen: Home()
+
+//             @Serializable
+//             data object ___Subscreen: Study()
         }
 
         sealed class Study: SignedIn() {
 
             @Serializable
-            data object RouteStudy: Study()
+            data object RouteStudyScreen: Study()
 
             @Serializable
-            data object StudyScreen: Study()
+            data object SubjectsSubscreen: Study()
+
+//             @Serializable
+//             data object ___Subscreen: Study()
         }
     }
 }

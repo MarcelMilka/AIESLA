@@ -60,9 +60,9 @@ class ScreenDockTest {
             buttonStudy.assertIsNotDisplayed()
 
 
-        // 4: verify content of screenDock is not displayed in 'CheckYourEmailScreen'
+        // 4: verify content of screenDock is not displayed in 'PasswordRecoveryEmailInformationScreen'
 
-            // navigate to 'CheckYourEmailScreen'
+            // navigate to 'PasswordRecoveryEmailInformationScreen'
             emailTextField.performTextInput("aaaaaaaaaaaaaaaa")
             ctr.awaitIdle()
             buttonRecoverYourPassword.performClick()
@@ -90,9 +90,9 @@ class ScreenDockTest {
             buttonHome.assertIsNotDisplayed()
             buttonStudy.assertIsNotDisplayed()
 
-        // 3: verify content of screenDock is not displayed in 'VerifyYourEmailScreen'
+        // 3: verify content of screenDock is not displayed in 'SignUpEmailInformationScreen'
 
-            // navigate to 'VerifyYourEmailScreen'
+            // navigate to 'SignUpEmailInformationScreen'
             emailTextField.performTextInput("google.user@gmail.com")
             ctr.awaitIdle()
             passwordTextField.performTextInput("1@Aaaaaaaaaaaaaaaa")
@@ -136,7 +136,9 @@ class ScreenDockTest {
         ctr.awaitIdle()
 
 
-        // 2: make sure screenDock and its content is displayed
+        // 2: make sure screenDock and its content are displayed
+        ctr.onNodeWithText("Home subscreen")
+
         screenDock.assertIsDisplayed()
 
         buttonHome.assertIsDisplayed()
@@ -146,30 +148,33 @@ class ScreenDockTest {
         buttonStudy.assertIsEnabled()
 
 
-        // 3: navigate to 'StudyScreen'
+        // 3: navigate to 'SubjectsSubscreen'
         buttonStudy.performClick()
         ctr.awaitIdle()
 
             // verify state has been properly changed
+            ctr.onNodeWithText("Subjects subscreen")
             buttonHome.assertIsEnabled()
             buttonStudy.assertIsNotEnabled()
 
 
-        // 4: navigate to 'HomeScreen'
+        // 4: navigate to 'HomeSubscreen'
         buttonHome.performClick()
 
             // verify state has been properly changed
+            ctr.onNodeWithText("Home subscreen")
             buttonHome.assertIsNotEnabled()
             buttonStudy.assertIsEnabled()
 
 
 
-        // 5: navigate back to 'StudyScreen' with in-built back button
+        // 5: navigate back to 'SubjectsSubscreen' with in-built back button
         ctr.activityRule.scenario.onActivity { activity ->
             activity.onBackPressedDispatcher.onBackPressed()
         }
 
             // verify state has been properly changed
+            ctr.onNodeWithText("Subjects subscreen")
             buttonHome.assertIsEnabled()
             buttonStudy.assertIsNotEnabled()
     }

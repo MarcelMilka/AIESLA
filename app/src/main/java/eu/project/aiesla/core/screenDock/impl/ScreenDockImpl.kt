@@ -1,5 +1,6 @@
 package eu.project.aiesla.core.screenDock.impl
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ fun screenDockImpl(
 
     navHostController.addOnDestinationChangedListener { _, destination, _ ->
 
+        Log.d("Halla!", "get current screen: ${destination.getCurrentScreen()}")
         screenDockViewModel.updateViewState(
             currentMainRoute = destination.getCurrentMainRoute(),
             currentScreen = destination.getCurrentScreen()
@@ -32,11 +34,11 @@ fun screenDockImpl(
         onNavigatePodcastsScreen = {},
         onNavigateHomeScreen = {
 
-            navHostController.navigate(Navigation.SignedIn.Home.RouteHome)
+            navHostController.navigate(Navigation.SignedIn.Home.RouteHomeScreen)
         },
         onNavigateStudyScreen = {
 
-            navHostController.navigate(Navigation.SignedIn.Study.RouteStudy)
+            navHostController.navigate(Navigation.SignedIn.Study.RouteStudyScreen)
         }
     )
 }
