@@ -6,7 +6,7 @@ import eu.project.aiesla.db.roomLocalDatabase.dao.SubjectDAO
 import eu.project.aiesla.db.roomLocalDatabase.entity.SubjectEntity
 
 @Database(
-    version = 0,
+    version = 1,
     entities = [SubjectEntity::class]
 )
 abstract class RoomLocalDatabase: RoomDatabase() {

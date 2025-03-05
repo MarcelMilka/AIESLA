@@ -1,4 +1,4 @@
-package eu.project.aiesla.core.routeSignedIn.home.ui
+package eu.project.aiesla.core.routeSignedIn.studyScreen.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,7 @@ import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.theme.DarkBackground
 
 @Composable
-fun homeScreen() {
+fun studyScreen() {
 
     Column(
         modifier = Modifier
@@ -33,7 +33,7 @@ fun homeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
 
-                    Text("HomeScreen")
+                    Text("StudyScreen")
                 }
             )
 

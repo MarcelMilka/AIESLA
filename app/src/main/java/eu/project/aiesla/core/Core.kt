@@ -1,18 +1,15 @@
 package eu.project.aiesla.core
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
-import eu.project.aiesla.core.routeSignedIn.home.impl.homeImpl
-import eu.project.aiesla.core.routeSignedIn.study.impl.studyImpl
+import eu.project.aiesla.core.routeSignedIn.homeScreen.impl.homeImpl
+import eu.project.aiesla.core.routeSignedIn.studyScreen.impl.studyImpl
 import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.checkYourEmailImpl
 import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.signIn.impl.signInImpl
