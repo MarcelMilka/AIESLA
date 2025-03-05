@@ -7,8 +7,8 @@ plugins {
 //  Firebase
     id("com.google.gms.google-services")
 
-//  Kapt
-    id("kotlin-kapt")
+//  KSP
+    id("com.google.devtools.ksp")
 
 //  Hilt
     id("com.google.dagger.hilt.android")
@@ -83,12 +83,12 @@ dependencies {
 
 //  Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
     testImplementation(kotlin("test"))
     testImplementation(libs.hilt.android.testing)
-    kaptTest(libs.hilt.android.compiler)
+    kspTest(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
 //  MockK
@@ -103,8 +103,10 @@ dependencies {
 
 //  Testing flows
     testImplementation(libs.turbine)
-}
 
-kapt {
-    correctErrorTypes = true
+//  Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
 }

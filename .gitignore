@@ -67,3 +67,4 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 lint/reports/
+/.kotlin/sessions/kotlin-compiler-16332372694842346660.salive
