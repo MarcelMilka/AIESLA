@@ -8,14 +8,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
-import eu.project.aiesla.core.routeSignedIn.homeScreen.subscreens.home.impl.homeImpl
-import eu.project.aiesla.core.routeSignedIn.studyScreen.subscreens.subjects.impl.subjectsImpl
-import eu.project.aiesla.core.routeSignedOut.checkYourEmail.impl.passwordRecoveryEmailInformationImpl
-import eu.project.aiesla.core.routeSignedOut.recoverYourPassword.impl.recoverYourPasswordImpl
-import eu.project.aiesla.core.routeSignedOut.signIn.impl.signInImpl
-import eu.project.aiesla.core.routeSignedOut.signUp.impl.signUpImpl
-import eu.project.aiesla.core.routeSignedOut.signUpEmailInformation.impl.signUpEmailInformationImpl
-import eu.project.aiesla.core.routeSignedOut.welcomeScreen.impl.welcomeScreenImpl
+import eu.project.aiesla.core.routeSignedIn.routeHomeScreen.subscreens.home.impl.homeImpl
+import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects.impl.subjectsImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.passwordRecoveryEmailInformationImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword.recoverYourPasswordImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.signInImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.signUpImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.signUpEmailInformationImpl
+import eu.project.aiesla.core.routeSignedOut.welcomeScreenImpl
 import eu.project.aiesla.core.screenDock.impl.screenDockImpl
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
