@@ -1,4 +1,4 @@
-package eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects.ui
+package eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

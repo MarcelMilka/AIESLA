@@ -66,8 +66,8 @@ sealed class Navigation {
             @Serializable
             data object SubjectsSubscreen: Study()
 
-//             @Serializable
-//             data object ___Subscreen: Study()
+            @Serializable
+            data object SubjectSubscreen: Study()
         }
     }
 }

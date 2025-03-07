@@ -7,7 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import eu.project.aiesla.db.roomLocalDatabase.db.RoomConstants
+import eu.project.aiesla.db.roomLocalDatabase.dao.SubjectDAO
+import eu.project.aiesla.db.roomLocalDatabase.db.RoomLocalDatabaseConstants
 import eu.project.aiesla.db.roomLocalDatabase.db.RoomLocalDatabase
 import javax.inject.Singleton
 
@@ -21,6 +22,11 @@ class RoomLocalDatabaseProvider {
         Room.databaseBuilder(
             context = applicationContext,
             klass = RoomLocalDatabase::class.java,
-            name = RoomConstants.ROOM_V1
+            name = RoomLocalDatabaseConstants.ROOM_V1
         ).build()
+
+    @Provides
+    @Singleton
+    fun provideSubjectDAO(roomLocalDatabase: RoomLocalDatabase): SubjectDAO =
+        roomLocalDatabase.subjectDAO()
 }
