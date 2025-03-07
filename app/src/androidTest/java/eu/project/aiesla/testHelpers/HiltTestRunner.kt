@@ -1,4 +1,4 @@
-package eu.project.aiesla
+package eu.project.aiesla.testHelpers
 
 import android.app.Application
 import android.content.Context

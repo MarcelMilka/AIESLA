@@ -1,11 +1,11 @@
-package eu.project.aiesla.auth.di
+package eu.project.aiesla.testHelpers
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
-import eu.project.aiesla.auth.authenticationManager.TestAuthenticationManager
+import eu.project.aiesla.auth.di.AuthenticationManagerProvider
 
 @Module
 @TestInstallIn(

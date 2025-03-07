@@ -65,6 +65,13 @@ class GetCurrentScreenTest {
     }
 
     @Test
+    fun `getCurrentScreen properly detects SubjectSubscreen route`() {
+        val navDestination: NavDestination = mockk()
+        every { navDestination.route } returns "eu.project.xnx.sharedConstants.navigation.Navigation.SignedIn.Study.SubjectSubscreen"
+        assertEquals(CurrentScreen.StudyScreen, navDestination.getCurrentScreen())
+    }
+
+    @Test
     fun `getCurrentScreen returns Error when route is unknown`() {
         val navDestination: NavDestination = mockk()
         every { navDestination.route } returns "invalid.route.notMatching"

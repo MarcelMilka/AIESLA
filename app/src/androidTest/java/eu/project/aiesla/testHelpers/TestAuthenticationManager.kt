@@ -1,6 +1,7 @@
-package eu.project.aiesla.auth.authenticationManager
+package eu.project.aiesla.testHelpers
 
 import android.util.Log
+import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess

@@ -50,6 +50,7 @@ fun NavDestination.getCurrentScreen(): CurrentScreen {
 
             // study
             route.contains(Navigation.SignedIn.Study.SubjectsSubscreen::class.java.simpleName) -> CurrentScreen.StudyScreen
+            route.contains(Navigation.SignedIn.Study.SubjectSubscreen::class.java.simpleName) -> CurrentScreen.StudyScreen
 
 
         else -> CurrentScreen.Error
