@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationTextButton
+import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun recoverYourPasswordScreen(
@@ -33,7 +33,7 @@ fun recoverYourPasswordScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp)
             .imePadding(),
 
@@ -76,7 +76,7 @@ fun recoverYourPasswordScreen(
                                 exit = fadeOut(animationSpec = tween(300)),
                                 content = {
 
-                                    primaryAuthenticationTextButton(
+                                    primaryAuthenticationButton(
                                         content = stringResource(R.string.recover_your_password),
                                         testTag = "button 'Recover your password.'",
                                         onClick = {

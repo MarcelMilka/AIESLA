@@ -2,7 +2,6 @@ package eu.project.aiesla.core.routeSignedOut
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,21 +9,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationTextButton
-import eu.project.aiesla.sharedUi.sharedElements.button.secondaryAuthenticationTextButton
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
+import eu.project.aiesla.sharedUi.sharedElements.verticalDividerS
+import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun welcomeScreen(
     onSignIn: () -> Unit,
-    onSignUp: () -> Unit,
-    onContinueWithoutAccount: () -> Unit,
+    onSignUp: () -> Unit
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp),
 
         verticalArrangement = Arrangement.SpaceBetween,
@@ -47,7 +45,7 @@ fun welcomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                verticalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
 
@@ -61,28 +59,21 @@ fun welcomeScreen(
                         content = {
 
                             // sign in
-                            primaryAuthenticationTextButton(
+                            primaryAuthenticationButton(
                                 content = stringResource(R.string.sign_in),
-                                testTag = "button 'Sign in.'",
+                                testTag = "WelcomeScreen primaryAuthenticationTextButton 'Sign in.'",
                                 onClick = {onSignIn()}
                             )
 
-                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+                            verticalDividerS()
 
                             // sign up
-                            primaryAuthenticationTextButton(
+                            primaryAuthenticationButton(
                                 content = stringResource(R.string.sign_up),
-                                testTag = "button 'Sign up.'",
+                                testTag = "WelcomeScreen primaryAuthenticationTextButton 'Sign up.'",
                                 onClick = {onSignUp()}
                             )
                         }
-                    )
-
-                    // continue without account
-                    secondaryAuthenticationTextButton(
-                        content = stringResource(R.string.continue_without_account),
-                        testTag = "button 'Continue without account.'",
-                        onClick = {onContinueWithoutAccount()}
                     )
                 }
             )

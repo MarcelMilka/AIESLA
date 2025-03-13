@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import eu.project.aiesla.sharedUi.theme.White50
+import eu.project.aiesla.sharedUi.theme.SecondaryTextColor
 import eu.project.aiesla.sharedUi.theme.quickSandMedium
 
 @Composable
@@ -44,7 +44,7 @@ fun primaryCenteredLabel50(content: String) {
 
     Text(
         text = content,
-        color = White50,
+        color = SecondaryTextColor,
         fontSize = 16.sp,
         fontFamily = quickSandMedium,
         textAlign = TextAlign.Center,

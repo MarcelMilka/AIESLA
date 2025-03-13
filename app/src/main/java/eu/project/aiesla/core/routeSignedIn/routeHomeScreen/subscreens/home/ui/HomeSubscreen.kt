@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun homeSubscreen() {
@@ -16,7 +16,7 @@ fun homeSubscreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp),
 
         verticalArrangement = Arrangement.SpaceBetween,

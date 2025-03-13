@@ -26,7 +26,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "eu.project.aiesla.HiltTestRunner"
+        testInstrumentationRunner = "eu.project.aiesla.testHelpers.HiltTestRunner"
     }
 
     buildTypes {

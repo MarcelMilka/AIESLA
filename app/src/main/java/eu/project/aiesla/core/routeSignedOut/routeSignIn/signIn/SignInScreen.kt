@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationTextButton
+import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
 import eu.project.aiesla.sharedUi.sharedElements.button.secondaryAuthenticationTextButton
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
 import eu.project.aiesla.sharedUi.sharedElements.textField.passwordTextField
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun signInScreen(
@@ -41,7 +41,7 @@ fun signInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp)
             .imePadding(),
 
@@ -92,7 +92,7 @@ fun signInScreen(
                                 exit = fadeOut(animationSpec = tween(300)),
                                 content = {
 
-                                    primaryAuthenticationTextButton(
+                                    primaryAuthenticationButton(
                                         content = stringResource(R.string.sign_in),
                                         testTag = "button 'Sign in.'",
                                         onClick = {

@@ -15,12 +15,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.theme.Background
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import eu.project.aiesla.R
 import eu.project.aiesla.auth.credentials.PasswordRequirements
-import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationTextButton
+import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
 import eu.project.aiesla.sharedUi.sharedElements.text.primaryCenteredLabel50
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
 import eu.project.aiesla.sharedUi.sharedElements.textField.passwordTextField
@@ -52,7 +52,7 @@ fun signUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp)
             .imePadding(),
 
@@ -114,7 +114,7 @@ fun signUpScreen(
                                 exit = fadeOut(animationSpec = tween(300)),
                                 content = {
 
-                                    primaryAuthenticationTextButton(
+                                    primaryAuthenticationButton(
                                         content = stringResource(R.string.sign_up),
                                         testTag = "button 'Sign up.'",
                                         onClick = {

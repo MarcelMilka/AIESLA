@@ -1,5 +1,7 @@
 package eu.project.aiesla.core.routeSignedOut
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -7,23 +9,25 @@ import eu.project.aiesla.sharedConstants.navigation.Navigation
 
 fun NavGraphBuilder.welcomeScreenImpl(navHostController: NavHostController) {
 
-    composable<Navigation.SignedOut.WelcomeScreen> {
+    composable<Navigation.SignedOut.WelcomeScreen>(
 
-        welcomeScreen(
-            onSignIn = {
+        enterTransition = {EnterTransition.None},
 
-                navHostController.navigate(route = Navigation.SignedOut.SignIn.RouteSignIn)
-            },
+        exitTransition = {ExitTransition.None},
 
-            onSignUp = {
+        content = {
 
-                navHostController.navigate(route = Navigation.SignedOut.SignUp.RouteSignUp)
-            },
+            welcomeScreen(
+                onSignIn = {
 
-            onContinueWithoutAccount = {
+                    navHostController.navigate(route = Navigation.SignedOut.SignIn.RouteSignIn)
+                },
 
-                navHostController.navigate(route = Navigation.SignedIn.RouteSignedIn)
-            }
-        )
-    }
+                onSignUp = {
+
+                    navHostController.navigate(route = Navigation.SignedOut.SignUp.RouteSignUp)
+                }
+            )
+        }
+    )
 }

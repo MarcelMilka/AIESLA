@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
-import eu.project.aiesla.sharedUi.theme.DarkBackground
+import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun signUpEmailInformationScreen() {
@@ -18,7 +18,7 @@ fun signUpEmailInformationScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(Background)
             .padding(Padding.P20.dp),
 
         verticalArrangement = Arrangement.SpaceBetween,

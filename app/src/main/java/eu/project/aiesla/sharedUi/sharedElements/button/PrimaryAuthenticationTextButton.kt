@@ -1,25 +1,41 @@
 package eu.project.aiesla.sharedUi.sharedElements.button
 
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
+import androidx.compose.ui.unit.dp
 import eu.project.aiesla.sharedUi.sharedElements.text.primaryLabel
+import eu.project.aiesla.sharedUi.theme.Primary
 
 @Composable
-fun primaryAuthenticationTextButton(
+fun primaryAuthenticationButton(
     content: String,
     testTag: String,
     onClick: () -> Unit
 ) {
 
-    TextButton(
-        onClick = {onClick()},
-        modifier = Modifier.testTag(testTag),
+    Button(
+
+        onClick = { onClick() },
+
+        modifier = Modifier
+            .width(250.dp)
+            .height(50.dp)
+            .testTag(testTag),
+
+        shape = RoundedCornerShape(20.dp),
+
+        colors = ButtonDefaults.buttonColors(containerColor = Primary),
+
         content = {
 
-            bigPrimaryLabel(content = content)
+            primaryLabel(content = content)
         }
     )
 }
