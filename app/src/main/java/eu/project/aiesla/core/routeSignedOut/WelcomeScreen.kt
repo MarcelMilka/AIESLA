@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
-import eu.project.aiesla.sharedUi.sharedElements.verticalDividerS
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
 import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
@@ -65,7 +65,7 @@ fun welcomeScreen(
                                 onClick = {onSignIn()}
                             )
 
-                            verticalDividerS()
+                            verticalDivider5()
 
                             // sign up
                             primaryAuthenticationButton(

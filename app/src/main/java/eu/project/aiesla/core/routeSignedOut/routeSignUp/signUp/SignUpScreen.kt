@@ -1,138 +1,195 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.unit.dp
-import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
-import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.theme.Background
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
+import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.PasswordRequirements
-import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
-import eu.project.aiesla.sharedUi.sharedElements.text.primaryCenteredLabel50
+import eu.project.aiesla.auth.results.SignUpProcess
+import eu.project.aiesla.sharedConstants.Padding
+import eu.project.aiesla.sharedUi.sharedElements.button.dynamicAuthenticationButton
+import eu.project.aiesla.sharedUi.sharedElements.text.dynamicTextFieldHint
+import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
 import eu.project.aiesla.sharedUi.sharedElements.textField.passwordTextField
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider10
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider20
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
+import eu.project.aiesla.sharedUi.theme.Background
+import eu.project.aiesla.sharedUi.theme.SecondaryWhite
 
 @Composable
 fun signUpScreen(
-    onSignUp: (EmailAndPasswordCredentials) -> Unit,
+    signUpProcess: SignUpProcess,
+    onSignUp: (EmailAndPasswordCredentials) -> Unit
 ) {
+
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
-    var allCharactersCount by rememberSaveable { mutableStateOf(0) }
-    var uppercaseCount by rememberSaveable { mutableStateOf(0) }
-    var specialCharCount by rememberSaveable { mutableStateOf(0) }
-    var digitCount by rememberSaveable { mutableStateOf(0) }
-
-    fun updatePasswordRequirements(password: String) {
-        allCharactersCount = password.length
-        uppercaseCount = password.count { it.isUpperCase() }
-        specialCharCount = password.count { !it.isLetterOrDigit() }
-        digitCount = password.count { it.isDigit() }
-    }
-
-    val keyboardIsVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+    var emailTextFieldIsActive by remember { mutableStateOf(false) }
+    var passwordTextFieldIsActive by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp)
-            .imePadding(),
+            .padding(Padding.P20.dp),
 
-        verticalArrangement = if (keyboardIsVisible) Arrangement.Center else Arrangement.Bottom,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
 
         content = {
 
+            // upper part
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if (keyboardIsVisible) 0.7f else 0.5f),
-                verticalArrangement = Arrangement.SpaceBetween,
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-
                 content = {
 
-                    // email text field, password text field, password requirements, button sign up
-                    Column(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .height(IntrinsicSize.Max),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    emailTextField(
+                        email = email,
+                        testTag = "SignUpScreen emailTextField",
+                        onValueChange = { email = it },
+                        emailFocusRequester = emailFocusRequester,
+                        onFocusChanged = {},
+                        onDone = {}
+                    )
 
+                    AnimatedVisibility(
+                        visible = signUpProcess is SignUpProcess.Unsuccessful,
                         content = {
 
-                            emailTextField(
-                                value = email,
-                                onValueChange = { email = it },
-                                focusRequester = emailFocusRequester,
-                                nextFocusRequester = passwordFocusRequester,
-                            )
-
-                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-
-                            passwordTextField(
-                                value = password,
-                                onValueChange = {
-
-                                    password = it
-                                    updatePasswordRequirements(it)
-                                },
-                                focusRequester = passwordFocusRequester,
-                            )
-
-                            Spacer(Modifier.height(10.dp))
-
-                            primaryCenteredLabel50(content = "$allCharactersCount/${PasswordRequirements.MIN_CHARACTERS_COUNT} characters")
-                            primaryCenteredLabel50(content = "$uppercaseCount/${PasswordRequirements.MIN_UPPERCASE_COUNT} uppercase letter")
-                            primaryCenteredLabel50(content = "$specialCharCount/${PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT} special character")
-                            primaryCenteredLabel50(content = "$digitCount/${PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT} numeric character")
-
-                            Spacer(Modifier.height(10.dp))
-
-                            AnimatedVisibility(
-                                visible = allCharactersCount >= 8 && uppercaseCount >= 1 && specialCharCount >= 1 && digitCount >= 1 && email.isNotEmpty(),
-                                enter = fadeIn(animationSpec = tween(300)),
-                                exit = fadeOut(animationSpec = tween(300)),
+                            Column(
+                                modifier = Modifier.width(300.dp),
+                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.Start,
                                 content = {
 
-                                    primaryAuthenticationButton(
-                                        content = stringResource(R.string.sign_up),
-                                        testTag = "button 'Sign up.'",
-                                        onClick = {
+                                    verticalDivider5()
 
-                                            onSignUp(
-                                                EmailAndPasswordCredentials(
-                                                    email = email,
-                                                    password = password
-                                                )
-                                            )
-                                        }
+                                    textFieldHint(
+                                        content = "error message",
+                                        testTag = "SignUpScreen emailTextFieldHint"
                                     )
                                 }
                             )
                         }
                     )
+
+                    verticalDivider10()
+
+                    passwordTextField(
+                        password = password,
+                        testTag = "SignUpScreen passwordTextField",
+                        onValueChange = { password = it },
+                        assignedFocusRequester = passwordFocusRequester,
+                        onFocusChanged = {passwordTextFieldIsActive = it},
+                        onDone = {}
+                    )
+
+                    AnimatedVisibility(
+                        visible = passwordTextFieldIsActive,
+                        content = {
+
+                            Column (
+                                modifier = Modifier.width(300.dp),
+                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.Start,
+                                content = {
+
+                                    verticalDivider5()
+
+                                    passwordRequirement(
+                                        isGreen = password.count() >= PasswordRequirements.MIN_CHARACTERS_COUNT,
+                                        content = "${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_CHARACTERS_COUNT} ${stringResource(R.string.characters)}",
+                                        testTag = "SignUpScreen passwordRequirement 'At least x characters'"
+                                    )
+
+                                    passwordRequirement(
+                                        isGreen = password.count { it.isUpperCase() } >= PasswordRequirements.MIN_UPPERCASE_COUNT,
+                                        content = "${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_UPPERCASE_COUNT} ${stringResource(R.string.uppercase_letters)}",
+                                        testTag = "SignUpScreen passwordRequirement 'At least x uppercase characters'"
+                                    )
+
+                                    passwordRequirement(
+                                        isGreen = password.count { !it.isLetterOrDigit() } >= PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT,
+                                        content = "${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT} ${stringResource(R.string.special_character)}",
+                                        testTag = "SignUpScreen passwordRequirement 'At least x special character'"
+                                    )
+
+                                    passwordRequirement(
+                                        isGreen = password.count { it.isDigit() } >= PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT,
+                                        content = "${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT} ${stringResource(R.string.numeric_character)}",
+                                        testTag = "SignUpScreen passwordRequirement 'At least x numeric character'"
+                                    )
+                                }
+                            )
+                        }
+                    )
+
+                    verticalDivider20()
+
+                    dynamicAuthenticationButton(
+                        content = stringResource(R.string.sign_up),
+                        enabled = email.isNotEmpty(),
+                        onClick = {
+
+                            onSignUp(
+                                EmailAndPasswordCredentials(
+                                    email = email,
+                                    password = password
+                                )
+                            )
+                        }
+                    )
                 }
             )
+
+            // lower part
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {}
+            )
         }
+    )
+}
+
+@Composable
+private fun passwordRequirement(isGreen: Boolean, content: String, testTag: String) {
+
+    var targetColor by remember { mutableStateOf(SecondaryWhite) }
+
+    targetColor = when (isGreen) {
+        true -> Green
+        false -> SecondaryWhite
+    }
+
+    val color by animateColorAsState(targetValue = targetColor)
+
+    dynamicTextFieldHint(
+        content = content,
+        color = color,
+        testTag = testTag
     )
 }

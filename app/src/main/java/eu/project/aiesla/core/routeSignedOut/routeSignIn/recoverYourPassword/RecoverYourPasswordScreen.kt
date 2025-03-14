@@ -61,12 +61,12 @@ fun recoverYourPasswordScreen(
 
                         content = {
 
-                            emailTextField(
-                                value = email,
-                                onValueChange = {email = it},
-                                focusRequester = FocusRequester(),
-                                nextFocusRequester = FocusRequester(),
-                            )
+//                            emailTextField(
+//                                value = email,
+//                                onValueChange = {email = it},
+//                                focusRequester = FocusRequester(),
+//                                nextFocusRequester = FocusRequester(),
+//                            )
 
                             Spacer(Modifier.height(10.dp))
 

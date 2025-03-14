@@ -1,75 +1,144 @@
 package eu.project.aiesla.sharedUi.sharedElements.textField
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
-import eu.project.aiesla.sharedUi.sharedElements.text.primaryCenteredLabel50
+import eu.project.aiesla.sharedConstants.RoundedCorner
+import eu.project.aiesla.sharedUi.sharedElements.text.textFieldLabel
+import eu.project.aiesla.sharedUi.theme.EmailPasswordTextFieldTextStyle
+import eu.project.aiesla.sharedUi.theme.Primary
 
 @Composable
-fun passwordTextField(
-    value: String,
+fun passwordTextField (
+    password: String,
+    testTag: String,
     onValueChange: (String) -> Unit,
-    focusRequester: FocusRequester
+    assignedFocusRequester: FocusRequester,
+    onFocusChanged: (Boolean) -> Unit,
+    onDone: () -> Unit
 ) {
+
+    var passwordIsVisible by rememberSaveable {
+
+        mutableStateOf(false)
+    }
 
     TextField(
 
-        value = value,
-        onValueChange = { onValueChange(it) },
+        value = password,
+        onValueChange = {
 
-        modifier = Modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester)
-            .testTag("passwordTextField"),
+            onValueChange(it)
+        },
 
-        placeholder = {
+        label = {
 
-            primaryCenteredLabel50(
-                content = stringResource(R.string.password),
+            textFieldLabel(
+                content = stringResource(R.string.password)
             )
         },
 
+        modifier = Modifier
+            .width(300.dp)
+            .height(60.dp)
+            .testTag(testTag)
+            .focusRequester(assignedFocusRequester)
+            .onFocusChanged {
+
+                if (it.isFocused) {
+
+                    onFocusChanged(true)
+                }
+
+                else if (!it.isFocused){
+
+                    onFocusChanged(false)
+                }
+            },
+
+        colors = TextFieldDefaults.colors(
+
+            unfocusedLabelColor = White,
+            focusedLabelColor = White,
+
+            focusedContainerColor = Primary,
+            unfocusedContainerColor = Primary,
+
+            cursorColor = White,
+
+            unfocusedIndicatorColor = Transparent,
+            disabledIndicatorColor = Transparent,
+
+            focusedTextColor = White,
+            unfocusedTextColor = White,
+            disabledContainerColor = Transparent,
+            focusedIndicatorColor = Transparent
+        ),
+
+        textStyle = EmailPasswordTextFieldTextStyle,
+
+        shape = RoundedCornerShape(RoundedCorner.MEDIUM.dp),
+
         keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
+            capitalization = KeyboardCapitalization.None
         ),
 
         keyboardActions = KeyboardActions(
-            onDone = {focusRequester.freeFocus()}
+
+            onDone = {
+
+                onDone()
+            }
         ),
 
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center
-        ),
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = White,
-            unfocusedTextColor = White,
-            focusedContainerColor = Transparent,
-            unfocusedContainerColor = Transparent,
-            disabledContainerColor = Transparent,
-            cursorColor = White,
-            focusedIndicatorColor = Transparent,
-            unfocusedIndicatorColor = Transparent,
-            disabledIndicatorColor = Transparent
-        ),
-        visualTransformation = PasswordVisualTransformation()
+        trailingIcon = {
+
+            IconButton(
+
+                onClick = {
+
+                    passwordIsVisible = !passwordIsVisible
+                },
+
+                content = {
+
+                    Icon(
+                        painter = when (passwordIsVisible) {
+
+                            true -> painterResource(R.drawable.visibility_on)
+
+                            false -> painterResource(R.drawable.visibility_off)
+                        },
+                        contentDescription = null,
+                        tint = White
+                    )
+                },
+            )
+        },
+
+        singleLine = true,
+
+        visualTransformation =
+            if (passwordIsVisible) { VisualTransformation.None }
+            else { PasswordVisualTransformation() },
     )
 }

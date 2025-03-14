@@ -11,4 +11,9 @@
     <string name="recover_your_password">Recupera tu contraseña.</string>
     <string name="email">Correo electrónico</string>
     <string name="password">Contraseña</string>
+    <string name="at_least">Al menos</string>
+    <string name="characters">caracteres</string>
+    <string name="uppercase_letters">letra mayúscula</string>
+    <string name="special_character">carácter especial</string>
+    <string name="numeric_character">carácter numérico</string>
 </resources>

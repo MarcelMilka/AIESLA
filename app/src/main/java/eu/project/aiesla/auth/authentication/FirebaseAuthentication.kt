@@ -28,14 +28,34 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
 
                     if (task.isSuccessful) {
 
-                        Log.d("Halla!", "signUpWithEmailAndPassword: ok")
                         continuation.resume(value = ResultOfSignUpProcess.Ok)
                     }
 
                     else {
 
-                        Log.d("Halla!", "signUpWithEmailAndPassword: not ok")
-                        continuation.resume(value = ResultOfSignUpProcess.UnidentifiedException)
+                        when (task.exception) {
+
+                            is FirebaseAuthInvalidCredentialsException -> {
+
+                                continuation.resume(
+                                    value = ResultOfSignUpProcess.InvalidEmailFormat
+                                )
+                            }
+
+                            is FirebaseAuthUserCollisionException -> {
+
+                                continuation.resume(
+                                    value = ResultOfSignUpProcess.EmailIsAlreadyInUse
+                                )
+                            }
+
+                            else -> {
+
+                                continuation.resume(
+                                    value = ResultOfSignUpProcess.UnidentifiedException
+                                )
+                            }
+                        }
                     }
                 }
         }

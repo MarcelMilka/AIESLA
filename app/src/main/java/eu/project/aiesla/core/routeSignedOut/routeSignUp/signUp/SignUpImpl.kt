@@ -52,6 +52,8 @@ fun NavGraphBuilder.signUpImpl(
 
         signUpScreen(
 
+            signUpProcess = signUpProcess,
+
             onSignUp = {
 
                 authenticationManager.signUp(

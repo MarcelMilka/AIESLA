@@ -67,47 +67,7 @@ fun signInScreen(
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally,
 
-                        content = {
-
-                            emailTextField(
-                                value = email,
-                                onValueChange = {email = it},
-                                focusRequester = emailFocusRequester,
-                                nextFocusRequester = passwordFocusRequester,
-                            )
-
-                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-
-                            passwordTextField(
-                                value = password,
-                                onValueChange = {password = it},
-                                focusRequester = passwordFocusRequester,
-                            )
-
-                            Spacer(Modifier.height(10.dp))
-
-                            AnimatedVisibility(
-                                visible = password.length >= 8 && email.isNotEmpty(),
-                                enter = fadeIn(animationSpec = tween(300)),
-                                exit = fadeOut(animationSpec = tween(300)),
-                                content = {
-
-                                    primaryAuthenticationButton(
-                                        content = stringResource(R.string.sign_in),
-                                        testTag = "button 'Sign in.'",
-                                        onClick = {
-
-                                            onSignIn(
-                                                EmailAndPasswordCredentials(
-                                                    email = email,
-                                                    password = password
-                                                )
-                                            )
-                                        }
-                                    )
-                                }
-                            )
-                        }
+                        content = {}
                     )
 
                     // recover your password

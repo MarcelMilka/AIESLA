@@ -10,7 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import eu.project.aiesla.sharedUi.sharedElements.text.primaryLabel
+import eu.project.aiesla.sharedConstants.RoundedCorner
+import eu.project.aiesla.sharedUi.sharedElements.text.primaryCenteredLabel
 import eu.project.aiesla.sharedUi.theme.Primary
 
 @Composable
@@ -29,13 +30,13 @@ fun primaryAuthenticationButton(
             .height(50.dp)
             .testTag(testTag),
 
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(RoundedCorner.MEDIUM.dp),
 
         colors = ButtonDefaults.buttonColors(containerColor = Primary),
 
         content = {
 
-            primaryLabel(content = content)
+            primaryCenteredLabel(content = content)
         }
     )
 }
@@ -44,15 +45,14 @@ fun primaryAuthenticationButton(
 fun secondaryAuthenticationTextButton(
     content: String,
     testTag: String,
-    onClick: () -> Unit
-) {
+    onClick: () -> Unit) {
 
     TextButton(
         onClick = {onClick()},
         modifier = Modifier.testTag(testTag),
         content = {
 
-            primaryLabel(content = content)
+            primaryCenteredLabel(content = content)
         }
     )
 }

@@ -8,4 +8,9 @@
     <string name="recover_your_password">Gjenopprett passordet ditt.</string>
     <string name="email">E-post</string>
     <string name="password">Passord</string>
+    <string name="at_least">Minst</string>
+    <string name="characters">tegn</string>
+    <string name="uppercase_letters">stor bokstav</string>
+    <string name="special_character">spesiell karakter</string>
+    <string name="numeric_character">numerisk tegn</string>
 </resources>

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.core.screenDock.model.ScreenDockViewState
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedConstants.navigation.CurrentScreen
-import eu.project.aiesla.sharedUi.theme.SecondaryTextColor
+import eu.project.aiesla.sharedUi.theme.SecondaryWhite
 
 @Composable
 fun screenDock(
@@ -50,7 +50,7 @@ fun screenDock(
 
                     HorizontalDivider(
                         thickness = 0.25.dp,
-                        color = SecondaryTextColor
+                        color = SecondaryWhite
                     )
 
                     Row(
@@ -80,7 +80,7 @@ fun screenDock(
 
                     HorizontalDivider(
                         thickness = 0.25.dp,
-                        color = SecondaryTextColor
+                        color = SecondaryWhite
                     )
                 }
             }
@@ -120,7 +120,7 @@ private fun screenDockButton(
                 White
             }
             false -> {
-                SecondaryTextColor
+                SecondaryWhite
             }
         }
 

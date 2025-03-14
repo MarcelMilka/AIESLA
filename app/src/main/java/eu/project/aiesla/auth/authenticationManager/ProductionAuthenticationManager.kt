@@ -89,18 +89,36 @@ class ProductionAuthenticationManager @Inject constructor(
 
                                 _signUpProcess.emit(
                                     value = SignUpProcess.Unsuccessful(
-                                        cause = UnsuccessfulSignUpProcessCause.EXEMPLARY_CAUSE
+                                        cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
                                     )
                                 )
                             }
                         }
                     }
 
+                    ResultOfSignUpProcess.InvalidEmailFormat -> {
+
+                        _signUpProcess.emit(
+                            value = SignUpProcess.Unsuccessful(
+                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
+                            )
+                        )
+                    }
+
+                    ResultOfSignUpProcess.EmailIsAlreadyInUse -> {
+
+                        _signUpProcess.emit(
+                            value = SignUpProcess.Unsuccessful(
+                                cause = UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse
+                            )
+                        )
+                    }
+
                     ResultOfSignUpProcess.UnidentifiedException -> {
 
                         _signUpProcess.emit(
                             value = SignUpProcess.Unsuccessful(
-                                cause = UnsuccessfulSignUpProcessCause.EXEMPLARY_CAUSE
+                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
                             )
                         )
                     }

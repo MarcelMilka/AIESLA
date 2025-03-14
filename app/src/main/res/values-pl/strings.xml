@@ -8,4 +8,9 @@
     <string name="recover_your_password">Odzyskaj swoje hasło.</string>
     <string name="email">E-mail</string>
     <string name="password">Hasło</string>
+    <string name="at_least">Przynajmniej</string>
+    <string name="characters">znaków</string>
+    <string name="uppercase_letters">wielka litera</string>
+    <string name="special_character">znak specjalny</string>
+    <string name="numeric_character">znak numeryczny</string>
 </resources>

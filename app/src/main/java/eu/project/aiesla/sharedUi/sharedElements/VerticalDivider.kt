@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import eu.project.aiesla.sharedConstants.Space
 
 @Composable
-fun verticalDividerM() {
+fun verticalDivider20() {
 
     Spacer(
         modifier = Modifier
@@ -17,7 +17,17 @@ fun verticalDividerM() {
 }
 
 @Composable
-fun verticalDividerS() {
+fun verticalDivider10() {
+
+    Spacer(
+        modifier = Modifier
+            .height(height = Space.S10.dp)
+    )
+}
+
+
+@Composable
+fun verticalDivider5() {
 
     Spacer(
         modifier = Modifier
