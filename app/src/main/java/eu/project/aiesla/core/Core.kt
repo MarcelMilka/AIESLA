@@ -67,7 +67,10 @@ fun core(
                                 authenticationManager = authenticationManager
                             )
 
-                            passwordRecoveryEmailInformationImpl()
+                            passwordRecoveryEmailInformationImpl(
+                                navHostController = navHostController,
+                                authenticationManager = authenticationManager
+                            )
                         }
 
                         navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
