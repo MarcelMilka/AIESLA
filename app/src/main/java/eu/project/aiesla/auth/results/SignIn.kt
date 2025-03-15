@@ -5,15 +5,18 @@ sealed class SignInProcess {
     data object Idle: SignInProcess()
     data object Pending: SignInProcess()
     data object Successful: SignInProcess()
-    data class Unsuccessful(val cause: String): SignInProcess()
+    data class Unsuccessful(val cause: UnsuccessfulSignInProcessCause): SignInProcess()
 }
 
 enum class ResultOfSignInProcess {
     Ok,
-    UnidentifiedException
+    InvalidEmailFormat,
+    PasswordIsIncorrect,
+    UnidentifiedException,
 }
 
-object UnsuccessfulSignInProcessCause {
-
-    const val EXEMPLARY_CAUSE = "exemplary cause"
+enum class UnsuccessfulSignInProcessCause {
+    InvalidEmailFormat,
+    PasswordIsIncorrect,
+    UnidentifiedException,
 }

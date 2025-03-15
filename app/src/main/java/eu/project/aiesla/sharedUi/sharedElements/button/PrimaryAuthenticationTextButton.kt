@@ -42,10 +42,11 @@ fun primaryAuthenticationButton(
 }
 
 @Composable
-fun secondaryAuthenticationTextButton(
+fun authenticationTextButton(
     content: String,
     testTag: String,
-    onClick: () -> Unit) {
+    onClick: () -> Unit
+) {
 
     TextButton(
         onClick = {onClick()},

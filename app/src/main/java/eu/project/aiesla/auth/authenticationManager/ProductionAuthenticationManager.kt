@@ -6,7 +6,6 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,11 +44,30 @@ class ProductionAuthenticationManager @Inject constructor(
 
                         _signInProcess.emit(value = SignInProcess.Successful)
                     }
+
+                    ResultOfSignInProcess.InvalidEmailFormat -> {
+
+                        _signInProcess.emit(
+                            value = SignInProcess.Unsuccessful(
+                                cause = UnsuccessfulSignInProcessCause.InvalidEmailFormat
+                            )
+                        )
+                    }
+
+                    ResultOfSignInProcess.PasswordIsIncorrect -> {
+
+                        _signInProcess.emit(
+                            value = SignInProcess.Unsuccessful(
+                                cause = UnsuccessfulSignInProcessCause.PasswordIsIncorrect
+                            )
+                        )
+                    }
+
                     ResultOfSignInProcess.UnidentifiedException -> {
 
                         _signInProcess.emit(
                             value = SignInProcess.Unsuccessful(
-                                cause = UnsuccessfulSignInProcessCause.EXEMPLARY_CAUSE
+                                cause = UnsuccessfulSignInProcessCause.UnidentifiedException
                             )
                         )
                     }

@@ -1,6 +1,5 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn
 
-import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,24 +24,17 @@ fun NavGraphBuilder.signInImpl(
 
         LaunchedEffect(signInProcess) {
 
-            when (signInProcess) {
-                SignInProcess.Idle -> {Log.d("Halla!", "Idle")}
-                SignInProcess.Pending -> {Log.d("Halla!", "Pending")}
-                SignInProcess.Successful -> {
+            if (signInProcess is SignInProcess.Successful) {
 
-                    Log.d("Halla!", "Successful")
-
-                    navHostController.navigate(
-                        route = Navigation.SignedIn.RouteSignedIn,
-                        builder = {
-                            this.popUpTo(
-                                route = Navigation.SignedOut.RouteSignedOut,
-                                popUpToBuilder = { inclusive = true }
-                            )
-                        }
-                    )
-                }
-                is SignInProcess.Unsuccessful -> {Log.d("Halla!", "Unsuccessful")}
+                navHostController.navigate(
+                    route = Navigation.SignedIn.RouteSignedIn,
+                    builder = {
+                        this.popUpTo(
+                            route = Navigation.SignedOut.RouteSignedOut,
+                            popUpToBuilder = { inclusive = true }
+                        )
+                    }
+                )
             }
         }
 

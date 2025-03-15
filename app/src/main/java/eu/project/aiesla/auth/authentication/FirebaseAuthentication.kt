@@ -101,7 +101,33 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
 
                     else {
 
-                        continuation.resume(value = ResultOfSignInProcess.UnidentifiedException)
+                        val exceptionMessage = task.exception?.message
+
+                        if (exceptionMessage != null) {
+
+                            when {
+
+                                exceptionMessage.contains("The email address is badly formatted") -> {
+
+                                    continuation.resume(value = ResultOfSignInProcess.InvalidEmailFormat)
+                                }
+
+                                exceptionMessage.contains("The supplied auth credential is incorrect, malformed or has expired") -> {
+
+                                    continuation.resume(value = ResultOfSignInProcess.PasswordIsIncorrect)
+                                }
+
+                                else -> {
+
+                                    continuation.resume(value = ResultOfSignInProcess.UnidentifiedException)
+                                }
+                            }
+                        }
+
+                        else {
+
+                            continuation.resume(value = ResultOfSignInProcess.UnidentifiedException)
+                        }
                     }
                 }
         }

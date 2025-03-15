@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import eu.project.aiesla.sharedConstants.TextSize
+import eu.project.aiesla.sharedUi.theme.PrimaryWhite
 import eu.project.aiesla.sharedUi.theme.SecondaryWhite
 import eu.project.aiesla.sharedUi.theme.quickSandBold
 import eu.project.aiesla.sharedUi.theme.quickSandMedium
@@ -31,6 +32,7 @@ fun primaryCenteredLabel(content: String) {
 
     Text(
         text = content,
+        color = PrimaryWhite,
         fontSize = TextSize.PRIMARY_LABEL.sp,
         fontFamily = quickSandMedium,
         textAlign = TextAlign.Center,
