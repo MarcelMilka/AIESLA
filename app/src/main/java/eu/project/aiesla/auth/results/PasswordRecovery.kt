@@ -5,15 +5,16 @@ sealed class PasswordRecoveryProcess {
     data object Idle: PasswordRecoveryProcess()
     data object Pending: PasswordRecoveryProcess()
     data object Successful: PasswordRecoveryProcess()
-    data class Unsuccessful(val cause: String): PasswordRecoveryProcess()
+    data class Unsuccessful(val cause: UnsuccessfulPasswordRecoveryCause): PasswordRecoveryProcess()
 }
 
 enum class ResultOfPasswordRecoveryProcess {
     Ok,
+    InvalidEmailFormat,
     UnidentifiedException,
 }
 
-object UnsuccessfulPasswordRecoveryCause {
-
-    const val EXEMPLARY_CAUSE = "exemplary cause"
+enum class UnsuccessfulPasswordRecoveryCause {
+    InvalidEmailFormat,
+    UnidentifiedException,
 }

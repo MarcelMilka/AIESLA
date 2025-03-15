@@ -147,7 +147,22 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
 
                     else {
 
-                        continuation.resume(value = ResultOfPasswordRecoveryProcess.UnidentifiedException)
+                        when (task.exception) {
+
+                            is FirebaseAuthInvalidCredentialsException -> {
+
+                                continuation.resume(
+                                    value = ResultOfPasswordRecoveryProcess.InvalidEmailFormat
+                                )
+                            }
+
+                            else -> {
+
+                                continuation.resume(
+                                    value = ResultOfPasswordRecoveryProcess.UnidentifiedException
+                                )
+                            }
+                        }
                     }
                 }
         }

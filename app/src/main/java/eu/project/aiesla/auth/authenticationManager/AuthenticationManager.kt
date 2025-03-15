@@ -22,4 +22,6 @@ interface AuthenticationManager {
     fun sendPasswordRecoveryEmail(email: EmailCredential)
 
     fun signOut()
+
+    fun resetStatesOfProcesses()
 }

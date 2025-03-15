@@ -154,20 +154,43 @@ class ProductionAuthenticationManager @Inject constructor(
                     firebaseAuthentication.sendPasswordRecoveryEmail(email = email)
 
                 when (resultOfPasswordRecoveryProcess) {
+
                     ResultOfPasswordRecoveryProcess.Ok -> {
 
                         _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
                     }
+
+                    ResultOfPasswordRecoveryProcess.InvalidEmailFormat -> {
+
+                        _passwordRecoveryProcess.emit(
+                            value = PasswordRecoveryProcess.Unsuccessful(
+                                cause = UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat
+                            )
+                        )
+                    }
+
                     ResultOfPasswordRecoveryProcess.UnidentifiedException -> {
 
                         _passwordRecoveryProcess.emit(
                             value = PasswordRecoveryProcess.Unsuccessful(
-                                cause = UnsuccessfulPasswordRecoveryCause.EXEMPLARY_CAUSE
+                                cause = UnsuccessfulPasswordRecoveryCause.UnidentifiedException
                             )
                         )
                     }
                 }
             }
+    }
+
+    override fun resetStatesOfProcesses() {
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            _signInProcess.emit(value = SignInProcess.Idle)
+
+            _signUpProcess.emit(value = SignUpProcess.Idle)
+
+            _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Idle)
+        }
     }
 
     override fun signOut() {

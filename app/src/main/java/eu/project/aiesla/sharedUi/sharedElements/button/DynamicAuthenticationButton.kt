@@ -3,6 +3,7 @@ package eu.project.aiesla.sharedUi.sharedElements.button
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +35,7 @@ fun buttonSignInSignUp(content: String, testTag: String, enabled: Boolean, onCli
         onClick = { onClick() },
 
         modifier = Modifier
-            .width(200.dp)
+            .width(intrinsicSize = IntrinsicSize.Max)
             .height(40.dp)
             .testTag(testTag),
 

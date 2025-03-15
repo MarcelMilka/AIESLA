@@ -1,6 +1,5 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword
 
-import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,30 +22,36 @@ fun NavGraphBuilder.recoverYourPasswordImpl(
             .passwordRecoveryProcess
             .collectAsStateWithLifecycle()
 
+        LaunchedEffect(true) {
+
+            authenticationManager.resetStatesOfProcesses()
+        }
+
         LaunchedEffect(passwordRecoveryProcess) {
 
-            when (passwordRecoveryProcess) {
-                PasswordRecoveryProcess.Idle -> {Log.d("Halla!", "Idle")}
-                PasswordRecoveryProcess.Pending -> {Log.d("Halla!", "Pending")}
-                PasswordRecoveryProcess.Successful -> {
+            if (passwordRecoveryProcess is PasswordRecoveryProcess.Successful) {
 
-                    Log.d("Halla!", "Successful")
-
-                    navHostController.navigate(
-                        route = Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen,
-                        builder = {
-                            this.popUpTo(
-                                route = Navigation.SignedOut.WelcomeScreen,
-                                popUpToBuilder = { inclusive = false }
-                            )
-                        }
-                    )
-                }
-                is PasswordRecoveryProcess.Unsuccessful -> {Log.d("Halla!", "Unsuccessful")}
+                navHostController.navigate(
+                    route = Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen,
+                    builder = {
+                        this.popUpTo(
+                            route = Navigation.SignedOut.WelcomeScreen,
+                            popUpToBuilder = { inclusive = false }
+                        )
+                    }
+                )
             }
         }
 
         recoverYourPasswordScreen(
+
+            passwordRecoveryProcess = passwordRecoveryProcess,
+
+            onResetPasswordRecoveryProcess = {
+
+                authenticationManager.resetStatesOfProcesses()
+            },
+
             onRecoverPassword = {
 
                 authenticationManager.sendPasswordRecoveryEmail(email = it)
