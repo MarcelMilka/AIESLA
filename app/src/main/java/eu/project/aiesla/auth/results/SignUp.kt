@@ -16,7 +16,6 @@ enum class ResultOfSignUpProcess {
 }
 
 enum class UnsuccessfulSignUpProcessCause {
-
     InvalidEmailFormat,
     EmailIsAlreadyInUse,
     UnidentifiedException,

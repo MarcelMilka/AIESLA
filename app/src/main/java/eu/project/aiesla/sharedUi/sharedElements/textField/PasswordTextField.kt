@@ -114,6 +114,8 @@ fun passwordTextField (
 
             IconButton(
 
+                modifier = Modifier.testTag("PasswordTextField icon button"),
+
                 onClick = {
 
                     passwordIsVisible = !passwordIsVisible
@@ -121,16 +123,26 @@ fun passwordTextField (
 
                 content = {
 
-                    Icon(
-                        painter = when (passwordIsVisible) {
+                    when (passwordIsVisible) {
 
-                            true -> painterResource(R.drawable.visibility_on)
+                        true -> {
 
-                            false -> painterResource(R.drawable.visibility_off)
-                        },
-                        contentDescription = null,
-                        tint = White
-                    )
+                            Icon(
+                                painter = painterResource(R.drawable.visibility_on),
+                                contentDescription = "Icon 'visibility on'",
+                                tint = White
+                            )
+                        }
+
+                        false -> {
+
+                            Icon(
+                                painter = painterResource(R.drawable.visibility_off),
+                                contentDescription = "Icon 'visibility off'",
+                                tint = White
+                            )
+                        }
+                    }
                 },
             )
         },

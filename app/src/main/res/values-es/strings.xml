@@ -16,4 +16,7 @@
     <string name="uppercase_letters">letra mayúscula</string>
     <string name="special_character">carácter especial</string>
     <string name="numeric_character">carácter numérico</string>
+    <string name="invalid_email_address">Dirección de correo electrónico no válida.</string>
+    <string name="email_is_already_in_use">El correo electrónico ya está en uso.</string>
+    <string name="unidentified_error">Error no identificado.</string>
 </resources>

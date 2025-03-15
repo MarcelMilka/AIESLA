@@ -13,4 +13,7 @@
     <string name="uppercase_letters">stor bokstav</string>
     <string name="special_character">spesiell karakter</string>
     <string name="numeric_character">numerisk tegn</string>
+    <string name="invalid_email_address">Ugyldig e-postadresse.</string>
+    <string name="email_is_already_in_use">E-postadressen er allerede i bruk.</string>
+    <string name="unidentified_error">Uidentifisert feil.</string>
 </resources>

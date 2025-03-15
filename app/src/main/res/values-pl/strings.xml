@@ -13,4 +13,7 @@
     <string name="uppercase_letters">wielka litera</string>
     <string name="special_character">znak specjalny</string>
     <string name="numeric_character">znak numeryczny</string>
+    <string name="invalid_email_address">Nieprawidłowy adres e-mail.</string>
+    <string name="email_is_already_in_use">Adres e-mail jest zajęty.</string>
+    <string name="unidentified_error">Niezidentyfikowany błąd.</string>
 </resources>

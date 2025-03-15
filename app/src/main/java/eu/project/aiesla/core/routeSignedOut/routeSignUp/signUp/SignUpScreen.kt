@@ -10,14 +10,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.PasswordRequirements
 import eu.project.aiesla.auth.results.SignUpProcess
+import eu.project.aiesla.auth.results.UnsuccessfulSignUpProcessCause
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.dynamicAuthenticationButton
+import eu.project.aiesla.sharedUi.sharedElements.button.buttonSignInSignUp
 import eu.project.aiesla.sharedUi.sharedElements.text.dynamicTextFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
@@ -40,14 +42,20 @@ fun signUpScreen(
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
-    var emailTextFieldIsActive by remember { mutableStateOf(false) }
     var passwordTextFieldIsActive by remember { mutableStateOf(false) }
+
+    // activate email text field immediately after entering the screen
+    LaunchedEffect(true) {
+
+        emailFocusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp),
+            .padding(Padding.P20.dp)
+            .testTag("SignUpScreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,10 +92,40 @@ fun signUpScreen(
 
                                     verticalDivider5()
 
-                                    textFieldHint(
-                                        content = "error message",
-                                        testTag = "SignUpScreen emailTextFieldHint"
-                                    )
+                                    when (signUpProcess is SignUpProcess.Unsuccessful) {
+
+                                        true -> {
+
+                                            when(signUpProcess.cause) {
+
+                                                UnsuccessfulSignUpProcessCause.InvalidEmailFormat -> {
+
+                                                    textFieldHint(
+                                                        content = stringResource(R.string.invalid_email_address),
+                                                        testTag = "SignUpScreen emailTextFieldHint InvalidEmailFormat"
+                                                    )
+                                                }
+
+                                                UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse -> {
+
+                                                    textFieldHint(
+                                                        content = stringResource(R.string.email_is_already_in_use),
+                                                        testTag = "SignUpScreen emailTextFieldHint EmailIsAlreadyInUse"
+                                                    )
+                                                }
+
+                                                UnsuccessfulSignUpProcessCause.UnidentifiedException -> {
+
+                                                    textFieldHint(
+                                                        content = stringResource(R.string.unidentified_error),
+                                                        testTag = "SignUpScreen emailTextFieldHint UnidentifiedException"
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        false -> {}
+                                    }
                                 }
                             )
                         }
@@ -146,9 +184,15 @@ fun signUpScreen(
 
                     verticalDivider20()
 
-                    dynamicAuthenticationButton(
+                    buttonSignInSignUp(
                         content = stringResource(R.string.sign_up),
-                        enabled = email.isNotEmpty(),
+                        testTag = "SignUpScreen dynamicAuthenticationButton",
+                        enabled =
+                            email.isNotEmpty() &&
+                            password.count() >= PasswordRequirements.MIN_CHARACTERS_COUNT &&
+                            password.count { it.isUpperCase() } >= PasswordRequirements.MIN_UPPERCASE_COUNT &&
+                            password.count { !it.isLetterOrDigit() } >= PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT &&
+                            password.count { it.isDigit() } >= PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT,
                         onClick = {
 
                             onSignUp(
