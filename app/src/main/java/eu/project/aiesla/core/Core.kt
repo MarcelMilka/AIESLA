@@ -80,7 +80,7 @@ fun core(
                                 authenticationManager = authenticationManager
                             )
 
-                            signUpEmailInformationImpl()
+                            signUpEmailInformationImpl(navHostController = navHostController)
                         }
                     }
 

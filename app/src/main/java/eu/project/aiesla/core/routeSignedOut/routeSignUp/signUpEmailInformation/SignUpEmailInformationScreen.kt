@@ -9,11 +9,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.Padding
+import eu.project.aiesla.sharedUi.sharedElements.button.primaryAuthenticationButton
 import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
 import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
-fun signUpEmailInformationScreen() {
+fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -46,9 +47,20 @@ fun signUpEmailInformationScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                verticalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                content = {}
+                content = {
+
+                    // sign in
+                    primaryAuthenticationButton(
+                        content = stringResource(R.string.sign_in),
+                        testTag = "SignUpEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'",
+                        onClick = {
+
+                            onSignIn()
+                        }
+                    )
+                }
             )
         }
     )
