@@ -40,7 +40,12 @@ class ProductionAuthenticationManager @Inject constructor(
                         val signInProcess = async {
 
                             _signInProcess.emit(value = SignInProcess.Pending)
-                            firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
+                            firebaseAuthentication.signInWithEmailAndPassword(
+                                credentials = EmailAndPasswordCredentials(
+                                    credentials.email,
+                                    credentials.password
+                                )
+                            )
                         }
 
                         when (signInProcess.await()) {
@@ -111,7 +116,13 @@ class ProductionAuthenticationManager @Inject constructor(
                         val signUpProcess = async {
 
                             _signUpProcess.emit(value = SignUpProcess.Pending)
-                            firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
+
+                            firebaseAuthentication.signUpWithEmailAndPassword(
+                                credentials = EmailAndPasswordCredentials(
+                                    email = credentials.email,
+                                    password = credentials.password
+                                )
+                            )
                         }
 
                         when (signUpProcess.await()) {
@@ -255,7 +266,7 @@ class ProductionAuthenticationManager @Inject constructor(
 
     override fun resetStatesOfProcesses() {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        coroutineScope.launch {
 
             _signInProcess.emit(value = SignInProcess.Idle)
 
@@ -267,7 +278,7 @@ class ProductionAuthenticationManager @Inject constructor(
 
     override fun signOut() {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        coroutineScope.launch {
 
             firebaseAuthentication.signOut()
         }

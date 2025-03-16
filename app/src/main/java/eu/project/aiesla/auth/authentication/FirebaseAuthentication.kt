@@ -2,6 +2,7 @@ package eu.project.aiesla.auth.authentication
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.*
+import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
 import eu.project.aiesla.auth.results.ResultOfSignInProcess
@@ -18,11 +19,15 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
     override fun isSignedIn(): Boolean =
         auth.currentUser != null && auth.currentUser!!.isEmailVerified
 
-    override suspend fun signUpWithEmailAndPassword(email: String, password: String): ResultOfSignUpProcess {
+    override suspend fun signUpWithEmailAndPassword(credentials: EmailAndPasswordCredentials): ResultOfSignUpProcess {
 
         return suspendCoroutine { continuation ->
 
-            auth.createUserWithEmailAndPassword(email, password)
+            auth
+                .createUserWithEmailAndPassword(
+                    credentials.email,
+                    credentials.password
+                )
                 .addOnCompleteListener { task ->
 
                     if (task.isSuccessful) {
@@ -81,12 +86,15 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
         }
     }
 
-    override suspend fun signInWithEmailAndPassword(email: String, password: String): ResultOfSignInProcess {
+    override suspend fun signInWithEmailAndPassword(credentials: EmailAndPasswordCredentials): ResultOfSignInProcess {
 
         return suspendCoroutine { continuation ->
 
             auth
-                .signInWithEmailAndPassword(email, password)
+                .signInWithEmailAndPassword(
+                    credentials.email,
+                    credentials.password
+                )
                 .addOnCompleteListener { task ->
 
                     val currentUser = auth.currentUser

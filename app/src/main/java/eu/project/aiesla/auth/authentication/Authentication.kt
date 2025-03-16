@@ -1,5 +1,6 @@
 package eu.project.aiesla.auth.authentication
 
+import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
 import eu.project.aiesla.auth.results.ResultOfSignInProcess
@@ -10,9 +11,9 @@ interface Authentication {
 
     fun isSignedIn(): Boolean
 
-    suspend fun signUpWithEmailAndPassword(email: String, password: String): ResultOfSignUpProcess
+    suspend fun signUpWithEmailAndPassword(credentials: EmailAndPasswordCredentials): ResultOfSignUpProcess
 
-    suspend fun signInWithEmailAndPassword(email: String, password: String): ResultOfSignInProcess
+    suspend fun signInWithEmailAndPassword(credentials: EmailAndPasswordCredentials): ResultOfSignInProcess
 
     suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail
 

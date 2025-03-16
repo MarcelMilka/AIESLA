@@ -100,7 +100,7 @@ class ProductionAuthenticationManagerTest {
     fun `signIn - signInProcess is Successful when ResultOfSignInProcess is Ok`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signInWithEmailAndPassword("email", "password") } returns ResultOfSignInProcess.Ok
+        coEvery { firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignInProcess.Ok
         authenticationManager.signIn(credentials = EmailAndPasswordCredentials("email", "password"))
 
         // test
@@ -121,7 +121,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signInWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -130,7 +130,7 @@ class ProductionAuthenticationManagerTest {
     fun `signIn - signInProcess is Unsuccessful - InvalidEmailFormat when ResultOfSignInProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signInWithEmailAndPassword("email", "password") } returns ResultOfSignInProcess.InvalidEmailFormat
+        coEvery { firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignInProcess.InvalidEmailFormat
         authenticationManager.signIn(credentials = EmailAndPasswordCredentials("email", "password"))
 
         // test
@@ -151,7 +151,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signInWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -160,7 +160,7 @@ class ProductionAuthenticationManagerTest {
     fun `signIn - signInProcess is Unsuccessful - PasswordIsIncorrect when ResultOfSignInProcess is PasswordIsIncorrect`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signInWithEmailAndPassword("email", "password") } returns ResultOfSignInProcess.PasswordIsIncorrect
+        coEvery { firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignInProcess.PasswordIsIncorrect
         authenticationManager.signIn(credentials = EmailAndPasswordCredentials("email", "password"))
 
         // test
@@ -181,7 +181,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signInWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -190,7 +190,7 @@ class ProductionAuthenticationManagerTest {
     fun `signIn - signInProcess is Unsuccessful - UnidentifiedException when ResultOfSignInProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signInWithEmailAndPassword("email", "password") } returns ResultOfSignInProcess.UnidentifiedException
+        coEvery { firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignInProcess.UnidentifiedException
         authenticationManager.signIn(credentials = EmailAndPasswordCredentials("email", "password"))
 
         // test
@@ -211,7 +211,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signInWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -220,7 +220,7 @@ class ProductionAuthenticationManagerTest {
     fun `signIn - signInProcess is Unsuccessful - Timeout when it takes more than 10 seconds to sign in`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signInWithEmailAndPassword("email", "password") } coAnswers {
+        coEvery { firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } coAnswers {
 
             delay(10500)
             ResultOfSignInProcess.Ok
@@ -246,7 +246,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signInWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signInWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -269,7 +269,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is Successful when ResultOfSignUpProcess is Ok and ResultOfSendingSignUpVerificationEmail is Ok`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } returns ResultOfSignUpProcess.Ok
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignUpProcess.Ok
         coEvery { firebaseAuthentication.sendSignUpVerificationEmail() } returns ResultOfSendingSignUpVerificationEmail.Ok
 
         authenticationManager.signUp(credentials = EmailAndPasswordCredentials("email", "password"))
@@ -292,7 +292,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
             firebaseAuthentication.sendSignUpVerificationEmail()
         }
     }
@@ -302,7 +302,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is Unsuccessful - UnidentifiedException when ResultOfSignUpProcess is Ok and ResultOfSendingSignUpVerificationEmail is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } returns ResultOfSignUpProcess.Ok
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignUpProcess.Ok
         coEvery { firebaseAuthentication.sendSignUpVerificationEmail() } returns ResultOfSendingSignUpVerificationEmail.UnidentifiedException
 
         authenticationManager.signUp(credentials = EmailAndPasswordCredentials("email", "password"))
@@ -325,7 +325,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
             firebaseAuthentication.sendSignUpVerificationEmail()
         }
     }
@@ -335,7 +335,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is is Unsuccessful - InvalidEmailFormat when ResultOfSignUpProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } returns ResultOfSignUpProcess.InvalidEmailFormat
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignUpProcess.InvalidEmailFormat
 
         authenticationManager.signUp(credentials = EmailAndPasswordCredentials("email", "password"))
 
@@ -357,7 +357,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -366,7 +366,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is is EmailIsAlreadyInUse - InvalidEmailFormat when ResultOfSignUpProcess is EmailIsAlreadyInUse`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } returns ResultOfSignUpProcess.EmailIsAlreadyInUse
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignUpProcess.EmailIsAlreadyInUse
 
         authenticationManager.signUp(credentials = EmailAndPasswordCredentials("email", "password"))
 
@@ -388,7 +388,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -397,7 +397,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is is UnidentifiedException - InvalidEmailFormat when ResultOfSignUpProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } returns ResultOfSignUpProcess.UnidentifiedException
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } returns ResultOfSignUpProcess.UnidentifiedException
 
         authenticationManager.signUp(credentials = EmailAndPasswordCredentials("email", "password"))
 
@@ -419,7 +419,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
@@ -428,7 +428,7 @@ class ProductionAuthenticationManagerTest {
     fun `signUp - signUpProcess is is Unsuccessful - Timeout when it takes more than 10 seconds to sign in`() = runTest(StandardTestDispatcher()) {
 
         // set up the test
-        coEvery { firebaseAuthentication.signUpWithEmailAndPassword("email", "password") } coAnswers {
+        coEvery { firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password")) } coAnswers {
 
             delay(10500)
             ResultOfSignUpProcess.Ok
@@ -454,7 +454,7 @@ class ProductionAuthenticationManagerTest {
         // verification
         coVerify(exactly = 1) {
 
-            firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+            firebaseAuthentication.signUpWithEmailAndPassword(EmailAndPasswordCredentials("email", "password"))
         }
     }
 
