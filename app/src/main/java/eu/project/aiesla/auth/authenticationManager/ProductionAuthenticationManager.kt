@@ -102,33 +102,64 @@ class ProductionAuthenticationManager @Inject constructor(
 
     override fun signUp(credentials: EmailAndPasswordCredentials) {
 
-        CoroutineScope(Dispatchers.IO)
+        coroutineScope
             .launch {
+                try {
 
-                val signUpProcess = async {
+                    withTimeout(timeout) {
 
-                    _signUpProcess.emit(value = SignUpProcess.Pending)
-                    firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
-                    ResultOfSignUpProcess.Ok
-                }
+                        val signUpProcess = async {
 
-                when (signUpProcess.await()) {
-
-                    ResultOfSignUpProcess.Ok -> {
-
-                        val verificationProcess = async {
-
-                            firebaseAuthentication.sendSignUpVerificationEmail()
+                            _signUpProcess.emit(value = SignUpProcess.Pending)
+                            firebaseAuthentication.signUpWithEmailAndPassword(credentials.email, credentials.password)
                         }
 
-                        when (verificationProcess.await()) {
+                        when (signUpProcess.await()) {
 
-                            ResultOfVerificationProcess.Ok -> {
+                            ResultOfSignUpProcess.Ok -> {
 
-                                _signUpProcess.emit(value = SignUpProcess.Successful)
+                                val processOfSendingSignUpVerificationEmail = async {
+
+                                    firebaseAuthentication.sendSignUpVerificationEmail()
+                                }
+
+                                when (processOfSendingSignUpVerificationEmail.await()) {
+
+                                    ResultOfSendingSignUpVerificationEmail.Ok -> {
+
+                                        _signUpProcess.emit(value = SignUpProcess.Successful)
+                                    }
+
+                                    ResultOfSendingSignUpVerificationEmail.UnidentifiedException -> {
+
+                                        _signUpProcess.emit(
+                                            value = SignUpProcess.Unsuccessful(
+                                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
+                                            )
+                                        )
+                                    }
+                                }
                             }
 
-                            ResultOfVerificationProcess.UnidentifiedException -> {
+                            ResultOfSignUpProcess.InvalidEmailFormat -> {
+
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.InvalidEmailFormat
+                                    )
+                                )
+                            }
+
+                            ResultOfSignUpProcess.EmailIsAlreadyInUse -> {
+
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse
+                                    )
+                                )
+                            }
+
+                            ResultOfSignUpProcess.UnidentifiedException -> {
 
                                 _signUpProcess.emit(
                                     value = SignUpProcess.Unsuccessful(
@@ -138,33 +169,24 @@ class ProductionAuthenticationManager @Inject constructor(
                             }
                         }
                     }
+                }
 
-                    ResultOfSignUpProcess.InvalidEmailFormat -> {
+                catch (e: TimeoutCancellationException) {
 
-                        _signUpProcess.emit(
-                            value = SignUpProcess.Unsuccessful(
-                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
-                            )
+                    _signUpProcess.emit(
+                        value = SignUpProcess.Unsuccessful(
+                            cause = UnsuccessfulSignUpProcessCause.Timeout
                         )
-                    }
+                    )
+                }
 
-                    ResultOfSignUpProcess.EmailIsAlreadyInUse -> {
+                catch (e: Exception) {
 
-                        _signUpProcess.emit(
-                            value = SignUpProcess.Unsuccessful(
-                                cause = UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse
-                            )
+                    _signUpProcess.emit(
+                        value = SignUpProcess.Unsuccessful(
+                            cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
                         )
-                    }
-
-                    ResultOfSignUpProcess.UnidentifiedException -> {
-
-                        _signUpProcess.emit(
-                            value = SignUpProcess.Unsuccessful(
-                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
-                            )
-                        )
-                    }
+                    )
                 }
             }
     }

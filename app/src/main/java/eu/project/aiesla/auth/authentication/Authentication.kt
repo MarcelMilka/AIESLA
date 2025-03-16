@@ -4,7 +4,7 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
 import eu.project.aiesla.auth.results.ResultOfSignInProcess
 import eu.project.aiesla.auth.results.ResultOfSignUpProcess
-import eu.project.aiesla.auth.results.ResultOfVerificationProcess
+import eu.project.aiesla.auth.results.ResultOfSendingSignUpVerificationEmail
 
 interface Authentication {
 
@@ -14,7 +14,7 @@ interface Authentication {
 
     suspend fun signInWithEmailAndPassword(email: String, password: String): ResultOfSignInProcess
 
-    suspend fun sendSignUpVerificationEmail(): ResultOfVerificationProcess
+    suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail
 
     suspend fun sendPasswordRecoveryEmail(email: EmailCredential): ResultOfPasswordRecoveryProcess
 

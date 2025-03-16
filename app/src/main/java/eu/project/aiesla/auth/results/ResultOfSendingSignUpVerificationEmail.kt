@@ -1,6 +1,6 @@
 package eu.project.aiesla.auth.results
 
-enum class ResultOfVerificationProcess {
+enum class ResultOfSendingSignUpVerificationEmail {
     Ok,
     UnidentifiedException,
 }

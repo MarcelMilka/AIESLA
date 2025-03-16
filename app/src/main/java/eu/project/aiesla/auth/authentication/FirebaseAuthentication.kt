@@ -1,13 +1,12 @@
 package eu.project.aiesla.auth.authentication
 
-import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.*
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.ResultOfPasswordRecoveryProcess
 import eu.project.aiesla.auth.results.ResultOfSignInProcess
 import eu.project.aiesla.auth.results.ResultOfSignUpProcess
-import eu.project.aiesla.auth.results.ResultOfVerificationProcess
+import eu.project.aiesla.auth.results.ResultOfSendingSignUpVerificationEmail
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -61,7 +60,7 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
         }
     }
 
-    override suspend fun sendSignUpVerificationEmail(): ResultOfVerificationProcess {
+    override suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail {
 
         return suspendCoroutine { continuation ->
 
@@ -71,14 +70,12 @@ class FirebaseAuthentication @Inject constructor(): Authentication {
 
                     if (task.isSuccessful) {
 
-                        Log.d("Halla!", "sendSignUpVerificationEmail: ok")
-                        continuation.resume(value = ResultOfVerificationProcess.Ok)
+                        continuation.resume(value = ResultOfSendingSignUpVerificationEmail.Ok)
                     }
 
                     else {
 
-                        Log.d("Halla!", "sendSignUpVerificationEmail: not ok")
-                        continuation.resume(value = ResultOfVerificationProcess.UnidentifiedException)
+                        continuation.resume(value = ResultOfSendingSignUpVerificationEmail.UnidentifiedException)
                     }
                 }
         }

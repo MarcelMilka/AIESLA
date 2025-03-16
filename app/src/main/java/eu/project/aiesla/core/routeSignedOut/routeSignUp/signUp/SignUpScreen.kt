@@ -114,6 +114,8 @@ fun signUpScreen(
                                                     )
                                                 }
 
+                                                UnsuccessfulSignUpProcessCause.Timeout -> {}
+
                                                 UnsuccessfulSignUpProcessCause.UnidentifiedException -> {
 
                                                     textFieldHint(
