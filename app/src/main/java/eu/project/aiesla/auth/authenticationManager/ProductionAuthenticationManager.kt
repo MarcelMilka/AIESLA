@@ -3,16 +3,16 @@ package eu.project.aiesla.auth.authenticationManager
 import eu.project.aiesla.auth.authentication.Authentication
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.di.IoDispatcher
 import eu.project.aiesla.auth.results.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class ProductionAuthenticationManager @Inject constructor(
-    private val firebaseAuthentication: Authentication
+    private val firebaseAuthentication: Authentication,
+    @IoDispatcher private val coroutineScope: CoroutineScope
 ): AuthenticationManager {
 
     private var _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
@@ -24,53 +24,78 @@ class ProductionAuthenticationManager @Inject constructor(
     private var _passwordRecoveryProcess = MutableStateFlow<PasswordRecoveryProcess>(PasswordRecoveryProcess.Idle)
     override val passwordRecoveryProcess = _passwordRecoveryProcess.asStateFlow()
 
+    private val timeout = 10000L
+
 
     override fun isSignedIn(): Boolean = firebaseAuthentication.isSignedIn()
 
     override fun signIn(credentials: EmailAndPasswordCredentials) {
 
-        CoroutineScope(Dispatchers.IO)
+        coroutineScope
             .launch {
+                try {
 
-                val signInProcess = async {
+                    withTimeout(timeout) {
 
-                    _signInProcess.emit(value = SignInProcess.Pending)
-                    firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
+                        val signInProcess = async {
+
+                            _signInProcess.emit(value = SignInProcess.Pending)
+                            firebaseAuthentication.signInWithEmailAndPassword(credentials.email, credentials.password)
+                        }
+
+                        when (signInProcess.await()) {
+
+                            ResultOfSignInProcess.Ok -> {
+
+                                _signInProcess.emit(value = SignInProcess.Successful)
+                            }
+
+                            ResultOfSignInProcess.InvalidEmailFormat -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.InvalidEmailFormat
+                                    )
+                                )
+                            }
+
+                            ResultOfSignInProcess.PasswordIsIncorrect -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.PasswordIsIncorrect
+                                    )
+                                )
+                            }
+
+                            ResultOfSignInProcess.UnidentifiedException -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.UnidentifiedException
+                                    )
+                                )
+                            }
+                        }
+                    }
                 }
 
-                when (signInProcess.await()) {
+                catch (e: TimeoutCancellationException) {
 
-                    ResultOfSignInProcess.Ok -> {
-
-                        _signInProcess.emit(value = SignInProcess.Successful)
-                    }
-
-                    ResultOfSignInProcess.InvalidEmailFormat -> {
-
-                        _signInProcess.emit(
-                            value = SignInProcess.Unsuccessful(
-                                cause = UnsuccessfulSignInProcessCause.InvalidEmailFormat
-                            )
+                    _signInProcess.emit(
+                        value = SignInProcess.Unsuccessful(
+                            cause = UnsuccessfulSignInProcessCause.Timeout
                         )
-                    }
+                    )
+                }
 
-                    ResultOfSignInProcess.PasswordIsIncorrect -> {
+                catch (e: Exception) {
 
-                        _signInProcess.emit(
-                            value = SignInProcess.Unsuccessful(
-                                cause = UnsuccessfulSignInProcessCause.PasswordIsIncorrect
-                            )
+                    _signInProcess.emit(
+                        value = SignInProcess.Unsuccessful(
+                            cause = UnsuccessfulSignInProcessCause.UnidentifiedException
                         )
-                    }
-
-                    ResultOfSignInProcess.UnidentifiedException -> {
-
-                        _signInProcess.emit(
-                            value = SignInProcess.Unsuccessful(
-                                cause = UnsuccessfulSignInProcessCause.UnidentifiedException
-                            )
-                        )
-                    }
+                    )
                 }
             }
     }

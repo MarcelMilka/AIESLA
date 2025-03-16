@@ -18,5 +18,6 @@ enum class ResultOfSignInProcess {
 enum class UnsuccessfulSignInProcessCause {
     InvalidEmailFormat,
     PasswordIsIncorrect,
+    Timeout,
     UnidentifiedException,
 }

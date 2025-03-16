@@ -7,14 +7,21 @@ import dagger.hilt.components.SingletonComponent
 import eu.project.aiesla.auth.authentication.Authentication
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.authenticationManager.ProductionAuthenticationManager
+import kotlinx.coroutines.CoroutineScope
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AuthenticationManagerProvider {
 
     @Provides
-    fun provideAuthenticationManagerProduction(firebaseAuthentication: Authentication): AuthenticationManager =
+    @Singleton
+    fun provideAuthenticationManagerProduction(
+        firebaseAuthentication: Authentication,
+        @IoDispatcher coroutineScope: CoroutineScope,
+    ): AuthenticationManager =
         ProductionAuthenticationManager(
-            firebaseAuthentication = firebaseAuthentication
+            firebaseAuthentication = firebaseAuthentication,
+            coroutineScope = coroutineScope
         )
 }
