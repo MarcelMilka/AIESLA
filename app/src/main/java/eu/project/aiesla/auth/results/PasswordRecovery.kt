@@ -16,5 +16,6 @@ enum class ResultOfPasswordRecoveryProcess {
 
 enum class UnsuccessfulPasswordRecoveryCause {
     InvalidEmailFormat,
+    Timeout,
     UnidentifiedException,
 }

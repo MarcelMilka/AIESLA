@@ -193,37 +193,62 @@ class ProductionAuthenticationManager @Inject constructor(
 
     override fun sendPasswordRecoveryEmail(email: EmailCredential) {
 
-        CoroutineScope(Dispatchers.IO)
+        coroutineScope
             .launch {
+                try {
 
-                _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Pending)
-                val resultOfPasswordRecoveryProcess =
-                    firebaseAuthentication.sendPasswordRecoveryEmail(email = email)
+                    withTimeout(timeout) {
 
-                when (resultOfPasswordRecoveryProcess) {
+                        val resultOfPasswordRecoveryProcess = async {
 
-                    ResultOfPasswordRecoveryProcess.Ok -> {
+                            _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Pending)
+                            firebaseAuthentication.sendPasswordRecoveryEmail(email = email)
+                        }
 
-                        _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
+                        when (resultOfPasswordRecoveryProcess.await()) {
+
+                            ResultOfPasswordRecoveryProcess.Ok -> {
+
+                                _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
+                            }
+
+                            ResultOfPasswordRecoveryProcess.InvalidEmailFormat -> {
+
+                                _passwordRecoveryProcess.emit(
+                                    value = PasswordRecoveryProcess.Unsuccessful(
+                                        cause = UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat
+                                    )
+                                )
+                            }
+
+                            ResultOfPasswordRecoveryProcess.UnidentifiedException -> {
+
+                                _passwordRecoveryProcess.emit(
+                                    value = PasswordRecoveryProcess.Unsuccessful(
+                                        cause = UnsuccessfulPasswordRecoveryCause.UnidentifiedException
+                                    )
+                                )
+                            }
+                        }
                     }
+                }
 
-                    ResultOfPasswordRecoveryProcess.InvalidEmailFormat -> {
+                catch (e: TimeoutCancellationException) {
 
-                        _passwordRecoveryProcess.emit(
-                            value = PasswordRecoveryProcess.Unsuccessful(
-                                cause = UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat
-                            )
+                    _passwordRecoveryProcess.emit(
+                        value = PasswordRecoveryProcess.Unsuccessful(
+                            cause = UnsuccessfulPasswordRecoveryCause.Timeout
                         )
-                    }
+                    )
+                }
 
-                    ResultOfPasswordRecoveryProcess.UnidentifiedException -> {
+                catch (e: Exception) {
 
-                        _passwordRecoveryProcess.emit(
-                            value = PasswordRecoveryProcess.Unsuccessful(
-                                cause = UnsuccessfulPasswordRecoveryCause.UnidentifiedException
-                            )
+                    _passwordRecoveryProcess.emit(
+                        value = PasswordRecoveryProcess.Unsuccessful(
+                            cause = UnsuccessfulPasswordRecoveryCause.UnidentifiedException
                         )
-                    }
+                    )
                 }
             }
     }

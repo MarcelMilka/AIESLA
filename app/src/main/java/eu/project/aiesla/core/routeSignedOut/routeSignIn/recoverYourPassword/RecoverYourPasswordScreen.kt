@@ -106,6 +106,8 @@ fun recoverYourPasswordScreen(
                                                     )
                                                 }
 
+                                                UnsuccessfulPasswordRecoveryCause.Timeout -> {}
+
                                                 UnsuccessfulPasswordRecoveryCause.UnidentifiedException -> {
 
                                                     textFieldHint(

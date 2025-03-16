@@ -3,6 +3,7 @@ package eu.project.aiesla.auth.authenticationManager
 import app.cash.turbine.test
 import eu.project.aiesla.auth.authentication.FirebaseAuthentication
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
+import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.*
 import eu.project.aiesla.testHelpers.MainDispatcherRule
 import io.mockk.*
@@ -454,6 +455,141 @@ class ProductionAuthenticationManagerTest {
         coVerify(exactly = 1) {
 
             firebaseAuthentication.signUpWithEmailAndPassword(any(), any())
+        }
+    }
+
+
+
+    // sendPasswordRecoveryEmail
+    @Test
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Idle by default`() = runTest {
+
+        authenticationManager.passwordRecoveryProcess.test {
+
+            assertEquals(PasswordRecoveryProcess.Idle, this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Successful when ResultOfPasswordRecoveryProcess is Ok`() = runTest(StandardTestDispatcher()) {
+
+        // set up the test
+        coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.Ok
+        authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
+
+        // test
+        authenticationManager.passwordRecoveryProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Successful, this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+            firebaseAuthentication.sendPasswordRecoveryEmail(any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - InvalidEmailFormat when ResultOfPasswordRecoveryProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
+
+        // set up the test
+        coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.InvalidEmailFormat
+        authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
+
+        // test
+        authenticationManager.passwordRecoveryProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+            firebaseAuthentication.sendPasswordRecoveryEmail(any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - UnidentifiedException when ResultOfPasswordRecoveryProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // set up the test
+        coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.UnidentifiedException
+        authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
+
+        // test
+        authenticationManager.passwordRecoveryProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.UnidentifiedException), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+            firebaseAuthentication.sendPasswordRecoveryEmail(any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - Timeout when it takes more than 10 seconds`() = runTest(StandardTestDispatcher()) {
+
+        // set up the test
+        coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } coAnswers {
+
+            delay(10500)
+            ResultOfPasswordRecoveryProcess.Ok
+        }
+
+        authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
+
+        // test
+        authenticationManager.passwordRecoveryProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.Timeout), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+            firebaseAuthentication.sendPasswordRecoveryEmail(any())
         }
     }
 }
