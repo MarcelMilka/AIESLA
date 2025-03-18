@@ -1,5 +1,7 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,39 +17,46 @@ fun NavGraphBuilder.signUpImpl(
     authenticationManager: AuthenticationManager
 ) {
 
-    composable<Navigation.SignedOut.SignUp.SignUpScreen> {
+    composable<Navigation.SignedOut.SignUp.SignUpScreen>(
 
-        val signUpProcess by
-        authenticationManager
-            .signUpProcess
-            .collectAsStateWithLifecycle()
+        enterTransition = { EnterTransition.None},
 
-        LaunchedEffect(signUpProcess) {
+        exitTransition = { ExitTransition.None},
 
-            if (signUpProcess is SignUpProcess.Successful) {
+        content = {
 
-                navHostController.navigate(
-                    route = Navigation.SignedOut.SignUp.SignUpEmailInformationScreen,
-                    builder = {
-                        this.popUpTo(
-                            route = Navigation.SignedOut.WelcomeScreen,
-                            popUpToBuilder = { inclusive = false }
-                        )
-                    }
-                )
+            val signUpProcess by
+            authenticationManager
+                .signUpProcess
+                .collectAsStateWithLifecycle()
+
+            LaunchedEffect(signUpProcess) {
+
+                if (signUpProcess is SignUpProcess.Successful) {
+
+                    navHostController.navigate(
+                        route = Navigation.SignedOut.SignUp.SignUpEmailInformationScreen,
+                        builder = {
+                            this.popUpTo(
+                                route = Navigation.SignedOut.WelcomeScreen,
+                                popUpToBuilder = { inclusive = false }
+                            )
+                        }
+                    )
+                }
             }
+
+            signUpScreen(
+
+                signUpProcess = signUpProcess,
+
+                onSignUp = {
+
+                    authenticationManager.signUp(
+                        credentials = it
+                    )
+                },
+            )
         }
-
-        signUpScreen(
-
-            signUpProcess = signUpProcess,
-
-            onSignUp = {
-
-                authenticationManager.signUp(
-                    credentials = it
-                )
-            },
-        )
-    }
+    )
 }

@@ -1,14 +1,11 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.vm
 
 import app.cash.turbine.test
-import app.cash.turbine.turbineScope
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.credentials.PasswordCredential
-import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.SignInProcess
-import eu.project.aiesla.auth.results.SignUpProcess
 import eu.project.aiesla.auth.results.UnsuccessfulSignInProcessCause
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
 import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldHint
@@ -17,13 +14,10 @@ import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldViewState
 import eu.project.aiesla.testHelpers.MainDispatcherRule
 import io.mockk.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -66,7 +60,7 @@ class SignInScreenViewModelTest {
 
 
     @Test
-    fun `updateEmail updates credentials`() = runTest(StandardTestDispatcher()) {
+    fun `updateEmail works as intended`() = runTest(StandardTestDispatcher()) {
         viewModel.updateEmail(EmailCredential("test@example.com"))
         assertEquals("test@example.com", viewModel.credentials.value.email)
     }
@@ -81,7 +75,6 @@ class SignInScreenViewModelTest {
     fun `updateEmail and updatePassword update credentials`() = runTest(StandardTestDispatcher()) {
         viewModel.updateEmail(EmailCredential("user@test.com"))
         viewModel.updatePassword(PasswordCredential("strongPass123"))
-
         assertEquals("user@test.com", viewModel.credentials.value.email)
         assertEquals("strongPass123", viewModel.credentials.value.password)
     }

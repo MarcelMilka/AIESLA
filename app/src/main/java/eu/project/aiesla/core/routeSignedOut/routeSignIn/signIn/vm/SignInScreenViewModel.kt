@@ -41,7 +41,7 @@ class SignInScreenViewModel @Inject constructor(
 
     init {
 
-//        viewModelScope.launch { authenticationManager.resetProcesses() }
+        viewModelScope.launch { authenticationManager.resetProcesses() }
 
         viewModelScope.launch { updateStateOfTheButtonProceed() }
 

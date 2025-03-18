@@ -1,5 +1,7 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,59 +18,61 @@ import kotlinx.coroutines.delay
 
 fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
 
-    composable<Navigation.SignedOut.SignIn.SignInScreen> {
+    composable<Navigation.SignedOut.SignIn.SignInScreen>(
 
-        val signInScreenViewModel = hiltViewModel<SignInScreenViewModel>()
+        enterTransition = { EnterTransition.None},
 
-        val signInProcess by
+        exitTransition = { ExitTransition.None},
+
+        content = {
+
+            val signInScreenViewModel = hiltViewModel<SignInScreenViewModel>()
+
+            val signInProcess by
             signInScreenViewModel
-            .signInProcess
-            .collectAsStateWithLifecycle()
+                .signInProcess
+                .collectAsStateWithLifecycle()
 
-        LaunchedEffect(signInProcess) {
+            LaunchedEffect(signInProcess) {
 
-            if (signInProcess is SignInProcess.Successful) {
+                if (signInProcess is SignInProcess.Successful) {
 
-                delay(100)
+                    delay(100)
 
-                navHostController.navigate(
-                    route = Navigation.SignedIn.RouteSignedIn,
-                    builder = {
-                        this.popUpTo(
-                            route = Navigation.SignedOut.RouteSignedOut,
-                            popUpToBuilder = { inclusive = true }
-                        )
-                    }
-                )
+                    navHostController.navigate(
+                        route = Navigation.SignedIn.RouteSignedIn,
+                        builder = {
+                            this.popUpTo(
+                                route = Navigation.SignedOut.RouteSignedOut,
+                                popUpToBuilder = { inclusive = true }
+                            )
+                        }
+                    )
+                }
             }
+
+            signInScreen(
+                credentials = signInScreenViewModel.credentials.collectAsStateWithLifecycle().value,
+
+                onUpdateEmail = { signInScreenViewModel.updateEmail(it) },
+
+                onUpdatePassword = { signInScreenViewModel.updatePassword(it) },
+
+                emailHintViewState = signInScreenViewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
+
+                passwordHintViewState = signInScreenViewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
+
+                buttonProceedViewState = signInScreenViewModel.stateOfButtonProceed.collectAsState().value,
+
+                onSignIn = { signInScreenViewModel.signIn() },
+
+                onRecoverPassword = {
+
+                    navHostController.navigate(
+                        route = Navigation.SignedOut.SignIn.RecoverYourPasswordScreen
+                    )
+                }
+            )
         }
-
-        signInScreen(
-            credentials = signInScreenViewModel.credentials.collectAsStateWithLifecycle().value,
-
-            onUpdateEmail = {
-
-                signInScreenViewModel.updateEmail(it)
-            },
-            onUpdatePassword = {
-
-                signInScreenViewModel.updatePassword(it)
-            },
-
-            emailHintViewState = signInScreenViewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
-            passwordHintViewState = signInScreenViewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
-            buttonProceedViewState = signInScreenViewModel.stateOfButtonProceed.collectAsState().value,
-
-            onSignIn = {
-
-                signInScreenViewModel.signIn()
-            },
-            onRecoverPassword = {
-
-                navHostController.navigate(
-                    route = Navigation.SignedOut.SignIn.RecoverYourPasswordScreen
-                )
-            }
-        )
-    }
+    )
 }
