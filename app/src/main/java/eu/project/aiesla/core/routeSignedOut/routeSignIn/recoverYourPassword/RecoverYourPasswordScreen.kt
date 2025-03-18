@@ -16,7 +16,6 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.UnsuccessfulPasswordRecoveryCause
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.buttonSignInSignUp
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
 import eu.project.aiesla.sharedUi.sharedElements.verticalDivider20
@@ -125,17 +124,17 @@ fun recoverYourPasswordScreen(
 
                     verticalDivider20()
 
-                    buttonSignInSignUp(
-                        content = stringResource(R.string.recover_your_password),
-                        testTag = "RecoverYourPasswordScreen dynamicAuthenticationButton",
-                        enabled = email.isNotEmpty() && passwordRecoveryProcess !is PasswordRecoveryProcess.Unsuccessful,
-                        onClick = {
-
-                            onRecoverPassword(
-                                EmailCredential(email = email)
-                            )
-                        }
-                    )
+//                    buttonSignInSignUp(
+//                        content = stringResource(R.string.recover_your_password),
+//                        testTag = "RecoverYourPasswordScreen dynamicAuthenticationButton",
+//                        enabled = email.isNotEmpty() && passwordRecoveryProcess !is PasswordRecoveryProcess.Unsuccessful,
+//                        onClick = {
+//
+//                            onRecoverPassword(
+//                                EmailCredential(email = email)
+//                            )
+//                        }
+//                    )
                 }
             )
 

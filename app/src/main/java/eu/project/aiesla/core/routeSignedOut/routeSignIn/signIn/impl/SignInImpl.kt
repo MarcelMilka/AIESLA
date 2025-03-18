@@ -1,30 +1,35 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn
+package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl
 
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.results.SignInProcess
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.ui.signInScreen
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.vm.SignInScreenViewModel
 import eu.project.aiesla.sharedConstants.navigation.Navigation
+import kotlinx.coroutines.delay
 
-fun NavGraphBuilder.signInImpl(
-    navHostController: NavHostController,
-    authenticationManager: AuthenticationManager,
-) {
+fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
 
     composable<Navigation.SignedOut.SignIn.SignInScreen> {
 
+        val signInScreenViewModel = hiltViewModel<SignInScreenViewModel>()
+
         val signInProcess by
-            authenticationManager
+            signInScreenViewModel
             .signInProcess
             .collectAsStateWithLifecycle()
 
         LaunchedEffect(signInProcess) {
 
             if (signInProcess is SignInProcess.Successful) {
+
+                delay(100)
 
                 navHostController.navigate(
                     route = Navigation.SignedIn.RouteSignedIn,
@@ -39,9 +44,24 @@ fun NavGraphBuilder.signInImpl(
         }
 
         signInScreen(
+            credentials = signInScreenViewModel.credentials.collectAsStateWithLifecycle().value,
+
+            onUpdateEmail = {
+
+                signInScreenViewModel.updateEmail(it)
+            },
+            onUpdatePassword = {
+
+                signInScreenViewModel.updatePassword(it)
+            },
+
+            emailHintViewState = signInScreenViewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
+            passwordHintViewState = signInScreenViewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
+            buttonProceedViewState = signInScreenViewModel.stateOfButtonProceed.collectAsState().value,
+
             onSignIn = {
 
-                authenticationManager.signIn(it)
+                signInScreenViewModel.signIn()
             },
             onRecoverPassword = {
 

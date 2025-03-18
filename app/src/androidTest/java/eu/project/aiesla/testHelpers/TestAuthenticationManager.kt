@@ -62,5 +62,5 @@ class TestAuthenticationManager: AuthenticationManager {
 
     override fun signOut() {}
 
-    override fun resetStatesOfProcesses() {}
+    override fun resetProcesses() {}
 }

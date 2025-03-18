@@ -18,7 +18,7 @@ import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subject.
 import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects.subjectsImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.passwordRecoveryEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword.recoverYourPasswordImpl
-import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.signInImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl.signInImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.signUpImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.signUpEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.welcomeScreenImpl
@@ -59,7 +59,6 @@ fun core(
 
                             signInImpl(
                                 navHostController = navHostController,
-                                authenticationManager = authenticationManager
                             )
 
                             recoverYourPasswordImpl(

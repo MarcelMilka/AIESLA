@@ -264,7 +264,7 @@ class ProductionAuthenticationManager @Inject constructor(
             }
     }
 
-    override fun resetStatesOfProcesses() {
+    override fun resetProcesses() {
 
         coroutineScope.launch {
 

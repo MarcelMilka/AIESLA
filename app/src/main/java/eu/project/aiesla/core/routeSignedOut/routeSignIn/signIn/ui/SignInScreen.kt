@@ -1,10 +1,8 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn
+package eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -13,25 +11,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
+import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.credentials.PasswordCredential
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.buttonSignInSignUp
+import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
 import eu.project.aiesla.sharedUi.sharedElements.button.authenticationTextButton
-import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
-import eu.project.aiesla.sharedUi.sharedElements.textField.passwordTextField
+import eu.project.aiesla.sharedUi.sharedElements.button.buttonProceed
+import eu.project.aiesla.sharedUi.sharedElements.textField.*
 import eu.project.aiesla.sharedUi.sharedElements.verticalDivider10
 import eu.project.aiesla.sharedUi.sharedElements.verticalDivider20
-import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
 import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
 fun signInScreen(
-    onSignIn: (EmailAndPasswordCredentials) -> Unit,
+    credentials: EmailAndPasswordCredentials,
+
+    onUpdateEmail: (EmailCredential) -> Unit,
+    onUpdatePassword: (PasswordCredential) -> Unit,
+
+    emailHintViewState: EmailTextFieldViewState,
+    passwordHintViewState: PasswordTextFieldViewState,
+    buttonProceedViewState: ButtonProceedViewState,
+
+    onSignIn: () -> Unit,
     onRecoverPassword: () -> Unit,
 ) {
-
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -59,90 +63,55 @@ fun signInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
 
                     emailTextField(
-                        email = email,
+                        email = credentials.email,
                         testTag = "SignInScreen emailTextField",
-                        onValueChange = { email = it },
+                        onValueChange = {
+
+                            onUpdateEmail(EmailCredential(email = it))
+                        },
                         emailFocusRequester = emailFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
                     )
 
-                    AnimatedVisibility(
-                        visible = false,
-                        content = {
-
-                            Column(
-                                modifier = Modifier.width(300.dp),
-                                verticalArrangement = Arrangement.Top,
-                                horizontalAlignment = Alignment.Start,
-                                content = {
-
-                                    verticalDivider5()
-
-                                    textFieldHint(
-                                        content = "stringResource(R.string.email_is_already_in_use)",
-                                        testTag = "SignInScreen emailTextFieldHint"
-                                    )
-                                }
-                            )
-                        }
-                    )
+                    emailTextFieldHintImpl(viewState = emailHintViewState)
 
                     verticalDivider10()
 
                     passwordTextField(
-                        password = password,
+                        password = credentials.password,
                         testTag = "SignInScreen passwordTextField",
-                        onValueChange = { password = it },
+                        onValueChange = {
+
+                            onUpdatePassword(PasswordCredential(password = it))
+                        },
                         assignedFocusRequester = passwordFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
                     )
 
-                    AnimatedVisibility(
-                        visible = false,
-                        content = {
-
-                            Column(
-                                modifier = Modifier.width(300.dp),
-                                verticalArrangement = Arrangement.Top,
-                                horizontalAlignment = Alignment.Start,
-                                content = {
-
-                                    verticalDivider5()
-
-                                    textFieldHint(
-                                        content = "stringResource(R.string.email_is_already_in_use)",
-                                        testTag = "SignInScreen passwordTextFieldHint"
-                                    )
-                                }
-                            )
-                        }
-                    )
+                    // password hint
+                    passwordTextFieldHintImpl(viewState = passwordHintViewState)
 
                     verticalDivider20()
 
-                    buttonSignInSignUp(
+                    // 'sign in'
+                    buttonProceed(
                         content = stringResource(R.string.sign_in),
                         testTag = "SignInScreen dynamicAuthenticationButton",
-                        enabled = email.isNotEmpty() && password.isNotEmpty(),
+                        buttonProceedViewState = buttonProceedViewState,
                         onClick = {
 
-                            onSignIn(
-                                EmailAndPasswordCredentials(
-                                    email = email,
-                                    password = password
-                                )
-                            )
+                            onSignIn()
                         }
                     )
 
-                    // recover your password
+                    // 'recover your password'
                     authenticationTextButton(
                         content = stringResource(R.string.recover_your_password),
                         testTag = "SignInScreen authenticationTextButton",

@@ -24,7 +24,7 @@ fun NavGraphBuilder.recoverYourPasswordImpl(
 
         LaunchedEffect(true) {
 
-            authenticationManager.resetStatesOfProcesses()
+            authenticationManager.resetProcesses()
         }
 
         LaunchedEffect(passwordRecoveryProcess) {
@@ -49,7 +49,7 @@ fun NavGraphBuilder.recoverYourPasswordImpl(
 
             onResetPasswordRecoveryProcess = {
 
-                authenticationManager.resetStatesOfProcesses()
+                authenticationManager.resetProcesses()
             },
 
             onRecoverPassword = {

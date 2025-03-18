@@ -16,4 +16,5 @@
     <string name="invalid_email_address">Ugyldig e-postadresse.</string>
     <string name="email_is_already_in_use">E-postadressen er allerede i bruk.</string>
     <string name="unidentified_error">Uidentifisert feil.</string>
+    <string name="invalid_password">Ugyldig passord.</string>
 </resources>

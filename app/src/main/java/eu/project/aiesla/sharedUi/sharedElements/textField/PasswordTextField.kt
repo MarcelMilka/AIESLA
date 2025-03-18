@@ -1,5 +1,8 @@
 package eu.project.aiesla.sharedUi.sharedElements.textField
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -21,7 +25,9 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.RoundedCorner
+import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldLabel
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
 import eu.project.aiesla.sharedUi.theme.EmailPasswordTextFieldTextStyle
 import eu.project.aiesla.sharedUi.theme.Primary
 
@@ -153,4 +159,56 @@ fun passwordTextField (
             if (passwordIsVisible) { VisualTransformation.None }
             else { PasswordVisualTransformation() },
     )
+}
+
+@Composable
+fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
+
+    AnimatedVisibility(
+        visible = viewState is PasswordTextFieldViewState.Visible,
+        content = {
+
+            Column(
+                modifier = Modifier.width(300.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                content = {
+
+                    verticalDivider5()
+
+                    when(viewState) {
+
+                        is PasswordTextFieldViewState.Visible -> {
+
+                            val content =
+                                when(viewState.hint){
+                                    PasswordTextFieldHint.PasswordIsIncorrect -> stringResource(R.string.invalid_password)
+                                    PasswordTextFieldHint.Timeout -> "timeout"
+                                    PasswordTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                }
+
+                            textFieldHint(
+                                content = content,
+                                testTag = "SignInScreen passwordTextFieldHint"
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            )
+        }
+    )
+}
+
+sealed class PasswordTextFieldViewState {
+
+    data object Invisible: PasswordTextFieldViewState()
+    data class Visible(val hint: PasswordTextFieldHint): PasswordTextFieldViewState()
+}
+
+enum class PasswordTextFieldHint {
+    PasswordIsIncorrect,
+    Timeout,
+    UnidentifiedException,
 }

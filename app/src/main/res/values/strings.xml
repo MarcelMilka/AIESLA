@@ -17,4 +17,5 @@
     <string name="invalid_email_address">Invalid email address.</string>
     <string name="email_is_already_in_use">E-mail is already in use.</string>
     <string name="unidentified_error">Unidentified error.</string>
+    <string name="invalid_password">Invalid password.</string>
 </resources>

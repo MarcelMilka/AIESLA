@@ -23,5 +23,5 @@ interface AuthenticationManager {
 
     fun signOut()
 
-    fun resetStatesOfProcesses()
+    fun resetProcesses()
 }

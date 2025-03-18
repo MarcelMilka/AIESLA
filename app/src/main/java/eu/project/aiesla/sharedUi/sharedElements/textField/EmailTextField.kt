@@ -1,5 +1,8 @@
 package eu.project.aiesla.sharedUi.sharedElements.textField
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -16,19 +20,17 @@ import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import eu.project.aiesla.R
 import eu.project.aiesla.sharedConstants.RoundedCorner
-import eu.project.aiesla.sharedConstants.TextSize
+import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldLabel
+import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
 import eu.project.aiesla.sharedUi.theme.EmailPasswordTextFieldTextStyle
 import eu.project.aiesla.sharedUi.theme.Primary
-import eu.project.aiesla.sharedUi.theme.quickSandMedium
 
 @Composable
 fun emailTextField (
@@ -110,4 +112,56 @@ fun emailTextField (
             },
         )
     )
+}
+
+@Composable
+fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
+
+    AnimatedVisibility(
+        visible = viewState is EmailTextFieldViewState.Visible,
+        content = {
+
+            Column(
+                modifier = Modifier.width(300.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                content = {
+
+                    verticalDivider5()
+
+                    when(viewState) {
+
+                        is EmailTextFieldViewState.Visible -> {
+
+                            val content =
+                                when(viewState.hint){
+                                    EmailTextFieldHint.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
+                                    EmailTextFieldHint.Timeout -> "timeout"
+                                    EmailTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                }
+
+                            textFieldHint(
+                                content = content,
+                                testTag = "SignInScreen emailTextFieldHint"
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            )
+        }
+    )
+}
+
+sealed class EmailTextFieldViewState {
+
+    data object Invisible: EmailTextFieldViewState()
+    data class Visible(val hint: EmailTextFieldHint): EmailTextFieldViewState()
+}
+
+enum class EmailTextFieldHint {
+    InvalidEmailFormat,
+    Timeout,
+    UnidentifiedException,
 }

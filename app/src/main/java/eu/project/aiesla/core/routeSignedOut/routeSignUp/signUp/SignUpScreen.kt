@@ -19,7 +19,6 @@ import eu.project.aiesla.auth.credentials.PasswordRequirements
 import eu.project.aiesla.auth.results.SignUpProcess
 import eu.project.aiesla.auth.results.UnsuccessfulSignUpProcessCause
 import eu.project.aiesla.sharedConstants.Padding
-import eu.project.aiesla.sharedUi.sharedElements.button.buttonSignInSignUp
 import eu.project.aiesla.sharedUi.sharedElements.text.dynamicTextFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
@@ -186,25 +185,25 @@ fun signUpScreen(
 
                     verticalDivider20()
 
-                    buttonSignInSignUp(
-                        content = stringResource(R.string.sign_up),
-                        testTag = "SignUpScreen dynamicAuthenticationButton",
-                        enabled =
-                            email.isNotEmpty() &&
-                            password.count() >= PasswordRequirements.MIN_CHARACTERS_COUNT &&
-                            password.count { it.isUpperCase() } >= PasswordRequirements.MIN_UPPERCASE_COUNT &&
-                            password.count { !it.isLetterOrDigit() } >= PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT &&
-                            password.count { it.isDigit() } >= PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT,
-                        onClick = {
-
-                            onSignUp(
-                                EmailAndPasswordCredentials(
-                                    email = email,
-                                    password = password
-                                )
-                            )
-                        }
-                    )
+//                    buttonSignInSignUp(
+//                        content = stringResource(R.string.sign_up),
+//                        testTag = "SignUpScreen dynamicAuthenticationButton",
+//                        enabled =
+//                            email.isNotEmpty() &&
+//                            password.count() >= PasswordRequirements.MIN_CHARACTERS_COUNT &&
+//                            password.count { it.isUpperCase() } >= PasswordRequirements.MIN_UPPERCASE_COUNT &&
+//                            password.count { !it.isLetterOrDigit() } >= PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT &&
+//                            password.count { it.isDigit() } >= PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT,
+//                        onClick = {
+//
+//                            onSignUp(
+//                                EmailAndPasswordCredentials(
+//                                    email = email,
+//                                    password = password
+//                                )
+//                            )
+//                        }
+//                    )
                 }
             )
 

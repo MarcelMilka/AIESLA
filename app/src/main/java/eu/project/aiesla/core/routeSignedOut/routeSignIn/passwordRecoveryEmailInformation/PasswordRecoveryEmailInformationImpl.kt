@@ -16,7 +16,7 @@ fun NavGraphBuilder.passwordRecoveryEmailInformationImpl(
 
         LaunchedEffect(true) {
 
-            authenticationManager.resetStatesOfProcesses()
+            authenticationManager.resetProcesses()
         }
 
         passwordRecoveryEmailInformationScreen(
