@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
@@ -20,7 +21,8 @@ fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp),
+            .padding(Padding.P20.dp)
+            .testTag("PasswordRecoveryEmailInformationScreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
