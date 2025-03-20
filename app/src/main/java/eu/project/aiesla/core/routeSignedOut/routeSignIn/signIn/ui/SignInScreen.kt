@@ -103,7 +103,7 @@ fun signInScreen(
                     // 'sign in'
                     buttonProceed(
                         content = stringResource(R.string.sign_in),
-                        testTag = "SignInScreen dynamicAuthenticationButton",
+                        testTag = "SignInScreen button 'Sign in'",
                         buttonProceedViewState = buttonProceedViewState,
                         onClick = {
 
@@ -114,7 +114,7 @@ fun signInScreen(
                     // 'recover your password'
                     authenticationTextButton(
                         content = stringResource(R.string.recover_your_password),
-                        testTag = "SignInScreen authenticationTextButton",
+                        testTag = "SignInScreen button 'Recover your password",
                         onClick = {onRecoverPassword()}
                     )
                 }

@@ -169,7 +169,7 @@ fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
         content = {
 
             Column(
-                modifier = Modifier.width(300.dp),
+                modifier = Modifier.width(300.dp).testTag("PasswordTextFieldHint impl"),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start,
                 content = {
@@ -183,13 +183,13 @@ fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
                             val content =
                                 when(viewState.hint){
                                     PasswordTextFieldHint.PasswordIsIncorrect -> stringResource(R.string.invalid_password)
-                                    PasswordTextFieldHint.Timeout -> "timeout"
+                                    PasswordTextFieldHint.Timeout -> stringResource(R.string.timeout)
                                     PasswordTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
                                 }
 
                             textFieldHint(
                                 content = content,
-                                testTag = "SignInScreen passwordTextFieldHint"
+                                testTag = "PasswordTextFieldHint"
                             )
                         }
 

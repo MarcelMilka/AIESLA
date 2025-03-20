@@ -122,7 +122,7 @@ fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
         content = {
 
             Column(
-                modifier = Modifier.width(300.dp),
+                modifier = Modifier.width(300.dp).testTag("EmailTextFieldHint impl"),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start,
                 content = {
@@ -136,13 +136,13 @@ fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
                             val content =
                                 when(viewState.hint){
                                     EmailTextFieldHint.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
-                                    EmailTextFieldHint.Timeout -> "timeout"
+                                    EmailTextFieldHint.Timeout -> stringResource(R.string.timeout)
                                     EmailTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
                                 }
 
                             textFieldHint(
                                 content = content,
-                                testTag = "SignInScreen emailTextFieldHint"
+                                testTag = "EmailTextFieldHint"
                             )
                         }
 
