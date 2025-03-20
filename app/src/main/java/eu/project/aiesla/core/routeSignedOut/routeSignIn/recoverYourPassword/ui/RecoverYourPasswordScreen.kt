@@ -76,10 +76,10 @@ fun recoverYourPasswordScreen(
 
                     verticalDivider20()
 
-                    // 'sign in'
+                    // 'recover your password'
                     buttonProceed(
                         content = stringResource(R.string.recover_your_password),
-                        testTag = "SignInScreen dynamicAuthenticationButton",
+                        testTag = "RecoverYourPasswordScreen `recover your password`",
                         buttonProceedViewState = buttonProceedViewState,
                         onClick = {
 
