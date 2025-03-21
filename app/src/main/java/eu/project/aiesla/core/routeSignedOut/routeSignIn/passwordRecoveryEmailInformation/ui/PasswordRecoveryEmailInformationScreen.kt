@@ -1,10 +1,11 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation
+package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
@@ -14,13 +15,14 @@ import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
 import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
-fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
+fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp),
+            .padding(Padding.P20.dp)
+            .testTag("PasswordRecoveryEmailInformationScreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,7 +39,7 @@ fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
                 content = {
 
                     bigPrimaryLabel(
-                        content = stringResource(R.string.verify_your_email)
+                        content = stringResource(R.string.check_your_email)
                     )
                 }
             )
@@ -54,7 +56,7 @@ fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
                     // sign in
                     primaryAuthenticationButton(
                         content = stringResource(R.string.sign_in),
-                        testTag = "SignUpEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'",
+                        testTag = "PasswordRecoveryEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'",
                         onClick = {
 
                             onSignIn()

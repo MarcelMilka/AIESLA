@@ -1,4 +1,4 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation
+package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,14 +15,14 @@ import eu.project.aiesla.sharedUi.sharedElements.text.bigPrimaryLabel
 import eu.project.aiesla.sharedUi.theme.Background
 
 @Composable
-fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
+fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
             .padding(Padding.P20.dp)
-            .testTag("PasswordRecoveryEmailInformationScreen"),
+            .testTag("SignUpEmailInformationScreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,7 +39,7 @@ fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
                 content = {
 
                     bigPrimaryLabel(
-                        content = stringResource(R.string.check_your_email)
+                        content = stringResource(R.string.verify_your_email)
                     )
                 }
             )
@@ -56,7 +56,7 @@ fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
                     // sign in
                     primaryAuthenticationButton(
                         content = stringResource(R.string.sign_in),
-                        testTag = "PasswordRecoveryEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'",
+                        testTag = "SignUpEmailInformationScreen primaryAuthenticationButton 'Sign in.'",
                         onClick = {
 
                             onSignIn()

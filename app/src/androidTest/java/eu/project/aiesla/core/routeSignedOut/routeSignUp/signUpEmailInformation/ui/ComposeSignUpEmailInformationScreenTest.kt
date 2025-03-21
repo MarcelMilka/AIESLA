@@ -1,8 +1,11 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation
+package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.ui
 
 import android.content.Context
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.InstrumentationRegistry
 import eu.project.aiesla.R
 import junit.framework.TestCase.assertTrue
@@ -11,15 +14,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ComposePasswordRecoveryEmailInformationScreenTest {
+class ComposeSignUpEmailInformationScreenTest {
 
     @get:Rule(order = 0)
     val ctr = createComposeRule()
 
-    // SignInScreen
-    private val passwordRecoveryEmailInformationScreen = ctr.onNodeWithTag("PasswordRecoveryEmailInformationScreen")
-    private val checkYourEmailInformation = ctr.onNodeWithText(getResourceString(R.string.check_your_email))
-    private val buttonSignIn = ctr.onNodeWithTag("PasswordRecoveryEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'")
+    // SignUpEmailInformationScreen
+    private val signUpEmailInformationScreen = ctr.onNodeWithTag("SignUpEmailInformationScreen")
+    private val checkYourEmailInformation = ctr.onNodeWithText(getResourceString(R.string.verify_your_email))
+    private val buttonSignIn = ctr.onNodeWithTag("SignUpEmailInformationScreen primaryAuthenticationButton 'Sign in.'")
 
 
     private var onSignIn = false
@@ -31,7 +34,7 @@ class ComposePasswordRecoveryEmailInformationScreenTest {
 
         ctr.setContent {
 
-            passwordRecoveryEmailInformationScreen(
+            signUpEmailInformationScreen(
                 onSignIn = { onSignIn = true }
             )
         }
@@ -40,7 +43,7 @@ class ComposePasswordRecoveryEmailInformationScreenTest {
     @Test
     fun `make sure all default elements are displayed`() = runTest {
 
-        passwordRecoveryEmailInformationScreen.assertIsDisplayed()
+        signUpEmailInformationScreen.assertIsDisplayed()
         checkYourEmailInformation.assertIsDisplayed()
         buttonSignIn.assertIsDisplayed()
     }

@@ -16,11 +16,11 @@ import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.core.routeSignedIn.routeHomeScreen.subscreens.home.impl.homeImpl
 import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subject.subjectImpl
 import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects.subjectsImpl
-import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.passwordRecoveryEmailInformationImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.impl.passwordRecoveryEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl.signInImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.impl.signUpImpl
-import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.signUpEmailInformationImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.impl.signUpEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.welcomeScreenImpl
 import eu.project.aiesla.core.screenDock.impl.screenDockImpl
 import eu.project.aiesla.sharedConstants.navigation.Navigation

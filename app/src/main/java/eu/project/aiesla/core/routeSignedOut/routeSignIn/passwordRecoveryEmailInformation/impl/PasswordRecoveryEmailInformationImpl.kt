@@ -1,10 +1,11 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation
+package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.impl
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
+import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.ui.passwordRecoveryEmailInformationScreen
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
 fun NavGraphBuilder.passwordRecoveryEmailInformationImpl(
