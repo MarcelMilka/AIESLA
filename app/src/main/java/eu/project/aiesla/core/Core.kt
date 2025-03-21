@@ -19,7 +19,7 @@ import eu.project.aiesla.core.routeSignedIn.routeStudyScreen.subscreens.subjects
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.passwordRecoveryEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword.impl.recoverYourPasswordImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl.signInImpl
-import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.signUpImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.impl.signUpImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.signUpEmailInformationImpl
 import eu.project.aiesla.core.routeSignedOut.welcomeScreenImpl
 import eu.project.aiesla.core.screenDock.impl.screenDockImpl
@@ -69,10 +69,7 @@ fun core(
 
                         navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
 
-                            signUpImpl(
-                                navHostController = navHostController,
-                                authenticationManager = authenticationManager
-                            )
+                            signUpImpl(navHostController = navHostController)
 
                             signUpEmailInformationImpl(navHostController = navHostController)
                         }

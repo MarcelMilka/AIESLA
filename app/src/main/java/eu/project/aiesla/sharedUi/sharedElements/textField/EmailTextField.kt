@@ -165,3 +165,59 @@ enum class EmailTextFieldHint {
     Timeout,
     UnidentifiedException,
 }
+
+
+
+@Composable
+fun signUpEmailTextFieldHintImpl(viewState: SignUpEmailTextFieldViewState) {
+
+    AnimatedVisibility(
+        visible = viewState is SignUpEmailTextFieldViewState.Visible,
+        content = {
+
+            Column(
+                modifier = Modifier.width(300.dp).testTag("SignUpEmailTextFieldHint impl"),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                content = {
+
+                    verticalDivider5()
+
+                    when(viewState) {
+
+                        is SignUpEmailTextFieldViewState.Visible -> {
+
+                            val content =
+                                when(viewState.hint){
+                                    SignUpEmailTextFieldHint.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
+                                    SignUpEmailTextFieldHint.EmailIsAlreadyInUse -> stringResource(R.string.email_is_already_in_use)
+                                    SignUpEmailTextFieldHint.Timeout -> stringResource(R.string.timeout)
+                                    SignUpEmailTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                }
+
+                            textFieldHint(
+                                content = content,
+                                testTag = "SignUpEmailTextFieldHint"
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            )
+        }
+    )
+}
+
+sealed class SignUpEmailTextFieldViewState {
+
+    data object Invisible: SignUpEmailTextFieldViewState()
+    data class Visible(val hint: SignUpEmailTextFieldHint): SignUpEmailTextFieldViewState()
+}
+
+enum class SignUpEmailTextFieldHint {
+    InvalidEmailFormat,
+    EmailIsAlreadyInUse,
+    Timeout,
+    UnidentifiedException,
+}

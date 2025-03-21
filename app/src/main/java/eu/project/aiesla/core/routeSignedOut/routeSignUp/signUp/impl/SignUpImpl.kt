@@ -1,21 +1,20 @@
-package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp
+package eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.impl
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.results.SignUpProcess
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.ui.signUpScreen
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.vm.SignUpScreenViewModel
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 
-fun NavGraphBuilder.signUpImpl(
-    navHostController: NavHostController,
-    authenticationManager: AuthenticationManager
-) {
+fun NavGraphBuilder.signUpImpl(navHostController: NavHostController) {
 
     composable<Navigation.SignedOut.SignUp.SignUpScreen>(
 
@@ -25,8 +24,10 @@ fun NavGraphBuilder.signUpImpl(
 
         content = {
 
+            val viewModel = hiltViewModel<SignUpScreenViewModel>()
+
             val signUpProcess by
-            authenticationManager
+                viewModel
                 .signUpProcess
                 .collectAsStateWithLifecycle()
 
@@ -47,15 +48,14 @@ fun NavGraphBuilder.signUpImpl(
             }
 
             signUpScreen(
-
-                signUpProcess = signUpProcess,
-
-                onSignUp = {
-
-                    authenticationManager.signUp(
-                        credentials = it
-                    )
-                },
+                credentials = viewModel.credentials.collectAsStateWithLifecycle().value,
+                onUpdateEmail = { viewModel.updateEmail(it) },
+                onUpdatePassword = { viewModel.updatePassword(it) },
+                onFocusChanged = { viewModel.reactToOnFocusChanged(it) },
+                emailHintViewState = viewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
+                passwordHintViewState = viewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
+                buttonProceedViewState = viewModel.stateOfButtonProceed.collectAsStateWithLifecycle().value,
+                onSignUp = { viewModel.signUp() },
             )
         }
     )

@@ -1,6 +1,7 @@
 package eu.project.aiesla.sharedUi.sharedElements.textField
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.testTag
@@ -24,12 +26,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
+import eu.project.aiesla.auth.credentials.PasswordRequirements
 import eu.project.aiesla.sharedConstants.RoundedCorner
+import eu.project.aiesla.sharedUi.sharedElements.text.dynamicTextFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldHint
 import eu.project.aiesla.sharedUi.sharedElements.text.textFieldLabel
 import eu.project.aiesla.sharedUi.sharedElements.verticalDivider5
 import eu.project.aiesla.sharedUi.theme.EmailPasswordTextFieldTextStyle
 import eu.project.aiesla.sharedUi.theme.Primary
+import eu.project.aiesla.sharedUi.theme.SecondaryWhite
 
 @Composable
 fun passwordTextField (
@@ -212,3 +217,89 @@ enum class PasswordTextFieldHint {
     Timeout,
     UnidentifiedException,
 }
+
+
+
+@Composable
+fun signUpPasswordTextFieldHintImpl(viewState: SignUpPasswordTextFieldViewState) {
+
+    AnimatedVisibility(
+        visible = viewState is SignUpPasswordTextFieldViewState.Visible,
+        content = {
+
+            Column(
+                modifier = Modifier.width(300.dp).testTag("SignUpPasswordTextFieldHint impl"),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                content = {
+
+                    verticalDivider5()
+
+                    when(viewState) {
+
+                        is SignUpPasswordTextFieldViewState.Visible -> {
+
+                            passwordRequirement(
+                                isGreen = viewState.totalCharacters.isGreen,
+                                content = "${viewState.totalCharacters.currentCount}/${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_CHARACTERS_COUNT} ${stringResource(R.string.characters)}",
+                                testTag = "totalCharacters"
+                            )
+
+                            passwordRequirement(
+                                isGreen = viewState.uppercaseCharacters.isGreen,
+                                content = "${viewState.uppercaseCharacters.currentCount}/${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_UPPERCASE_COUNT} ${stringResource(R.string.uppercase_letters)}",
+                                testTag = "uppercaseCharacters"
+                            )
+
+                            passwordRequirement(
+                                isGreen = viewState.specialCharacters.isGreen,
+                                content = "${viewState.specialCharacters.currentCount}/${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT} ${stringResource(R.string.special_character)}",
+                                testTag = "specialCharacters"
+                            )
+
+                            passwordRequirement(
+                                isGreen = viewState.numericCharacters.isGreen,
+                                content = "${viewState.numericCharacters.currentCount}/${stringResource(R.string.at_least)} ${PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT} ${stringResource(R.string.numeric_character)}",
+                                testTag = "numericCharacters"
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            )
+        }
+    )
+}
+
+sealed class SignUpPasswordTextFieldViewState {
+
+    data object Invisible: SignUpPasswordTextFieldViewState()
+    data class Visible(
+        val totalCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
+        val uppercaseCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
+        val specialCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
+        val numericCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0)
+    ): SignUpPasswordTextFieldViewState()
+}
+
+@Composable
+fun passwordRequirement(isGreen: Boolean, content: String, testTag: String) {
+
+    var targetColor by remember { mutableStateOf(SecondaryWhite) }
+
+    targetColor = when (isGreen) {
+        true -> Green
+        false -> SecondaryWhite
+    }
+
+    val color by animateColorAsState(targetValue = targetColor)
+
+    dynamicTextFieldHint(
+        content = content,
+        color = color,
+        testTag = testTag
+    )
+}
+
+data class PasswordRequirementViewState(val isGreen: Boolean = false, val currentCount: Int = 0)

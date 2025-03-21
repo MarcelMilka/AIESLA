@@ -29,7 +29,7 @@ fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
             val signInScreenViewModel = hiltViewModel<SignInScreenViewModel>()
 
             val signInProcess by
-            signInScreenViewModel
+                signInScreenViewModel
                 .signInProcess
                 .collectAsStateWithLifecycle()
 

@@ -9,7 +9,7 @@
     <string name="recover_your_password">Recover your password.</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
-    <string name="at_least">At least</string>
+    <string name="at_least">at least</string>
     <string name="characters">characters</string>
     <string name="uppercase_letters">uppercase letter</string>
     <string name="special_character">special character</string>
