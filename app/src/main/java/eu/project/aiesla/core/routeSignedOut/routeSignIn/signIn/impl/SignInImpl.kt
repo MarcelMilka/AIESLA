@@ -20,16 +20,16 @@ fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
 
     composable<Navigation.SignedOut.SignIn.SignInScreen>(
 
-        enterTransition = { EnterTransition.None},
+        enterTransition = { EnterTransition.None },
 
-        exitTransition = { ExitTransition.None},
+        exitTransition = { ExitTransition.None },
 
         content = {
 
-            val signInScreenViewModel = hiltViewModel<SignInScreenViewModel>()
+            val viewModel = hiltViewModel<SignInScreenViewModel>()
 
             val signInProcess by
-                signInScreenViewModel
+                viewModel
                 .signInProcess
                 .collectAsStateWithLifecycle()
 
@@ -42,6 +42,7 @@ fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
                     navHostController.navigate(
                         route = Navigation.SignedIn.RouteSignedIn,
                         builder = {
+
                             this.popUpTo(
                                 route = Navigation.SignedOut.RouteSignedOut,
                                 popUpToBuilder = { inclusive = true }
@@ -52,19 +53,19 @@ fun NavGraphBuilder.signInImpl(navHostController: NavHostController) {
             }
 
             signInScreen(
-                credentials = signInScreenViewModel.credentials.collectAsStateWithLifecycle().value,
+                credentials = viewModel.credentials.collectAsStateWithLifecycle().value,
 
-                onUpdateEmail = { signInScreenViewModel.updateEmail(it) },
+                onUpdateEmail = { viewModel.updateEmail(it) },
 
-                onUpdatePassword = { signInScreenViewModel.updatePassword(it) },
+                onUpdatePassword = { viewModel.updatePassword(it) },
 
-                emailHintViewState = signInScreenViewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
+                emailHintViewState = viewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
 
-                passwordHintViewState = signInScreenViewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
+                passwordHintViewState = viewModel.stateOfPasswordHint.collectAsStateWithLifecycle().value,
 
-                buttonProceedViewState = signInScreenViewModel.stateOfButtonProceed.collectAsState().value,
+                buttonProceedViewState = viewModel.stateOfButtonProceed.collectAsState().value,
 
-                onSignIn = { signInScreenViewModel.signIn() },
+                onSignIn = { viewModel.signIn() },
 
                 onRecoverPassword = {
 

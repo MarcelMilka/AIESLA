@@ -1,10 +1,10 @@
-package eu.project.aiesla.core
+package eu.project.aiesla.core.routeSignedOut
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import eu.project.aiesla.core.routeSignedOut.welcomeScreen
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.welcome.ui.welcomeScreen
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

@@ -115,10 +115,10 @@ fun emailTextField (
 }
 
 @Composable
-fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
+fun signInEmailHint(viewState: SignInEmailHintViewState) {
 
     AnimatedVisibility(
-        visible = viewState is EmailTextFieldViewState.Visible,
+        visible = viewState is SignInEmailHintViewState.Visible,
         content = {
 
             Column(
@@ -131,13 +131,13 @@ fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
 
                     when(viewState) {
 
-                        is EmailTextFieldViewState.Visible -> {
+                        is SignInEmailHintViewState.Visible -> {
 
                             val content =
                                 when(viewState.hint){
-                                    EmailTextFieldHint.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
-                                    EmailTextFieldHint.Timeout -> stringResource(R.string.timeout)
-                                    EmailTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                    SignInEmailHintOptions.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
+                                    SignInEmailHintOptions.Timeout -> stringResource(R.string.timeout)
+                                    SignInEmailHintOptions.UnidentifiedException -> stringResource(R.string.unidentified_error)
                                 }
 
                             textFieldHint(
@@ -154,13 +154,13 @@ fun emailTextFieldHintImpl(viewState: EmailTextFieldViewState) {
     )
 }
 
-sealed class EmailTextFieldViewState {
+sealed class SignInEmailHintViewState {
 
-    data object Invisible: EmailTextFieldViewState()
-    data class Visible(val hint: EmailTextFieldHint): EmailTextFieldViewState()
+    data object Invisible: SignInEmailHintViewState()
+    data class Visible(val hint: SignInEmailHintOptions): SignInEmailHintViewState()
 }
 
-enum class EmailTextFieldHint {
+enum class SignInEmailHintOptions {
     InvalidEmailFormat,
     Timeout,
     UnidentifiedException,
@@ -169,10 +169,10 @@ enum class EmailTextFieldHint {
 
 
 @Composable
-fun signUpEmailTextFieldHintImpl(viewState: SignUpEmailTextFieldViewState) {
+fun signUpEmailTextFieldHintImpl(viewState: SignUpEmailHintViewState) {
 
     AnimatedVisibility(
-        visible = viewState is SignUpEmailTextFieldViewState.Visible,
+        visible = viewState is SignUpEmailHintViewState.Visible,
         content = {
 
             Column(
@@ -185,14 +185,14 @@ fun signUpEmailTextFieldHintImpl(viewState: SignUpEmailTextFieldViewState) {
 
                     when(viewState) {
 
-                        is SignUpEmailTextFieldViewState.Visible -> {
+                        is SignUpEmailHintViewState.Visible -> {
 
                             val content =
                                 when(viewState.hint){
-                                    SignUpEmailTextFieldHint.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
-                                    SignUpEmailTextFieldHint.EmailIsAlreadyInUse -> stringResource(R.string.email_is_already_in_use)
-                                    SignUpEmailTextFieldHint.Timeout -> stringResource(R.string.timeout)
-                                    SignUpEmailTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                    SignUpEmailHintOptions.InvalidEmailFormat -> stringResource(R.string.invalid_email_address)
+                                    SignUpEmailHintOptions.EmailIsAlreadyInUse -> stringResource(R.string.email_is_already_in_use)
+                                    SignUpEmailHintOptions.Timeout -> stringResource(R.string.timeout)
+                                    SignUpEmailHintOptions.UnidentifiedException -> stringResource(R.string.unidentified_error)
                                 }
 
                             textFieldHint(
@@ -209,13 +209,13 @@ fun signUpEmailTextFieldHintImpl(viewState: SignUpEmailTextFieldViewState) {
     )
 }
 
-sealed class SignUpEmailTextFieldViewState {
+sealed class SignUpEmailHintViewState {
 
-    data object Invisible: SignUpEmailTextFieldViewState()
-    data class Visible(val hint: SignUpEmailTextFieldHint): SignUpEmailTextFieldViewState()
+    data object Invisible: SignUpEmailHintViewState()
+    data class Visible(val hint: SignUpEmailHintOptions): SignUpEmailHintViewState()
 }
 
-enum class SignUpEmailTextFieldHint {
+enum class SignUpEmailHintOptions {
     InvalidEmailFormat,
     EmailIsAlreadyInUse,
     Timeout,

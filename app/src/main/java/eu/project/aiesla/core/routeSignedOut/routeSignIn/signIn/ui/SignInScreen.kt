@@ -29,8 +29,8 @@ fun signInScreen(
     onUpdateEmail: (EmailCredential) -> Unit,
     onUpdatePassword: (PasswordCredential) -> Unit,
 
-    emailHintViewState: EmailTextFieldViewState,
-    passwordHintViewState: PasswordTextFieldViewState,
+    emailHintViewState: SignInEmailHintViewState,
+    passwordHintViewState: SignInPasswordHintViewState,
     buttonProceedViewState: ButtonProceedViewState,
 
     onSignIn: () -> Unit,
@@ -41,10 +41,7 @@ fun signInScreen(
     val passwordFocusRequester = remember { FocusRequester() }
 
     // activate email text field immediately after entering the screen
-    LaunchedEffect(true) {
-
-        emailFocusRequester.requestFocus()
-    }
+    LaunchedEffect(true) { emailFocusRequester.requestFocus() }
 
     Column(
         modifier = Modifier
@@ -60,73 +57,67 @@ fun signInScreen(
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     emailTextField(
                         email = credentials.email,
                         testTag = "SignInScreen emailTextField",
-                        onValueChange = {
-
-                            onUpdateEmail(EmailCredential(email = it))
-                        },
+                        onValueChange = { onUpdateEmail(EmailCredential(email = it)) },
                         emailFocusRequester = emailFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
                     )
 
-                    emailTextFieldHintImpl(viewState = emailHintViewState)
+                    signInEmailHint(viewState = emailHintViewState)
 
                     verticalDivider10()
 
                     passwordTextField(
                         password = credentials.password,
                         testTag = "SignInScreen passwordTextField",
-                        onValueChange = {
-
-                            onUpdatePassword(PasswordCredential(password = it))
-                        },
+                        onValueChange = { onUpdatePassword(PasswordCredential(password = it)) },
                         assignedFocusRequester = passwordFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
                     )
 
-                    // password hint
-                    passwordTextFieldHintImpl(viewState = passwordHintViewState)
+                    signInPasswordHint(viewState = passwordHintViewState)
 
                     verticalDivider20()
 
-                    // 'sign in'
                     buttonProceed(
                         content = stringResource(R.string.sign_in),
                         testTag = "SignInScreen button 'Sign in'",
                         buttonProceedViewState = buttonProceedViewState,
-                        onClick = {
-
-                            onSignIn()
-                        }
+                        onClick = { onSignIn() }
                     )
 
-                    // 'recover your password'
                     authenticationTextButton(
                         content = stringResource(R.string.recover_your_password),
                         testTag = "SignInScreen button 'Recover your password",
-                        onClick = {onRecoverPassword()}
+                        onClick = { onRecoverPassword() }
                     )
                 }
             )
 
             // lower part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {}
             )
         }

@@ -6,6 +6,8 @@ import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.di.AuthenticationManagerProvider
+import eu.project.aiesla.auth.di.IoDispatcher
+import kotlinx.coroutines.CoroutineScope
 
 @Module
 @TestInstallIn(
@@ -15,6 +17,8 @@ import eu.project.aiesla.auth.di.AuthenticationManagerProvider
 class TestAuthenticationManagerProvider {
 
     @Provides
-    fun provideTestAuthenticationManager(): AuthenticationManager =
-        TestAuthenticationManager()
+    fun provideTestAuthenticationManager(
+        @IoDispatcher coroutineScope: CoroutineScope
+    ): AuthenticationManager =
+        TestAuthenticationManager(coroutineScope)
 }

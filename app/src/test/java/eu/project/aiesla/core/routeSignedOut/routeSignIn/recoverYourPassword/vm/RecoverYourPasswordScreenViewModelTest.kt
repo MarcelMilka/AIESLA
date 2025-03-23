@@ -6,8 +6,8 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.UnsuccessfulPasswordRecoveryCause
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintViewState
 import eu.project.aiesla.testHelpers.MainDispatcherRule
 import io.mockk.*
 import kotlinx.coroutines.delay
@@ -164,7 +164,7 @@ class RecoverYourPasswordScreenViewModelTest {
 
         viewModel.stateOfEmailHint.test {
 
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -176,31 +176,31 @@ class RecoverYourPasswordScreenViewModelTest {
         viewModel.stateOfEmailHint.test {
 
             // default
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Email error
             launch { passwordRecoveryFlow.emit(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.InvalidEmailFormat), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.InvalidEmailFormat), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Timeout error
             launch { passwordRecoveryFlow.emit(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.Timeout)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.Timeout), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.Timeout), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Unidentified error
             launch { passwordRecoveryFlow.emit(PasswordRecoveryProcess.Unsuccessful(UnsuccessfulPasswordRecoveryCause.UnidentifiedException)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.UnidentifiedException), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.UnidentifiedException), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
         }
     }
 }

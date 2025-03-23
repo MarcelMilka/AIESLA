@@ -10,10 +10,10 @@ import eu.project.aiesla.auth.credentials.PasswordCredential
 import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.auth.results.UnsuccessfulSignInProcessCause
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInPasswordHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInPasswordHintViewState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,10 +28,10 @@ class SignInScreenViewModel @Inject constructor(
     private val _credentials = MutableStateFlow(EmailAndPasswordCredentials("", ""))
     val credentials = _credentials.asStateFlow()
 
-    private val _stateOfEmailHint = MutableStateFlow<EmailTextFieldViewState>(EmailTextFieldViewState.Invisible)
+    private val _stateOfEmailHint = MutableStateFlow<SignInEmailHintViewState>(SignInEmailHintViewState.Invisible)
     val stateOfEmailHint = _stateOfEmailHint.asStateFlow()
 
-    private val _stateOfPasswordHint = MutableStateFlow<PasswordTextFieldViewState>(PasswordTextFieldViewState.Invisible)
+    private val _stateOfPasswordHint = MutableStateFlow<SignInPasswordHintViewState>(SignInPasswordHintViewState.Invisible)
     val stateOfPasswordHint = _stateOfPasswordHint.asStateFlow()
 
     private val _stateOfButtonProceed = MutableStateFlow<ButtonProceedViewState>(ButtonProceedViewState.Disabled)
@@ -89,8 +89,8 @@ class SignInScreenViewModel @Inject constructor(
                         if (
                             credentials.email.isNotEmpty() &&
                             credentials.password.isNotEmpty() &&
-                            emailHint is EmailTextFieldViewState.Invisible &&
-                            passwordHint is PasswordTextFieldViewState.Invisible
+                            emailHint is SignInEmailHintViewState.Invisible &&
+                            passwordHint is SignInPasswordHintViewState.Invisible
 
                         ) { ButtonProceedViewState.Enabled }
 
@@ -121,8 +121,8 @@ class SignInScreenViewModel @Inject constructor(
                         UnsuccessfulSignInProcessCause.InvalidEmailFormat -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.InvalidEmailFormat
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.InvalidEmailFormat
                                 )
                             )
                         }
@@ -130,8 +130,8 @@ class SignInScreenViewModel @Inject constructor(
                         UnsuccessfulSignInProcessCause.PasswordIsIncorrect -> {
 
                             _stateOfPasswordHint.emit(
-                                value = PasswordTextFieldViewState.Visible(
-                                    hint = PasswordTextFieldHint.PasswordIsIncorrect
+                                value = SignInPasswordHintViewState.Visible(
+                                    hint = SignInPasswordHintOptions.PasswordIsIncorrect
                                 )
                             )
                         }
@@ -139,14 +139,14 @@ class SignInScreenViewModel @Inject constructor(
                         UnsuccessfulSignInProcessCause.Timeout -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.Timeout
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.Timeout
                                 )
                             )
 
                             _stateOfPasswordHint.emit(
-                                value = PasswordTextFieldViewState.Visible(
-                                    hint = PasswordTextFieldHint.Timeout
+                                value = SignInPasswordHintViewState.Visible(
+                                    hint = SignInPasswordHintOptions.Timeout
                                 )
                             )
                         }
@@ -154,14 +154,14 @@ class SignInScreenViewModel @Inject constructor(
                         UnsuccessfulSignInProcessCause.UnidentifiedException -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.UnidentifiedException
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.UnidentifiedException
                                 )
                             )
 
                             _stateOfPasswordHint.emit(
-                                value = PasswordTextFieldViewState.Visible(
-                                    hint = PasswordTextFieldHint.UnidentifiedException
+                                value = SignInPasswordHintViewState.Visible(
+                                    hint = SignInPasswordHintOptions.UnidentifiedException
                                 )
                             )
                         }
@@ -175,15 +175,15 @@ class SignInScreenViewModel @Inject constructor(
 
     private fun hideEmailHint() {
 
-        if (_stateOfEmailHint.value is EmailTextFieldViewState.Visible) {
-            _stateOfEmailHint.value = EmailTextFieldViewState.Invisible
+        if (_stateOfEmailHint.value is SignInEmailHintViewState.Visible) {
+            _stateOfEmailHint.value = SignInEmailHintViewState.Invisible
         }
     }
 
     private fun hidePasswordHint() {
 
-        if (_stateOfPasswordHint.value is PasswordTextFieldViewState.Visible) {
-            _stateOfPasswordHint.value = PasswordTextFieldViewState.Invisible
+        if (_stateOfPasswordHint.value is SignInPasswordHintViewState.Visible) {
+            _stateOfPasswordHint.value = SignInPasswordHintViewState.Invisible
         }
     }
 }

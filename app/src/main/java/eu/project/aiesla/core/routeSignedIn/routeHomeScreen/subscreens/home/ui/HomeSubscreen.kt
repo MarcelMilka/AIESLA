@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.theme.Background
@@ -17,7 +18,8 @@ fun homeSubscreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp),
+            .padding(Padding.P20.dp)
+            .testTag("HomeSubscreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,

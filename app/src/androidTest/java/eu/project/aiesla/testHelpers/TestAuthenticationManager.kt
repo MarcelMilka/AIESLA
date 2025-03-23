@@ -1,19 +1,21 @@
 package eu.project.aiesla.testHelpers
 
-import android.util.Log
 import eu.project.aiesla.auth.authenticationManager.AuthenticationManager
 import eu.project.aiesla.auth.credentials.EmailAndPasswordCredentials
 import eu.project.aiesla.auth.credentials.EmailCredential
+import eu.project.aiesla.auth.di.IoDispatcher
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.auth.results.SignUpProcess
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TestAuthenticationManager: AuthenticationManager {
+class TestAuthenticationManager @Inject constructor(
+    @IoDispatcher private val coroutineScope: CoroutineScope
+): AuthenticationManager {
 
     private val _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
     override val signInProcess: StateFlow<SignInProcess>
@@ -32,9 +34,7 @@ class TestAuthenticationManager: AuthenticationManager {
 
     override fun signIn(credentials: EmailAndPasswordCredentials) {
 
-        Log.d("Halla!", "signIn: ")
-
-        CoroutineScope(Dispatchers.Default)
+        coroutineScope
             .launch {
                 _signInProcess.emit(value = SignInProcess.Successful)
             }
@@ -42,9 +42,7 @@ class TestAuthenticationManager: AuthenticationManager {
 
     override fun signUp(credentials: EmailAndPasswordCredentials) {
 
-        Log.d("Halla!", "signUp: ")
-
-        CoroutineScope(Dispatchers.Default)
+        coroutineScope
             .launch {
                 _signUpProcess.emit(value = SignUpProcess.Successful)
             }
@@ -52,9 +50,7 @@ class TestAuthenticationManager: AuthenticationManager {
 
     override fun sendPasswordRecoveryEmail(email: EmailCredential) {
 
-        Log.d("Halla!", "sendPasswordRecoveryEmail: ")
-
-        CoroutineScope(Dispatchers.Default)
+        coroutineScope
             .launch {
                 _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Successful)
             }
@@ -62,5 +58,15 @@ class TestAuthenticationManager: AuthenticationManager {
 
     override fun signOut() {}
 
-    override fun resetProcesses() {}
+    override fun resetProcesses() {
+
+        coroutineScope
+            .launch {
+                _signInProcess.emit(value = SignInProcess.Idle)
+
+                _signUpProcess.emit(value = SignUpProcess.Idle)
+
+                _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Idle)
+            }
+    }
 }

@@ -29,8 +29,8 @@ fun signUpScreen(
     onUpdatePassword: (PasswordCredential) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
 
-    emailHintViewState: SignUpEmailTextFieldViewState,
-    passwordHintViewState: SignUpPasswordTextFieldViewState,
+    emailHintViewState: SignUpEmailHintViewState,
+    passwordHintViewState: SignUpPasswordHintViewState,
     buttonProceedViewState: ButtonProceedViewState,
 
     onSignUp: () -> Unit
@@ -40,10 +40,7 @@ fun signUpScreen(
     val passwordFocusRequester = remember { FocusRequester() }
 
     // activate email text field immediately after entering the screen
-    LaunchedEffect(true) {
-
-        emailFocusRequester.requestFocus()
-    }
+    LaunchedEffect(true) { emailFocusRequester.requestFocus() }
 
     Column(
         modifier = Modifier
@@ -59,20 +56,20 @@ fun signUpScreen(
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     emailTextField(
                         email = credentials.email,
                         testTag = "SignUpScreen emailTextField",
-                        onValueChange = {
-
-                            onUpdateEmail(EmailCredential(email = it))
-                        },
+                        onValueChange = { onUpdateEmail(EmailCredential(email = it)) },
                         emailFocusRequester = emailFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
@@ -85,19 +82,13 @@ fun signUpScreen(
                     passwordTextField(
                         password = credentials.password,
                         testTag = "SignUpScreen passwordTextField",
-                        onValueChange = {
-
-                            onUpdatePassword(PasswordCredential(password = it))
-                        },
+                        onValueChange = { onUpdatePassword(PasswordCredential(password = it)) },
                         assignedFocusRequester = passwordFocusRequester,
-                        onFocusChanged = {
-
-                            onFocusChanged(it)
-                        },
+                        onFocusChanged = { onFocusChanged(it) },
                         onDone = {}
                     )
 
-                    signUpPasswordTextFieldHintImpl(viewState = passwordHintViewState)
+                    signUpPasswordHint(viewState = passwordHintViewState)
 
                     verticalDivider20()
 
@@ -105,21 +96,21 @@ fun signUpScreen(
                         content = stringResource(R.string.sign_up),
                         buttonProceedViewState = buttonProceedViewState,
                         testTag = "SignUpScreen button 'Sign up'",
-                        onClick = {
-
-                            onSignUp()
-                        }
+                        onClick = { onSignUp() }
                     )
                 }
             )
 
             // lower part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {}
             )
         }

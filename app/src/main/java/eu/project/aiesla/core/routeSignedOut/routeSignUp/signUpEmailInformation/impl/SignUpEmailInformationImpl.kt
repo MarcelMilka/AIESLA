@@ -12,9 +12,9 @@ fun NavGraphBuilder.signUpEmailInformationImpl(navHostController: NavHostControl
 
     composable<Navigation.SignedOut.SignUp.SignUpEmailInformationScreen> (
 
-        enterTransition = { EnterTransition.None},
+        enterTransition = { EnterTransition.None },
 
-        exitTransition = { ExitTransition.None},
+        exitTransition = { ExitTransition.None },
 
         content = {
 
@@ -24,6 +24,7 @@ fun NavGraphBuilder.signUpEmailInformationImpl(navHostController: NavHostControl
                     navHostController.navigate(
                         route = Navigation.SignedOut.SignIn.RouteSignIn,
                         builder = {
+
                             this.popUpTo(
                                 route = Navigation.SignedOut.WelcomeScreen,
                                 popUpToBuilder = { inclusive = false }

@@ -81,19 +81,19 @@ class SignUpScreenViewModelTest {
         viewModel.stateOfPasswordHint.test {
 
             // default
-            assertEquals(SignUpPasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Invisible, awaitItem())
 
             // visible
             launch { viewModel.reactToOnFocusChanged(true) }
-            assertEquals(SignUpPasswordTextFieldViewState.Visible(), awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Visible(), awaitItem())
 
             // invisible
             launch { viewModel.reactToOnFocusChanged(false) }
-            assertEquals(SignUpPasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Invisible, awaitItem())
 
             // visible
             launch { viewModel.reactToOnFocusChanged(true) }
-            assertEquals(SignUpPasswordTextFieldViewState.Visible(), awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Visible(), awaitItem())
         }
     }
 
@@ -209,7 +209,7 @@ class SignUpScreenViewModelTest {
 
         viewModel.stateOfEmailHint.test {
 
-            assertEquals(SignUpEmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpEmailHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -221,35 +221,35 @@ class SignUpScreenViewModelTest {
         viewModel.stateOfEmailHint.test {
 
             // default
-            assertEquals(SignUpEmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpEmailHintViewState.Invisible, awaitItem())
 
             // Email error
             launch { signUpFlow.emit(SignUpProcess.Unsuccessful(UnsuccessfulSignUpProcessCause.InvalidEmailFormat)) }
-            assertEquals(SignUpEmailTextFieldViewState.Visible(SignUpEmailTextFieldHint.InvalidEmailFormat), awaitItem())
+            assertEquals(SignUpEmailHintViewState.Visible(SignUpEmailHintOptions.InvalidEmailFormat), awaitItem())
 
             // Email error 2
             launch { signUpFlow.emit(SignUpProcess.Unsuccessful(UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse)) }
-            assertEquals(SignUpEmailTextFieldViewState.Visible(SignUpEmailTextFieldHint.EmailIsAlreadyInUse), awaitItem())
+            assertEquals(SignUpEmailHintViewState.Visible(SignUpEmailHintOptions.EmailIsAlreadyInUse), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email"))
-            assertEquals(SignUpEmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpEmailHintViewState.Invisible, awaitItem())
 
             // Timeout error
             launch { signUpFlow.emit(SignUpProcess.Unsuccessful(UnsuccessfulSignUpProcessCause.Timeout)) }
-            assertEquals(SignUpEmailTextFieldViewState.Visible(SignUpEmailTextFieldHint.Timeout), awaitItem())
+            assertEquals(SignUpEmailHintViewState.Visible(SignUpEmailHintOptions.Timeout), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email"))
-            assertEquals(SignUpEmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpEmailHintViewState.Invisible, awaitItem())
 
             // Unidentified error
             launch { signUpFlow.emit(SignUpProcess.Unsuccessful(UnsuccessfulSignUpProcessCause.UnidentifiedException)) }
-            assertEquals(SignUpEmailTextFieldViewState.Visible(SignUpEmailTextFieldHint.UnidentifiedException), awaitItem())
+            assertEquals(SignUpEmailHintViewState.Visible(SignUpEmailHintOptions.UnidentifiedException), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email email"))
-            assertEquals(SignUpEmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpEmailHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -262,7 +262,7 @@ class SignUpScreenViewModelTest {
 
         viewModel.stateOfPasswordHint.test {
 
-            assertEquals(SignUpPasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -272,14 +272,14 @@ class SignUpScreenViewModelTest {
         viewModel.stateOfPasswordHint.test {
 
             // default
-            assertEquals(SignUpPasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Invisible, awaitItem())
 
             // visible #1
             viewModel.reactToOnFocusChanged(true)
             viewModel.updatePassword(PasswordCredential("P1!assword"))
 
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = false,
                         currentCount = 0
@@ -302,7 +302,7 @@ class SignUpScreenViewModelTest {
 
             // visible #2
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = true,
                         currentCount = 10
@@ -327,7 +327,7 @@ class SignUpScreenViewModelTest {
             viewModel.updatePassword(PasswordCredential("P1!assw"))
 
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = false,
                         currentCount = 7
@@ -352,7 +352,7 @@ class SignUpScreenViewModelTest {
             viewModel.updatePassword(PasswordCredential("1!assw"))
 
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = false,
                         currentCount = 6
@@ -377,7 +377,7 @@ class SignUpScreenViewModelTest {
             viewModel.updatePassword(PasswordCredential("!assw"))
 
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = false,
                         currentCount = 5
@@ -402,7 +402,7 @@ class SignUpScreenViewModelTest {
             viewModel.updatePassword(PasswordCredential("assw"))
 
             assertEquals(
-                SignUpPasswordTextFieldViewState.Visible(
+                SignUpPasswordHintViewState.Visible(
                     totalCharacters = PasswordRequirementViewState(
                         isGreen = false,
                         currentCount = 4
@@ -426,7 +426,7 @@ class SignUpScreenViewModelTest {
             // visible #6
             viewModel.reactToOnFocusChanged(false)
 
-            assertEquals(SignUpPasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignUpPasswordHintViewState.Invisible, awaitItem())
         }
     }
 }

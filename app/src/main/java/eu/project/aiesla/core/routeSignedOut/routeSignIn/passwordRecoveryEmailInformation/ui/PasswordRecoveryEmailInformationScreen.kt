@@ -31,11 +31,14 @@ fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     bigPrimaryLabel(
@@ -46,21 +49,20 @@ fun passwordRecoveryEmailInformationScreen(onSignIn: () -> Unit) {
 
             // lower part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
-                    // sign in
                     primaryAuthenticationButton(
                         content = stringResource(R.string.sign_in),
                         testTag = "PasswordRecoveryEmailInformationScreen primaryAuthenticationTextButton 'Sign in.'",
-                        onClick = {
-
-                            onSignIn()
-                        }
+                        onClick = { onSignIn() }
                     )
                 }
             )

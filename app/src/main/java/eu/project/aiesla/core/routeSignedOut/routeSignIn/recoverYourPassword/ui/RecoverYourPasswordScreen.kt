@@ -14,9 +14,9 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.sharedConstants.Padding
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
 import eu.project.aiesla.sharedUi.sharedElements.button.buttonProceed
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintViewState
 import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextField
-import eu.project.aiesla.sharedUi.sharedElements.textField.emailTextFieldHintImpl
+import eu.project.aiesla.sharedUi.sharedElements.textField.signInEmailHint
 import eu.project.aiesla.sharedUi.sharedElements.verticalDivider20
 import eu.project.aiesla.sharedUi.theme.Background
 
@@ -25,7 +25,7 @@ fun recoverYourPasswordScreen(
     email: EmailCredential,
     onUpdateEmail: (EmailCredential) -> Unit,
 
-    emailHintViewState: EmailTextFieldViewState,
+    emailHintViewState: SignInEmailHintViewState,
     buttonProceedViewState: ButtonProceedViewState,
 
     onRecoverPassword: () -> Unit,
@@ -34,10 +34,7 @@ fun recoverYourPasswordScreen(
     val emailFocusRequester = remember { FocusRequester() }
 
     // activate email text field immediately after entering the screen
-    LaunchedEffect(true) {
-
-        emailFocusRequester.requestFocus()
-    }
+    LaunchedEffect(true) { emailFocusRequester.requestFocus() }
 
     Column(
         modifier = Modifier
@@ -53,38 +50,34 @@ fun recoverYourPasswordScreen(
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     emailTextField(
                         email = email.email,
                         testTag = "RecoverYourPasswordScreen emailTextField",
-                        onValueChange = {
-
-                            onUpdateEmail(EmailCredential(email = it))
-                        },
+                        onValueChange = { onUpdateEmail(EmailCredential(email = it)) },
                         emailFocusRequester = emailFocusRequester,
                         onFocusChanged = {},
                         onDone = {}
                     )
 
-                    emailTextFieldHintImpl(viewState = emailHintViewState)
+                    signInEmailHint(viewState = emailHintViewState)
 
                     verticalDivider20()
 
-                    // 'recover your password'
                     buttonProceed(
                         content = stringResource(R.string.recover_your_password),
                         testTag = "RecoverYourPasswordScreen `recover your password`",
                         buttonProceedViewState = buttonProceedViewState,
-                        onClick = {
-
-                            onRecoverPassword()
-                        }
+                        onClick = { onRecoverPassword() }
                     )
                 }
             )

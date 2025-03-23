@@ -20,16 +20,16 @@ fun NavGraphBuilder.recoverYourPasswordImpl(navHostController: NavHostController
 
     composable<Navigation.SignedOut.SignIn.RecoverYourPasswordScreen>(
 
-        enterTransition = { EnterTransition.None},
+        enterTransition = { EnterTransition.None },
 
-        exitTransition = { ExitTransition.None},
+        exitTransition = { ExitTransition.None },
 
         content = {
 
-            val recoverYourPasswordScreenViewModel = hiltViewModel<RecoverYourPasswordScreenViewModel>()
+            val viewModel = hiltViewModel<RecoverYourPasswordScreenViewModel>()
 
             val passwordRecoveryProcess by
-            recoverYourPasswordScreenViewModel
+                viewModel
                 .signInProcess
                 .collectAsStateWithLifecycle()
 
@@ -52,15 +52,15 @@ fun NavGraphBuilder.recoverYourPasswordImpl(navHostController: NavHostController
             }
 
             recoverYourPasswordScreen(
-                email = recoverYourPasswordScreenViewModel.email.collectAsStateWithLifecycle().value,
+                email = viewModel.email.collectAsStateWithLifecycle().value,
 
-                onUpdateEmail = { recoverYourPasswordScreenViewModel.updateEmail(it) },
+                onUpdateEmail = { viewModel.updateEmail(it) },
 
-                emailHintViewState = recoverYourPasswordScreenViewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
+                emailHintViewState = viewModel.stateOfEmailHint.collectAsStateWithLifecycle().value,
 
-                buttonProceedViewState = recoverYourPasswordScreenViewModel.stateOfButtonProceed.collectAsState().value,
+                buttonProceedViewState = viewModel.stateOfButtonProceed.collectAsState().value,
 
-                onRecoverPassword = { recoverYourPasswordScreenViewModel.sendPasswordRecoveryEmail() }
+                onRecoverPassword = { viewModel.sendPasswordRecoveryEmail() }
             )
         }
     )

@@ -8,10 +8,10 @@ import eu.project.aiesla.auth.credentials.PasswordCredential
 import eu.project.aiesla.auth.results.SignInProcess
 import eu.project.aiesla.auth.results.UnsuccessfulSignInProcessCause
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.PasswordTextFieldViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInPasswordHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInPasswordHintViewState
 import eu.project.aiesla.testHelpers.MainDispatcherRule
 import io.mockk.*
 import kotlinx.coroutines.delay
@@ -296,7 +296,7 @@ class SignInScreenViewModelTest {
 
         viewModel.stateOfEmailHint.test {
 
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -308,31 +308,31 @@ class SignInScreenViewModelTest {
         viewModel.stateOfEmailHint.test {
 
             // default
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Email error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.InvalidEmailFormat)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.InvalidEmailFormat), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.InvalidEmailFormat), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Timeout error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.Timeout)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.Timeout), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.Timeout), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
 
             // Unidentified error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.UnidentifiedException)) }
-            assertEquals(EmailTextFieldViewState.Visible(EmailTextFieldHint.UnidentifiedException), awaitItem())
+            assertEquals(SignInEmailHintViewState.Visible(SignInEmailHintOptions.UnidentifiedException), awaitItem())
 
             // Hide via entering email
             viewModel.updateEmail(EmailCredential("email email email"))
-            assertEquals(EmailTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInEmailHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -345,7 +345,7 @@ class SignInScreenViewModelTest {
 
         viewModel.stateOfPasswordHint.test {
 
-            assertEquals(PasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInPasswordHintViewState.Invisible, awaitItem())
         }
     }
 
@@ -357,32 +357,32 @@ class SignInScreenViewModelTest {
         viewModel.stateOfPasswordHint.test {
 
             // default
-            assertEquals(PasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInPasswordHintViewState.Invisible, awaitItem())
 
             // Password error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.PasswordIsIncorrect)) }
-            assertEquals(PasswordTextFieldViewState.Visible(PasswordTextFieldHint.PasswordIsIncorrect), awaitItem())
+            assertEquals(SignInPasswordHintViewState.Visible(SignInPasswordHintOptions.PasswordIsIncorrect), awaitItem())
 
             // Hide via entering email
             viewModel.updatePassword(PasswordCredential("password"))
-            assertEquals(PasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInPasswordHintViewState.Invisible, awaitItem())
 
             // Timeout error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.Timeout)) }
-            assertEquals(PasswordTextFieldViewState.Visible(PasswordTextFieldHint.Timeout), awaitItem())
+            assertEquals(SignInPasswordHintViewState.Visible(SignInPasswordHintOptions.Timeout), awaitItem())
 
             // Hide via entering email
             viewModel.updatePassword(PasswordCredential("password"))
-            assertEquals(PasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInPasswordHintViewState.Invisible, awaitItem())
 
 
             // Unidentified error
             launch { signInFlow.emit(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.UnidentifiedException)) }
-            assertEquals(PasswordTextFieldViewState.Visible(PasswordTextFieldHint.UnidentifiedException), awaitItem())
+            assertEquals(SignInPasswordHintViewState.Visible(SignInPasswordHintOptions.UnidentifiedException), awaitItem())
 
             // Hide via entering email
             viewModel.updatePassword(PasswordCredential("password"))
-            assertEquals(PasswordTextFieldViewState.Invisible, awaitItem())
+            assertEquals(SignInPasswordHintViewState.Invisible, awaitItem())
         }
     }
 }

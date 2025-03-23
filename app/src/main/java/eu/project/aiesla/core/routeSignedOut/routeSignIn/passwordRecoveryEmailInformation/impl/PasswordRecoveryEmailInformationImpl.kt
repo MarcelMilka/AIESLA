@@ -1,5 +1,7 @@
 package eu.project.aiesla.core.routeSignedOut.routeSignIn.passwordRecoveryEmailInformation.impl
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -13,26 +15,32 @@ fun NavGraphBuilder.passwordRecoveryEmailInformationImpl(
     authenticationManager: AuthenticationManager
 ) {
 
-    composable<Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen> {
+    composable<Navigation.SignedOut.SignIn.PasswordRecoveryEmailInformationScreen> (
 
-        LaunchedEffect(true) {
+        enterTransition = { EnterTransition.None },
 
-            authenticationManager.resetProcesses()
+        exitTransition = { ExitTransition.None },
+
+        content = {
+
+            LaunchedEffect(true) { authenticationManager.resetProcesses() }
+
+            passwordRecoveryEmailInformationScreen(
+                onSignIn = {
+
+                    navHostController.navigate(
+                        route = Navigation.SignedOut.SignIn.RouteSignIn,
+                        builder = {
+
+                            this.popUpTo(
+
+                                route = Navigation.SignedOut.WelcomeScreen,
+                                popUpToBuilder = { inclusive = false }
+                            )
+                        }
+                    )
+                }
+            )
         }
-
-        passwordRecoveryEmailInformationScreen(
-            onSignIn = {
-
-                navHostController.navigate(
-                    route = Navigation.SignedOut.SignIn.RouteSignIn,
-                    builder = {
-                        this.popUpTo(
-                            route = Navigation.SignedOut.WelcomeScreen,
-                            popUpToBuilder = { inclusive = false }
-                        )
-                    }
-                )
-            }
-        )
-    }
+    )
 }

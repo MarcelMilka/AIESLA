@@ -26,10 +26,10 @@ class SignUpScreenViewModel @Inject constructor(
     private val _credentials = MutableStateFlow(EmailAndPasswordCredentials("", ""))
     val credentials = _credentials.asStateFlow()
 
-    private val _stateOfEmailHint = MutableStateFlow<SignUpEmailTextFieldViewState>(SignUpEmailTextFieldViewState.Invisible)
+    private val _stateOfEmailHint = MutableStateFlow<SignUpEmailHintViewState>(SignUpEmailHintViewState.Invisible)
     val stateOfEmailHint = _stateOfEmailHint.asStateFlow()
 
-    private val _stateOfPasswordHint = MutableStateFlow<SignUpPasswordTextFieldViewState>(SignUpPasswordTextFieldViewState.Invisible)
+    private val _stateOfPasswordHint = MutableStateFlow<SignUpPasswordHintViewState>(SignUpPasswordHintViewState.Invisible)
     val stateOfPasswordHint = _stateOfPasswordHint.asStateFlow()
 
     private val _stateOfButtonProceed = MutableStateFlow<ButtonProceedViewState>(ButtonProceedViewState.Disabled)
@@ -66,9 +66,9 @@ class SignUpScreenViewModel @Inject constructor(
 
             val stateOfPasswordHint =  when(passwordTextFieldIsFocused) {
 
-                true -> SignUpPasswordTextFieldViewState.Visible()
+                true -> SignUpPasswordHintViewState.Visible()
 
-                false -> SignUpPasswordTextFieldViewState.Invisible
+                false -> SignUpPasswordHintViewState.Invisible
             }
 
             _stateOfPasswordHint.emit(value = stateOfPasswordHint)
@@ -98,29 +98,29 @@ class SignUpScreenViewModel @Inject constructor(
 
                         UnsuccessfulSignUpProcessCause.InvalidEmailFormat -> {
 
-                            SignUpEmailTextFieldViewState.Visible(
-                                hint = SignUpEmailTextFieldHint.InvalidEmailFormat
+                            SignUpEmailHintViewState.Visible(
+                                hint = SignUpEmailHintOptions.InvalidEmailFormat
                             )
                         }
 
                         UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse -> {
 
-                            SignUpEmailTextFieldViewState.Visible(
-                                hint = SignUpEmailTextFieldHint.EmailIsAlreadyInUse
+                            SignUpEmailHintViewState.Visible(
+                                hint = SignUpEmailHintOptions.EmailIsAlreadyInUse
                             )
                         }
 
                         UnsuccessfulSignUpProcessCause.Timeout -> {
 
-                            SignUpEmailTextFieldViewState.Visible(
-                                hint = SignUpEmailTextFieldHint.Timeout
+                            SignUpEmailHintViewState.Visible(
+                                hint = SignUpEmailHintOptions.Timeout
                             )
                         }
 
                         UnsuccessfulSignUpProcessCause.UnidentifiedException -> {
 
-                            SignUpEmailTextFieldViewState.Visible(
-                                hint = SignUpEmailTextFieldHint.UnidentifiedException
+                            SignUpEmailHintViewState.Visible(
+                                hint = SignUpEmailHintOptions.UnidentifiedException
                             )
                         }
                     }
@@ -136,8 +136,8 @@ class SignUpScreenViewModel @Inject constructor(
 
     private fun hideEmailHint() {
 
-        if (_stateOfEmailHint.value is SignUpEmailTextFieldViewState.Visible) {
-            _stateOfEmailHint.value = SignUpEmailTextFieldViewState.Invisible
+        if (_stateOfEmailHint.value is SignUpEmailHintViewState.Visible) {
+            _stateOfEmailHint.value = SignUpEmailHintViewState.Invisible
         }
     }
 
@@ -147,14 +147,14 @@ class SignUpScreenViewModel @Inject constructor(
 
             when(stateOfPasswordHint) {
 
-                is SignUpPasswordTextFieldViewState.Visible -> {
+                is SignUpPasswordHintViewState.Visible -> {
 
                     val totalCharacters = credentials.password.count()
                     val uppercaseCharacters = credentials.password.count { it.isUpperCase() }
                     val specialCharacters = credentials.password.count { !it.isLetterOrDigit() }
                     val numericCharacters = credentials.password.count { it.isDigit() }
 
-                    val viewState = SignUpPasswordTextFieldViewState.Visible(
+                    val viewState = SignUpPasswordHintViewState.Visible(
 
                         totalCharacters = PasswordRequirementViewState(
                             isGreen = totalCharacters >= PasswordRequirements.MIN_CHARACTERS_COUNT,
@@ -203,7 +203,7 @@ class SignUpScreenViewModel @Inject constructor(
                         credentials.password.count { it.isUpperCase() } >= PasswordRequirements.MIN_UPPERCASE_COUNT &&
                         credentials.password.count { !it.isLetterOrDigit() } >= PasswordRequirements.MIN_SPECIAL_CHARACTER_COUNT &&
                         credentials.password.count { it.isDigit() } >= PasswordRequirements.MIN_NUMERIC_CHARACTER_COUNT &&
-                        emailHint is SignUpEmailTextFieldViewState.Invisible
+                        emailHint is SignUpEmailHintViewState.Invisible
                     ) { ButtonProceedViewState.Enabled }
 
                     else ButtonProceedViewState.Disabled

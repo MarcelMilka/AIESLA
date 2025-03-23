@@ -8,8 +8,8 @@ import eu.project.aiesla.auth.credentials.EmailCredential
 import eu.project.aiesla.auth.results.PasswordRecoveryProcess
 import eu.project.aiesla.auth.results.UnsuccessfulPasswordRecoveryCause
 import eu.project.aiesla.sharedUi.sharedElements.button.ButtonProceedViewState
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldHint
-import eu.project.aiesla.sharedUi.sharedElements.textField.EmailTextFieldViewState
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintOptions
+import eu.project.aiesla.sharedUi.sharedElements.textField.SignInEmailHintViewState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
     private val _email = MutableStateFlow(EmailCredential(""))
     val email = _email.asStateFlow()
 
-    private val _stateOfEmailHint = MutableStateFlow<EmailTextFieldViewState>(EmailTextFieldViewState.Invisible)
+    private val _stateOfEmailHint = MutableStateFlow<SignInEmailHintViewState>(SignInEmailHintViewState.Invisible)
     val stateOfEmailHint = _stateOfEmailHint.asStateFlow()
 
     private val _stateOfButtonProceed = MutableStateFlow<ButtonProceedViewState>(ButtonProceedViewState.Disabled)
@@ -73,7 +73,7 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
 
                         if (
                             email.email.isNotEmpty() &&
-                            emailHint is EmailTextFieldViewState.Invisible
+                            emailHint is SignInEmailHintViewState.Invisible
 
                         ) { ButtonProceedViewState.Enabled }
 
@@ -104,8 +104,8 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
                         UnsuccessfulPasswordRecoveryCause.InvalidEmailFormat -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.InvalidEmailFormat
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.InvalidEmailFormat
                                 )
                             )
                         }
@@ -113,8 +113,8 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
                         UnsuccessfulPasswordRecoveryCause.Timeout -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.Timeout
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.Timeout
                                 )
                             )
                         }
@@ -122,8 +122,8 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
                         UnsuccessfulPasswordRecoveryCause.UnidentifiedException -> {
 
                             _stateOfEmailHint.emit(
-                                value = EmailTextFieldViewState.Visible(
-                                    hint = EmailTextFieldHint.UnidentifiedException
+                                value = SignInEmailHintViewState.Visible(
+                                    hint = SignInEmailHintOptions.UnidentifiedException
                                 )
                             )
                         }
@@ -137,8 +137,8 @@ class RecoverYourPasswordScreenViewModel @Inject constructor(
 
     private fun hideEmailHint() {
 
-        if (_stateOfEmailHint.value is EmailTextFieldViewState.Visible) {
-            _stateOfEmailHint.value = EmailTextFieldViewState.Invisible
+        if (_stateOfEmailHint.value is SignInEmailHintViewState.Visible) {
+            _stateOfEmailHint.value = SignInEmailHintViewState.Invisible
         }
     }
 }

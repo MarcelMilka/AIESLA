@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ComposeSignUpEmailInformationScreenTest {
+class SignUpEmailInformationScreenTest {
 
     @get:Rule(order = 0)
     val ctr = createComposeRule()

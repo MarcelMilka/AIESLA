@@ -167,10 +167,10 @@ fun passwordTextField (
 }
 
 @Composable
-fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
+fun signInPasswordHint(viewState: SignInPasswordHintViewState) {
 
     AnimatedVisibility(
-        visible = viewState is PasswordTextFieldViewState.Visible,
+        visible = viewState is SignInPasswordHintViewState.Visible,
         content = {
 
             Column(
@@ -183,13 +183,13 @@ fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
 
                     when(viewState) {
 
-                        is PasswordTextFieldViewState.Visible -> {
+                        is SignInPasswordHintViewState.Visible -> {
 
                             val content =
                                 when(viewState.hint){
-                                    PasswordTextFieldHint.PasswordIsIncorrect -> stringResource(R.string.invalid_password)
-                                    PasswordTextFieldHint.Timeout -> stringResource(R.string.timeout)
-                                    PasswordTextFieldHint.UnidentifiedException -> stringResource(R.string.unidentified_error)
+                                    SignInPasswordHintOptions.PasswordIsIncorrect -> stringResource(R.string.invalid_password)
+                                    SignInPasswordHintOptions.Timeout -> stringResource(R.string.timeout)
+                                    SignInPasswordHintOptions.UnidentifiedException -> stringResource(R.string.unidentified_error)
                                 }
 
                             textFieldHint(
@@ -206,13 +206,13 @@ fun passwordTextFieldHintImpl(viewState: PasswordTextFieldViewState) {
     )
 }
 
-sealed class PasswordTextFieldViewState {
+sealed class SignInPasswordHintViewState {
 
-    data object Invisible: PasswordTextFieldViewState()
-    data class Visible(val hint: PasswordTextFieldHint): PasswordTextFieldViewState()
+    data object Invisible: SignInPasswordHintViewState()
+    data class Visible(val hint: SignInPasswordHintOptions): SignInPasswordHintViewState()
 }
 
-enum class PasswordTextFieldHint {
+enum class SignInPasswordHintOptions {
     PasswordIsIncorrect,
     Timeout,
     UnidentifiedException,
@@ -221,10 +221,10 @@ enum class PasswordTextFieldHint {
 
 
 @Composable
-fun signUpPasswordTextFieldHintImpl(viewState: SignUpPasswordTextFieldViewState) {
+fun signUpPasswordHint(viewState: SignUpPasswordHintViewState) {
 
     AnimatedVisibility(
-        visible = viewState is SignUpPasswordTextFieldViewState.Visible,
+        visible = viewState is SignUpPasswordHintViewState.Visible,
         content = {
 
             Column(
@@ -237,7 +237,7 @@ fun signUpPasswordTextFieldHintImpl(viewState: SignUpPasswordTextFieldViewState)
 
                     when(viewState) {
 
-                        is SignUpPasswordTextFieldViewState.Visible -> {
+                        is SignUpPasswordHintViewState.Visible -> {
 
                             passwordRequirement(
                                 isGreen = viewState.totalCharacters.isGreen,
@@ -272,16 +272,20 @@ fun signUpPasswordTextFieldHintImpl(viewState: SignUpPasswordTextFieldViewState)
     )
 }
 
-sealed class SignUpPasswordTextFieldViewState {
+sealed class SignUpPasswordHintViewState {
 
-    data object Invisible: SignUpPasswordTextFieldViewState()
+    data object Invisible: SignUpPasswordHintViewState()
     data class Visible(
         val totalCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
         val uppercaseCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
         val specialCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0),
         val numericCharacters: PasswordRequirementViewState = PasswordRequirementViewState(false, 0)
-    ): SignUpPasswordTextFieldViewState()
+    ): SignUpPasswordHintViewState()
 }
+
+
+
+data class PasswordRequirementViewState(val isGreen: Boolean = false, val currentCount: Int = 0)
 
 @Composable
 fun passwordRequirement(isGreen: Boolean, content: String, testTag: String) {
@@ -301,5 +305,3 @@ fun passwordRequirement(isGreen: Boolean, content: String, testTag: String) {
         testTag = testTag
     )
 }
-
-data class PasswordRequirementViewState(val isGreen: Boolean = false, val currentCount: Int = 0)

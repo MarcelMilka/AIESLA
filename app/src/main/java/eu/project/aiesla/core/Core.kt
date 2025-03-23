@@ -21,7 +21,7 @@ import eu.project.aiesla.core.routeSignedOut.routeSignIn.recoverYourPassword.imp
 import eu.project.aiesla.core.routeSignedOut.routeSignIn.signIn.impl.signInImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUp.impl.signUpImpl
 import eu.project.aiesla.core.routeSignedOut.routeSignUp.signUpEmailInformation.impl.signUpEmailInformationImpl
-import eu.project.aiesla.core.routeSignedOut.welcomeScreenImpl
+import eu.project.aiesla.core.routeSignedOut.routeSignUp.welcome.impl.welcomeScreenImpl
 import eu.project.aiesla.core.screenDock.impl.screenDockImpl
 import eu.project.aiesla.sharedConstants.navigation.Navigation
 

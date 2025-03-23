@@ -1,10 +1,11 @@
-package eu.project.aiesla.core.routeSignedOut
+package eu.project.aiesla.core.routeSignedOut.routeSignUp.welcome.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.aiesla.R
@@ -23,7 +24,8 @@ fun welcomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
-            .padding(Padding.P20.dp),
+            .padding(Padding.P20.dp)
+            .testTag("WelcomeScreen"),
 
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -32,21 +34,27 @@ fun welcomeScreen(
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {}
             )
 
             // lower part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     // sign in / sign up
@@ -62,7 +70,7 @@ fun welcomeScreen(
                             primaryAuthenticationButton(
                                 content = stringResource(R.string.sign_in),
                                 testTag = "WelcomeScreen primaryAuthenticationTextButton 'Sign in.'",
-                                onClick = {onSignIn()}
+                                onClick = { onSignIn() }
                             )
 
                             verticalDivider5()
@@ -71,7 +79,7 @@ fun welcomeScreen(
                             primaryAuthenticationButton(
                                 content = stringResource(R.string.sign_up),
                                 testTag = "WelcomeScreen primaryAuthenticationTextButton 'Sign up.'",
-                                onClick = {onSignUp()}
+                                onClick = { onSignUp() }
                             )
                         }
                     )

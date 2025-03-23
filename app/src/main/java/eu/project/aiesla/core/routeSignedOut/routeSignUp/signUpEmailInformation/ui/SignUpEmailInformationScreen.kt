@@ -31,11 +31,14 @@ fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
 
             // upper part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     bigPrimaryLabel(
@@ -46,21 +49,21 @@ fun signUpEmailInformationScreen(onSignIn: () -> Unit) {
 
             // lower part
             Column(
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
+
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
+
                 content = {
 
                     // sign in
                     primaryAuthenticationButton(
                         content = stringResource(R.string.sign_in),
                         testTag = "SignUpEmailInformationScreen primaryAuthenticationButton 'Sign in.'",
-                        onClick = {
-
-                            onSignIn()
-                        }
+                        onClick = { onSignIn() }
                     )
                 }
             )
