@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "AIESLA"
 include(":app")
- 
+include(":navigation")
+include(":applicationScaffold")
+include(":routeSignedIn")
+include(":routeSignedOut")
+include(":routeUnsuccessfulInitialization")

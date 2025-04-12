@@ -1,22 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    namespace = "eu.project.aiesla"
+    namespace = "com.example.applicationscaffold"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "eu.project.aiesla"
         minSdk = 30
-        //noinspection OldTargetApi
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -25,18 +21,12 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
     kotlinOptions {
         jvmTarget = "11"
-    }
-
-    buildFeatures {
-        compose = true
     }
 }
 
@@ -58,5 +48,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":applicationScaffold"))
+    //  Navigation
+    implementation(libs.navigation.compose)
+    implementation(project(":navigation"))
+
+    implementation(project(":routeSignedOut"))
 }
