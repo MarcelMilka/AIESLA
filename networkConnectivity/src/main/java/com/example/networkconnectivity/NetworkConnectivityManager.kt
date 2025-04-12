@@ -8,11 +8,12 @@ import android.net.NetworkRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // the class below was implemented following the documentation:
 // https://developer.android.com/training/monitoring-device-state/connectivity-status-type
 
-class NetworkConnectivityManager(
+class NetworkConnectivityManager @Inject constructor(
     private val context: Context,
     private val ioCoroutine: CoroutineScope
 ) {

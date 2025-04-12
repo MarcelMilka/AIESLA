@@ -1,5 +1,7 @@
 [versions]
 activityComposeVersion = "1.10.1"
+hiltAndroidCompilerVersion = "2.51.1"
+hiltAndroidVersion = "2.51.1"
 kotlin = "1.9.20"
 composeBomVersion = "2024.04.01"
 coreKtx = "1.15.0"
@@ -29,6 +31,8 @@ androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 junit = { module = "junit:junit", version.ref = "junitVersion" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
