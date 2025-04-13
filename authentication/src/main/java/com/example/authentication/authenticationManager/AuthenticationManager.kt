@@ -7,5 +7,5 @@ interface AuthenticationManager {
 
     val authenticationState: StateFlow<AuthenticationState>
 
-    fun checkAuthenticationState()
+    suspend fun checkAuthenticationState()
 }

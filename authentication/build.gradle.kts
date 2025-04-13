@@ -73,6 +73,10 @@ dependencies {
     testImplementation(libs.mockk.mockk.agent)
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.mockk.agent)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.turbine)
 }
 
 kapt {
