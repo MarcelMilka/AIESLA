@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.authentication"
+    namespace = "com.example.firebase"
     compileSdk = 35
 
     defaultConfig {
@@ -30,13 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            merges += "META-INF/LICENSE.md"
-            merges += "META-INF/LICENSE-notice.md"
-        }
-    }
 }
 
 dependencies {
@@ -57,22 +50,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(project(":dataStore"))
-    implementation(project(":roomLocalDatabase"))
-    implementation(project(":firebase"))
-
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
-
-    testImplementation(libs.mockk)
-    testImplementation(libs.mockk.android)
-    testImplementation(libs.mockk.mockk.agent)
-    androidTestImplementation(libs.mockk.android)
-    androidTestImplementation(libs.mockk.mockk.agent)
 }
 
 kapt {

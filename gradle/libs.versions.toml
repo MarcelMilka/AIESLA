@@ -1,5 +1,6 @@
 [versions]
 activityComposeVersion = "1.10.1"
+firebaseBomVersion = "33.12.0"
 hiltAndroidCompilerVersion = "2.51.1"
 hiltAndroidTestingVersion = "2.51.1"
 hiltAndroidVersion = "2.51.1"
@@ -26,6 +27,7 @@ roomRuntime = "2.7.0"
 roomCompiler = "2.7.0"
 roomKtx = "2.7.0"
 roomTesting = "2.7.0"
+playServicesAuth = "21.3.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -41,6 +43,7 @@ androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidTestingVersion" }
@@ -58,7 +61,8 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomTesting" }
-
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 [plugins]
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvmVersion" }
