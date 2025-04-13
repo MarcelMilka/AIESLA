@@ -48,9 +48,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //  Navigation
-    implementation(libs.navigation.compose)
     implementation(project(":navigation"))
-
+    implementation(project(":authentication"))
     implementation(project(":routeSignedOut"))
+    implementation(project(":routeSignedIn"))
+    implementation(project(":routeUnsuccessfulInitialization"))
+
+    implementation(libs.navigation.compose)
 }

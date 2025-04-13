@@ -53,6 +53,9 @@ sealed class Navigation {
     sealed class UnsuccessfulAuthentication: Navigation() {
 
         @Serializable
+        data object RouteUnsuccessfulAuthentication: UnsuccessfulAuthentication()
+
+        @Serializable
         data object UnsuccessfulAuthenticationScreen: UnsuccessfulAuthentication()
     }
 }

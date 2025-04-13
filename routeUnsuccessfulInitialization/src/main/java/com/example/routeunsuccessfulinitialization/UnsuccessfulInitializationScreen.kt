@@ -1,4 +1,4 @@
-package com.example.routesignedout
+package com.example.routeunsuccessfulinitialization
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
 @Composable
-fun welcomeScreen() {
+fun unsuccessfulInitializationScreen() {
 
     Column(
-        modifier = Modifier.fillMaxSize().testTag("WelcomeScreen"),
+        modifier = Modifier.fillMaxSize().testTag("UnsuccessfulInitializationScreen"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            Text("WelcomeScreen")
+            Text("UnsuccessfulInitializationScreen")
         }
     )
 }

@@ -18,7 +18,7 @@ class AuthenticationManagerProvider {
 
     @Provides
     @Singleton
-    fun provideProductionAuthenticationManager(
+    fun provideAuthenticationManagerImpl(
         onboardingRepository: OnboardingRepository,
         @FirebaseAuthenticationQ firebaseAuthentication: Authentication,
         @RoomAuthenticationQ roomAuthentication: Authentication,

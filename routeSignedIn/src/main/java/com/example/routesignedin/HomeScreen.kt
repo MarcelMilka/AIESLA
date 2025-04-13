@@ -1,4 +1,4 @@
-package com.example.routesignedout
+package com.example.routesignedin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
 @Composable
-fun welcomeScreen() {
+fun homeScreen() {
 
     Column(
-        modifier = Modifier.fillMaxSize().testTag("WelcomeScreen"),
+        modifier = Modifier.fillMaxSize().testTag("HomeScreen"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            Text("WelcomeScreen")
+            Text("HomeScreen")
         }
     )
 }

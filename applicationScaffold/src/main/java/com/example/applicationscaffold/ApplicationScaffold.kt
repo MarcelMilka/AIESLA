@@ -7,10 +7,13 @@ import androidx.compose.ui.Modifier
 import com.example.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.authentication.results.AuthenticationState
+import com.example.routesignedin.routeSignedInImpl
 import com.example.routesignedout.routeSignedOutImpl
+import com.example.routeunsuccessfulinitialization.routeUnsuccessfulInitializationImpl
 
 @Composable
-fun applicationScaffold() {
+fun applicationScaffold(authenticationState: AuthenticationState) {
 
     val navigationController = rememberNavController()
 
@@ -24,10 +27,19 @@ fun applicationScaffold() {
 
             NavHost(
                 navController = navigationController,
-                startDestination = Navigation.SignedOut.RouteSignedOut,
+                startDestination = when(authenticationState) {
+
+                    AuthenticationState.SignedIn -> Navigation.SignedIn.RouteSignedIn
+                    AuthenticationState.SignedOut -> Navigation.SignedOut.RouteSignedOut
+                    is AuthenticationState.Unsuccessful -> Navigation.UnsuccessfulAuthentication.RouteUnsuccessfulAuthentication
+                },
                 builder = {
 
                     this.routeSignedOutImpl()
+
+                    this.routeSignedInImpl()
+
+                    this.routeUnsuccessfulInitializationImpl()
                 }
             )
         }
