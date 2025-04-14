@@ -35,7 +35,7 @@ fun applicationScaffold(authenticationState: AuthenticationState) {
                 },
                 builder = {
 
-                    this.routeSignedOutImpl()
+                    this.routeSignedOutImpl(navigationController = navigationController)
 
                     this.routeSignedInImpl()
 
