@@ -17,9 +17,6 @@ class OnboardingRepository @Inject constructor(
             this.dataStoreUserOnboardingState
                 .data
                 .firstOrNull()
-
-            UserOnboardingState(true)
-//            null
         }
 
         catch (e: IOException) { null }

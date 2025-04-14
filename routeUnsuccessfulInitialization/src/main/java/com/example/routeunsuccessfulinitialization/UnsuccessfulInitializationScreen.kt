@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
 @Composable
-fun unsuccessfulInitializationScreen() {
+internal fun unsuccessfulInitializationScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize().testTag("UnsuccessfulInitializationScreen"),

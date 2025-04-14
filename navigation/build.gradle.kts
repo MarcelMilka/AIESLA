@@ -39,9 +39,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-//  Navigation
     implementation(libs.navigation.compose)
-
-//  Serialization
     implementation(libs.kotlinx.serialization.json)
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
 @Composable
-fun welcomeScreen() {
+internal fun welcomeScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize().testTag("WelcomeScreen"),

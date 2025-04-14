@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 
 @Composable
-fun homeScreen() {
+internal fun homeScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize().testTag("HomeScreen"),

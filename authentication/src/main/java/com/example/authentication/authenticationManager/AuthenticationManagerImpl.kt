@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
-class AuthenticationManagerImpl @Inject constructor(
+internal class AuthenticationManagerImpl @Inject constructor(
     val onboardingRepository: OnboardingRepository,
     @FirebaseAuthenticationQ val firebaseAuthentication: Authentication,
     @RoomAuthenticationQ val roomAuthentication: Authentication,
