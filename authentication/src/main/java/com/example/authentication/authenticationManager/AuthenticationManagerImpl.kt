@@ -9,6 +9,7 @@ import com.example.datastore.data.OnboardingRepository
 import com.example.datastore.model.UserOnboardingState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
@@ -24,6 +25,9 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
     private var _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
     override val signUpProcess = _signUpProcess.asStateFlow()
+
+    private var _signInProcess = MutableStateFlow<SignInProcess>(SignInProcess.Idle)
+    override val signInProcess = _signInProcess.asStateFlow()
 
     private val timeout = 10000L
 
@@ -178,6 +182,82 @@ internal class AuthenticationManagerImpl @Inject constructor(
                     _signUpProcess.emit(
                         value = SignUpProcess.Unsuccessful(
                             cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
+                        )
+                    )
+                }
+            }
+    }
+
+    override fun signIn(credentials: EmailAndPasswordCredentials) {
+
+        coroutineScope
+            .launch {
+                try {
+
+                    withTimeout(timeout) {
+
+                        val signInProcess = async {
+
+                            _signInProcess.emit(value = SignInProcess.Pending)
+                            firebaseAuthentication.signIn(
+                                credentials = EmailAndPasswordCredentials(
+                                    credentials.email,
+                                    credentials.password
+                                )
+                            )
+                        }
+
+                        when (signInProcess.await()) {
+
+                            ResultOfSignInProcess.Ok -> {
+
+                                _signInProcess.emit(value = SignInProcess.Successful)
+                            }
+
+                            ResultOfSignInProcess.InvalidEmailFormat -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.InvalidEmailFormat
+                                    )
+                                )
+                            }
+
+                            ResultOfSignInProcess.PasswordIsIncorrect -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.PasswordIsIncorrect
+                                    )
+                                )
+                            }
+
+                            ResultOfSignInProcess.UnidentifiedException -> {
+
+                                _signInProcess.emit(
+                                    value = SignInProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignInProcessCause.UnidentifiedException
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+
+                catch (e: TimeoutCancellationException) {
+
+                    _signInProcess.emit(
+                        value = SignInProcess.Unsuccessful(
+                            cause = UnsuccessfulSignInProcessCause.Timeout
+                        )
+                    )
+                }
+
+                catch (e: Exception) {
+
+                    _signInProcess.emit(
+                        value = SignInProcess.Unsuccessful(
+                            cause = UnsuccessfulSignInProcessCause.UnidentifiedException
                         )
                     )
                 }

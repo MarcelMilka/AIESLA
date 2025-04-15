@@ -462,4 +462,171 @@ class AuthenticationManagerImplTest {
             firebaseAuthentication.signUp(credentials = any())
         }
     }
+
+
+
+    @Test
+    fun `signIn - signInProcess is Idle by default`() = runTest {
+
+        authenticationManager.signInProcess.test {
+
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `signIn - signInProcess is Successful when ResultOfSignInProcess is Ok`() = runTest(StandardTestDispatcher()) {
+
+        // stubbing
+        coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.Ok
+
+        // testing
+        authenticationManager.signIn(credentials = emailAndPasswordCredentials)
+        authenticationManager.signInProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Successful, this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.signIn(credentials = any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `signIn - signInProcess is Unsuccessful - InvalidEmailFormat when ResultOfSignInProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
+
+        // stubbing
+        coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.InvalidEmailFormat
+
+        // testing
+        authenticationManager.signIn(credentials = emailAndPasswordCredentials)
+        authenticationManager.signInProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.InvalidEmailFormat), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.signIn(credentials = any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `signIn - signInProcess is Unsuccessful - PasswordIsIncorrect when ResultOfSignInProcess is PasswordIsIncorrect`() = runTest(StandardTestDispatcher()) {
+
+        // stubbing
+        coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.PasswordIsIncorrect
+
+        // testing
+        authenticationManager.signIn(credentials = emailAndPasswordCredentials)
+        authenticationManager.signInProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.PasswordIsIncorrect), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.signIn(credentials = any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `signIn - signInProcess is Unsuccessful - UnidentifiedException when ResultOfSignInProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // stubbing
+        coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.UnidentifiedException
+
+        // testing
+        authenticationManager.signIn(credentials = emailAndPasswordCredentials)
+        authenticationManager.signInProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.UnidentifiedException), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.signIn(credentials = any())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `signIn - signInProcess is Unsuccessful - Timeout when it takes more than 10 seconds to sign in`() = runTest(StandardTestDispatcher()) {
+
+        // stubbing
+        coEvery { firebaseAuthentication.signIn(credentials = any()) } coAnswers {
+
+            delay(10500)
+            ResultOfSignInProcess.Ok
+        }
+
+        // testing
+        authenticationManager.signIn(credentials = emailAndPasswordCredentials)
+        authenticationManager.signInProcess.test {
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Idle, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Pending, this.awaitItem())
+
+            advanceUntilIdle()
+            assertEquals(SignInProcess.Unsuccessful(UnsuccessfulSignInProcessCause.Timeout), this.awaitItem())
+
+            this.cancelAndConsumeRemainingEvents()
+        }
+
+        // verification
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.signIn(credentials = any())
+        }
+    }
 }
