@@ -2,6 +2,7 @@ package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
+import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.example.roomlocaldatabase.dao.MetadataDAO
 import io.mockk.*
@@ -90,6 +91,34 @@ class RoomAuthenticationTest {
         assertEquals(
             ResultOfSendingSignUpVerificationEmail.Ok,
             roomAuthentication.sendSignUpVerificationEmail()
+        )
+    }
+
+
+
+    @Test
+    fun `signIn - returns Ok when user is properly signed in`() = runTest {
+
+        // stubbing
+        coEvery { metadataDAO.signIn() } just runs
+
+        // test
+        assertEquals(
+            ResultOfSignInProcess.Ok,
+            roomAuthentication.signIn(credentials = emailAndPasswordCredentials)
+        )
+    }
+
+    @Test
+    fun `signIn - returns UnidentifiedException when an error occurs`() = runTest {
+
+        // stubbing
+        coEvery { metadataDAO.signIn() } throws RuntimeException()
+
+        // test
+        assertEquals(
+            ResultOfSignInProcess.UnidentifiedException,
+            roomAuthentication.signIn(credentials = emailAndPasswordCredentials)
         )
     }
 }

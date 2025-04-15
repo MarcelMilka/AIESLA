@@ -2,6 +2,7 @@ package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
+import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.example.roomlocaldatabase.dao.MetadataDAO
 import com.example.roomlocaldatabase.entity.MetadataEntity
@@ -24,7 +25,6 @@ internal class RoomAuthentication @Inject constructor(
             )
 
             metadataDAO.initializeMetadata(metadataEntity)
-
             ResultOfSignUpProcess.Ok
         }
 
@@ -36,4 +36,18 @@ internal class RoomAuthentication @Inject constructor(
 
     override suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail =
         ResultOfSendingSignUpVerificationEmail.Ok
+
+    override suspend fun signIn(credentials: EmailAndPasswordCredentials): ResultOfSignInProcess {
+
+        return try {
+
+            metadataDAO.signIn()
+            ResultOfSignInProcess.Ok
+        }
+
+        catch (e: Exception) {
+
+            ResultOfSignInProcess.UnidentifiedException
+        }
+    }
 }
