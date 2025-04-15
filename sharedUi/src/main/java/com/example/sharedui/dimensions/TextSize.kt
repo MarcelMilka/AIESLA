@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.sp
 
 object TextSize {
 
+    val guidance = 24.sp
     val primary = 16.sp
     val secondary = 14.dp
     val textFieldHint = 12.sp

@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.example.authentication.results.SignUpProcess
 import com.example.navigation.Navigation
 import com.example.routesignedout.routeSignUp.signUp.ui.signUpScreen
 import com.example.routesignedout.routeSignUp.signUp.vm.SignUpScreenViewModel
@@ -35,19 +36,19 @@ fun NavGraphBuilder.signUpScreenImpl(navHostController: NavHostController) {
 
                 delay(100)
 
-//                if (signUpProcess is SignUpProcess.Successful) {
-//
-//                    navHostController.navigate(
-//                        route = Navigation.SignedOut.SignUp.SignUpEmailInformationScreen,
-//                        builder = {
-//
-//                            this.popUpTo(
-//                                route = Navigation.SignedOut.WelcomeScreen,
-//                                popUpToBuilder = { inclusive = false }
-//                            )
-//                        }
-//                    )
-//                }
+                if (signUpProcess is SignUpProcess.Successful) {
+
+                    navHostController.navigate(
+                        route = Navigation.SignedOut.SignUp.SignUpEmailInformationScreen,
+                        builder = {
+
+                            this.popUpTo(
+                                route = Navigation.SignedOut.WelcomeScreen,
+                                popUpToBuilder = { inclusive = false }
+                            )
+                        }
+                    )
+                }
             }
 
             signUpScreen(

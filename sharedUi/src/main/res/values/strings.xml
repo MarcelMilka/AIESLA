@@ -20,4 +20,5 @@
     <string name="special_character">special character</string>
     <string name="numeric_character">numeric character</string>
 
+    <string name="verify_your_email">A verification email has been sent to your email address.</string>
 </resources>

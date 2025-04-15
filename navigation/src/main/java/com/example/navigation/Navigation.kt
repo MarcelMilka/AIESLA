@@ -32,6 +32,9 @@ sealed class Navigation {
 
             @Serializable
             data object SignUpScreen: SignUp()
+
+            @Serializable
+            data object SignUpEmailInformationScreen: SignUp()
         }
     }
 
