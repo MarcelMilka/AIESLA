@@ -1,6 +1,7 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -61,5 +62,26 @@ internal class FirebaseAuthentication @Inject constructor(
                 }
         }
 
+    }
+
+    override suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail {
+
+        return suspendCoroutine { continuation ->
+
+            val user = firebaseAuth.currentUser!!
+            user.sendEmailVerification()
+                .addOnCompleteListener { task ->
+
+                    if (task.isSuccessful) {
+
+                        continuation.resume(value = ResultOfSendingSignUpVerificationEmail.Ok)
+                    }
+
+                    else {
+
+                        continuation.resume(value = ResultOfSendingSignUpVerificationEmail.UnidentifiedException)
+                    }
+                }
+        }
     }
 }

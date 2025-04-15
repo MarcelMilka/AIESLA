@@ -1,6 +1,7 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -20,6 +21,7 @@ class FirebaseAuthenticationTest {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var task: Task<AuthResult>
+    private lateinit var authTask: Task<Void>
 
     private lateinit var firebaseAuthentication: Authentication
 
@@ -29,6 +31,7 @@ class FirebaseAuthenticationTest {
         firebaseAuth = mockk()
         firebaseUser = mockk()
         task = mockk()
+        authTask = mockk()
 
         firebaseAuthentication = FirebaseAuthentication(
             firebaseAuth = firebaseAuth
@@ -171,5 +174,49 @@ class FirebaseAuthenticationTest {
 
         // testing
         assertEquals(ResultOfSignUpProcess.UnidentifiedException, result)
+    }
+
+
+
+    @Test
+    fun `sendSignUpVerificationEmail - returns Ok when the verification email is sent successfully`() = runTest {
+
+        // stubbing
+        every { authTask.isSuccessful } returns true
+
+        every { authTask.addOnCompleteListener(any()) } answers {
+
+            val listener = arg<OnCompleteListener<Void>>(0)
+            listener.onComplete(authTask)
+            authTask
+        }
+
+        every { firebaseUser.sendEmailVerification() } returns authTask
+        every { firebaseAuth.currentUser } returns firebaseUser
+
+        // testing
+        val result = firebaseAuthentication.sendSignUpVerificationEmail()
+        assertEquals(ResultOfSendingSignUpVerificationEmail.Ok, result)
+    }
+
+    @Test
+    fun `sendSignUpVerificationEmail - returns Ok when the verification email is sent unsuccessfully`() = runTest {
+
+        // stubbing
+        every { authTask.isSuccessful } returns false
+
+        every { authTask.addOnCompleteListener(any()) } answers {
+
+            val listener = arg<OnCompleteListener<Void>>(0)
+            listener.onComplete(authTask)
+            authTask
+        }
+
+        every { firebaseUser.sendEmailVerification() } returns authTask
+        every { firebaseAuth.currentUser } returns firebaseUser
+
+        // testing
+        val result = firebaseAuthentication.sendSignUpVerificationEmail()
+        assertEquals(ResultOfSendingSignUpVerificationEmail.UnidentifiedException, result)
     }
 }

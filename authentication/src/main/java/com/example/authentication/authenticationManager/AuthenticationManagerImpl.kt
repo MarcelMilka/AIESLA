@@ -7,12 +7,9 @@ import com.example.authentication.results.AuthenticationState
 import com.example.authentication.results.UnsuccessfulInitializationCause
 import com.example.datastore.data.OnboardingRepository
 import com.example.datastore.model.UserOnboardingState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
 internal class AuthenticationManagerImpl @Inject constructor(

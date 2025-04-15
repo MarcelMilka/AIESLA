@@ -1,6 +1,7 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.example.roomlocaldatabase.dao.MetadataDAO
 import com.example.roomlocaldatabase.entity.MetadataEntity
@@ -32,4 +33,7 @@ internal class RoomAuthentication @Inject constructor(
             ResultOfSignUpProcess.UnidentifiedException
         }
     }
+
+    override suspend fun sendSignUpVerificationEmail(): ResultOfSendingSignUpVerificationEmail =
+        ResultOfSendingSignUpVerificationEmail.Ok
 }

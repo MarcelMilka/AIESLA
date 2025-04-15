@@ -1,6 +1,7 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.example.roomlocaldatabase.dao.MetadataDAO
 import io.mockk.*
@@ -78,6 +79,17 @@ class RoomAuthenticationTest {
         assertEquals(
             ResultOfSignUpProcess.UnidentifiedException,
             roomAuthentication.signUp(credentials = emailAndPasswordCredentials)
+        )
+    }
+
+
+
+    @Test
+    fun `sendSignUpVerificationEmail - always returns Ok`() = runTest {
+
+        assertEquals(
+            ResultOfSendingSignUpVerificationEmail.Ok,
+            roomAuthentication.sendSignUpVerificationEmail()
         )
     }
 }
