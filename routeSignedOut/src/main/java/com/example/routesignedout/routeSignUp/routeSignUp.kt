@@ -1,4 +1,4 @@
-package com.example.routesignedout
+package com.example.routesignedout.routeSignUp
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -7,15 +7,12 @@ import com.example.navigation.Navigation
 import com.example.routesignedout.routeSignUp.signUp.impl.signUpScreenImpl
 import com.example.routesignedout.welcomeScreen.welcomeScreenImpl
 
-fun NavGraphBuilder.routeSignedOutImpl(navigationController: NavHostController) {
+fun NavGraphBuilder.routeSignUp(navigationController: NavHostController) {
 
     navigation<Navigation.SignedOut.RouteSignedOut>(startDestination = Navigation.SignedOut.WelcomeScreen) {
 
         this.welcomeScreenImpl(navigationController)
 
-        this.navigation<Navigation.SignedOut.SignUp.RouteSignUp>(startDestination = Navigation.SignedOut.SignUp.SignUpScreen) {
-
-            this.signUpScreenImpl(navigationController)
-        }
+        this.signUpScreenImpl(navigationController)
     }
 }
