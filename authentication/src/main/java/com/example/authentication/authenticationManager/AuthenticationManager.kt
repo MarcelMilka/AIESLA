@@ -13,4 +13,6 @@ interface AuthenticationManager {
     suspend fun checkAuthenticationState()
 
     fun signUp(credentials: EmailAndPasswordCredentials)
+
+    fun resetProcesses()
 }

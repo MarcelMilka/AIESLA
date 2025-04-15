@@ -30,6 +30,13 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -57,6 +64,16 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.mockk.agent)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.mockk.agent)
+
+    testImplementation(libs.turbine)
 }
 
 kapt {

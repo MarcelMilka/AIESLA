@@ -190,4 +190,12 @@ internal class AuthenticationManagerImpl @Inject constructor(
                 }
             }
     }
+
+    override fun resetProcesses() {
+
+        coroutineScope.launch {
+
+            _signUpProcess.emit(value = SignUpProcess.Idle)
+        }
+    }
 }
