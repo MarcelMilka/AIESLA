@@ -64,6 +64,12 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.hilt.android.testing)
+    kaptTest(libs.hilt.android.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.kotlinx.coroutines.test)
 

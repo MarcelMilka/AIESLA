@@ -3,4 +3,21 @@
 
     <string name="sign_in">Sign in.</string>
     <string name="sign_up">Sign up.</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="invalid_email_address">Invalid email address.</string>
+    <string name="email_is_already_in_use">E-mail is already in use.</string>
+    <string name="unidentified_error">Unidentified error.</string>
+    <string name="invalid_password">Invalid password.</string>
+    <string name="the_process_took_too_long">The process took too long.</string>
+
+    <string name="at_least">at least</string>
+
+    <string name="characters">characters</string>
+    <string name="uppercase_letters">uppercase letter</string>
+    <string name="special_character">special character</string>
+    <string name="numeric_character">numeric character</string>
+
 </resources>
