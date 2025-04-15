@@ -29,13 +29,10 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
     init {
 
-        coroutineScope.launch {
-
-            checkAuthenticationState()
-        }
+        checkAuthenticationState()
     }
 
-    override suspend fun checkAuthenticationState() {
+    override fun checkAuthenticationState() {
 
         coroutineScope
             .launch {
@@ -43,27 +40,23 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
                     withTimeout(timeout) {
 
-                        val onboardingState = onboardingRepository.checkOnboardingState() ?: UserOnboardingState(firstLaunchEver = null)
+                        val onboardingState = onboardingRepository.checkOnboardingState() ?:UserOnboardingState(firstLaunchEver = null)
 
                         val authenticationState =
                             when (onboardingState.firstLaunchEver) {
 
-                                true -> AuthenticationState.SignedIn
+                                true -> {
+
+                                    onboardingRepository.setOnboardingStateToFalse()
+                                    AuthenticationState.SignedIn
+                                }
 
                                 false -> {
 
-                                    when(firebaseAuthentication.isSignedIn()) {
+                                    when (firebaseAuthentication.isSignedIn()) {
 
                                         true -> AuthenticationState.SignedIn
-
-                                        false -> {
-
-                                            when(roomAuthentication.isSignedIn()) {
-
-                                                true -> AuthenticationState.SignedIn
-                                                false -> AuthenticationState.SignedOut
-                                            }
-                                        }
+                                        false -> AuthenticationState.SignedOut
                                     }
                                 }
 

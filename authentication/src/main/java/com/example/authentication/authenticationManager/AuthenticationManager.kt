@@ -10,7 +10,7 @@ interface AuthenticationManager {
     val authenticationState: StateFlow<AuthenticationState>
     val signUpProcess: StateFlow<SignUpProcess>
 
-    suspend fun checkAuthenticationState()
+    fun checkAuthenticationState()
 
     fun signUp(credentials: EmailAndPasswordCredentials)
 
