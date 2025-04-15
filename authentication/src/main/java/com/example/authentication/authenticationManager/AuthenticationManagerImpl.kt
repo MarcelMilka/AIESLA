@@ -1,10 +1,10 @@
 package com.example.authentication.authenticationManager
 
 import com.example.authentication.authentication.Authentication
+import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.di.FirebaseAuthenticationQ
 import com.example.authentication.di.RoomAuthenticationQ
-import com.example.authentication.results.AuthenticationState
-import com.example.authentication.results.UnsuccessfulInitializationCause
+import com.example.authentication.results.*
 import com.example.datastore.data.OnboardingRepository
 import com.example.datastore.model.UserOnboardingState
 import kotlinx.coroutines.*
@@ -21,6 +21,9 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
     private var _authenticationState = MutableStateFlow<AuthenticationState>(AuthenticationState.SignedOut)
     override val authenticationState = _authenticationState.asStateFlow()
+
+    private var _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
+    override val signUpProcess = _signUpProcess.asStateFlow()
 
     private val timeout = 10000L
 
@@ -85,6 +88,103 @@ internal class AuthenticationManagerImpl @Inject constructor(
                     _authenticationState.emit(
                         value = AuthenticationState.Unsuccessful(
                             cause = UnsuccessfulInitializationCause.UnidentifiedException
+                        )
+                    )
+                }
+            }
+    }
+
+    override fun signUp(credentials: EmailAndPasswordCredentials) {
+
+        coroutineScope
+            .launch {
+                try {
+
+                    withTimeout(timeout) {
+
+                        val signUpProcess = async {
+
+                            _signUpProcess.emit(value = SignUpProcess.Pending)
+
+                            firebaseAuthentication.signUp(
+                                credentials = EmailAndPasswordCredentials(
+                                    email = credentials.email,
+                                    password = credentials.password
+                                )
+                            )
+                        }
+
+                        when (signUpProcess.await()) {
+
+                            ResultOfSignUpProcess.Ok -> {
+
+                                val processOfSendingSignUpVerificationEmail = async {
+
+                                    firebaseAuthentication.sendSignUpVerificationEmail()
+                                }
+
+                                when (processOfSendingSignUpVerificationEmail.await()) {
+
+                                    ResultOfSendingSignUpVerificationEmail.Ok -> {
+
+                                        _signUpProcess.emit(value = SignUpProcess.Successful)
+                                    }
+
+                                    ResultOfSendingSignUpVerificationEmail.UnidentifiedException -> {
+
+                                        _signUpProcess.emit(
+                                            value = SignUpProcess.Unsuccessful(
+                                                cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+
+                            ResultOfSignUpProcess.InvalidEmailFormat -> {
+
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.InvalidEmailFormat
+                                    )
+                                )
+                            }
+
+                            ResultOfSignUpProcess.EmailIsAlreadyInUse -> {
+
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.EmailIsAlreadyInUse
+                                    )
+                                )
+                            }
+
+                            ResultOfSignUpProcess.UnidentifiedException -> {
+
+                                _signUpProcess.emit(
+                                    value = SignUpProcess.Unsuccessful(
+                                        cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+
+                catch (e: TimeoutCancellationException) {
+
+                    _signUpProcess.emit(
+                        value = SignUpProcess.Unsuccessful(
+                            cause = UnsuccessfulSignUpProcessCause.Timeout
+                        )
+                    )
+                }
+
+                catch (e: Exception) {
+
+                    _signUpProcess.emit(
+                        value = SignUpProcess.Unsuccessful(
+                            cause = UnsuccessfulSignUpProcessCause.UnidentifiedException
                         )
                     )
                 }
