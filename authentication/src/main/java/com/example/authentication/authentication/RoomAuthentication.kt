@@ -1,6 +1,8 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.credentials.EmailCredential
+import com.example.authentication.results.ResultOfPasswordRecoveryProcess
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
@@ -50,4 +52,7 @@ internal class RoomAuthentication @Inject constructor(
             ResultOfSignInProcess.UnidentifiedException
         }
     }
+
+    override suspend fun sendPasswordRecoveryEmail(email: EmailCredential): ResultOfPasswordRecoveryProcess =
+        ResultOfPasswordRecoveryProcess.Ok
 }

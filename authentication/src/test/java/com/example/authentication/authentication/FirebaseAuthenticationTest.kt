@@ -1,6 +1,8 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.credentials.EmailCredential
+import com.example.authentication.results.ResultOfPasswordRecoveryProcess
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
@@ -21,8 +23,8 @@ class FirebaseAuthenticationTest {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseUser: FirebaseUser
-    private lateinit var task: Task<AuthResult>
-    private lateinit var authTask: Task<Void>
+    private lateinit var authTask: Task<AuthResult>
+    private lateinit var task: Task<Void>
 
     private lateinit var firebaseAuthentication: Authentication
 
@@ -31,8 +33,8 @@ class FirebaseAuthenticationTest {
 
         firebaseAuth = mockk()
         firebaseUser = mockk()
-        task = mockk()
         authTask = mockk()
+        task = mockk()
 
         firebaseAuthentication = FirebaseAuthentication(
             firebaseAuth = firebaseAuth
@@ -85,18 +87,18 @@ class FirebaseAuthenticationTest {
     fun `signUp - returns Ok when the sign up process is successful`() = runTest {
 
         // stubbing
-        every { task.isSuccessful } returns true
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.isSuccessful } returns true
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
         every { firebaseUser.isEmailVerified } returns false
         every { firebaseAuth.currentUser } returns firebaseUser
 
-        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         assertEquals(
@@ -111,17 +113,17 @@ class FirebaseAuthenticationTest {
         // stubbing
         val exception = mockk<FirebaseAuthInvalidCredentialsException>()
 
-        every { task.isSuccessful } returns false
-        every { task.exception } returns exception
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception } returns exception
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns authTask
 
         val result = firebaseAuthentication.signUp(emailAndPasswordCredentials)
 
@@ -135,17 +137,17 @@ class FirebaseAuthenticationTest {
         // stubbing
         val exception = mockk<FirebaseAuthUserCollisionException>()
 
-        every { task.isSuccessful } returns false
-        every { task.exception } returns exception
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception } returns exception
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns authTask
 
         val result = firebaseAuthentication.signUp(emailAndPasswordCredentials)
 
@@ -159,17 +161,17 @@ class FirebaseAuthenticationTest {
         // stubbing
         val unknownException = Exception("Some generic error")
 
-        every { task.isSuccessful } returns false
-        every { task.exception } returns unknownException
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception } returns unknownException
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.createUserWithEmailAndPassword(any(), any()) } returns authTask
 
         val result = firebaseAuthentication.signUp(emailAndPasswordCredentials)
 
@@ -183,16 +185,16 @@ class FirebaseAuthenticationTest {
     fun `sendSignUpVerificationEmail - returns Ok when the verification email is sent successfully`() = runTest {
 
         // stubbing
-        every { authTask.isSuccessful } returns true
+        every { task.isSuccessful } returns true
 
-        every { authTask.addOnCompleteListener(any()) } answers {
+        every { task.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<Void>>(0)
-            listener.onComplete(authTask)
-            authTask
+            listener.onComplete(task)
+            task
         }
 
-        every { firebaseUser.sendEmailVerification() } returns authTask
+        every { firebaseUser.sendEmailVerification() } returns task
         every { firebaseAuth.currentUser } returns firebaseUser
 
         // testing
@@ -204,16 +206,16 @@ class FirebaseAuthenticationTest {
     fun `sendSignUpVerificationEmail - returns Ok when the verification email is sent unsuccessfully`() = runTest {
 
         // stubbing
-        every { authTask.isSuccessful } returns false
+        every { task.isSuccessful } returns false
 
-        every { authTask.addOnCompleteListener(any()) } answers {
+        every { task.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<Void>>(0)
-            listener.onComplete(authTask)
-            authTask
+            listener.onComplete(task)
+            task
         }
 
-        every { firebaseUser.sendEmailVerification() } returns authTask
+        every { firebaseUser.sendEmailVerification() } returns task
         every { firebaseAuth.currentUser } returns firebaseUser
 
         // testing
@@ -227,18 +229,18 @@ class FirebaseAuthenticationTest {
     fun `signIn - returns Ok when sign in succeeds and user is verified`() = runTest {
 
         // stubbing
-        every { task.isSuccessful } returns true
+        every { authTask.isSuccessful } returns true
         every { firebaseAuth.currentUser } returns firebaseUser
         every { firebaseUser.isEmailVerified } returns true
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         val result = firebaseAuthentication.signIn(emailAndPasswordCredentials)
@@ -249,18 +251,18 @@ class FirebaseAuthenticationTest {
     fun `signIn - returns InvalidEmailFormat when exception message indicates badly formatted email`() = runTest {
 
         // mocking
-        every { task.isSuccessful } returns false
-        every { task.exception?.message } returns "The email address is badly formatted"
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception?.message } returns "The email address is badly formatted"
         every { firebaseAuth.currentUser } returns null
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         val result = firebaseAuthentication.signIn(emailAndPasswordCredentials)
@@ -271,18 +273,18 @@ class FirebaseAuthenticationTest {
     fun `signIn - returns PasswordIsIncorrect when exception message indicates bad credentials`() = runTest {
 
         // stubbing
-        every { task.isSuccessful } returns false
-        every { task.exception?.message } returns "The supplied auth credential is incorrect, malformed or has expired"
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception?.message } returns "The supplied auth credential is incorrect, malformed or has expired"
         every { firebaseAuth.currentUser } returns null
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         val result = firebaseAuthentication.signIn(emailAndPasswordCredentials)
@@ -293,18 +295,18 @@ class FirebaseAuthenticationTest {
     fun `signIn - returns UnidentifiedException when exception message is unknown`() = runTest {
 
         // stubbing
-        every { task.isSuccessful } returns false
-        every { task.exception?.message } returns "Something weird happened"
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception?.message } returns "Something weird happened"
         every { firebaseAuth.currentUser } returns null
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         val result = firebaseAuthentication.signIn(emailAndPasswordCredentials)
@@ -316,22 +318,63 @@ class FirebaseAuthenticationTest {
     fun `signIn - returns UnidentifiedException when exception is null`() = runTest {
 
         // stubbing
-        every { task.isSuccessful } returns false
-        every { task.exception } returns null
+        every { authTask.isSuccessful } returns false
+        every { authTask.exception } returns null
         every { firebaseAuth.currentUser } returns null
 
-        every { task.addOnCompleteListener(any()) } answers {
+        every { authTask.addOnCompleteListener(any()) } answers {
 
             val listener = arg<OnCompleteListener<AuthResult>>(0)
-            listener.onComplete(task)
-            task
+            listener.onComplete(authTask)
+            authTask
         }
 
-        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns task
+        every { firebaseAuth.signInWithEmailAndPassword(any(), any()) } returns authTask
 
         // testing
         val result = firebaseAuthentication.signIn(emailAndPasswordCredentials)
 
         assertEquals(ResultOfSignInProcess.UnidentifiedException, result)
+    }
+
+
+
+    @Test
+    fun `sendPasswordRecoveryEmail - returns Ok when task is successful`() = runTest {
+
+        // stubbing
+        every { task.isSuccessful } returns true
+        every { task.addOnCompleteListener(any()) } answers {
+
+            val listener = arg<OnCompleteListener<Void>>(0)
+            listener.onComplete(task)
+            task
+        }
+        every { firebaseAuth.sendPasswordResetEmail(any()) } returns task
+
+        // testing
+        val result = firebaseAuthentication.sendPasswordRecoveryEmail(EmailCredential("user@example.com"))
+
+        assertEquals(ResultOfPasswordRecoveryProcess.Ok, result)
+    }
+
+    @Test
+    fun `sendPasswordRecoveryEmail - returns UnidentifiedException for unknown error`() = runTest {
+
+        // stubbing
+        every { task.isSuccessful } returns false
+        every { task.exception } returns Exception("Some unknown exception")
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = arg<OnCompleteListener<Void>>(0)
+            listener.onComplete(task)
+            task
+        }
+
+        every { firebaseAuth.sendPasswordResetEmail(any()) } returns task
+
+        // testing
+        val result = firebaseAuthentication.sendPasswordRecoveryEmail(EmailCredential("user@example.com"))
+
+        assertEquals(ResultOfPasswordRecoveryProcess.UnidentifiedException, result)
     }
 }

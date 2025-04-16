@@ -1,6 +1,8 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.credentials.EmailCredential
+import com.example.authentication.results.ResultOfPasswordRecoveryProcess
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
@@ -119,6 +121,17 @@ class RoomAuthenticationTest {
         assertEquals(
             ResultOfSignInProcess.UnidentifiedException,
             roomAuthentication.signIn(credentials = emailAndPasswordCredentials)
+        )
+    }
+
+
+
+    @Test
+    fun `sendPasswordRecoveryEmail - always returns Ok`() = runTest {
+
+        assertEquals(
+            ResultOfPasswordRecoveryProcess.Ok,
+            roomAuthentication.sendPasswordRecoveryEmail(email = EmailCredential(""))
         )
     }
 }

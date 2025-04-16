@@ -1,6 +1,8 @@
 package com.example.authentication.authentication
 
 import com.example.authentication.credentials.EmailAndPasswordCredentials
+import com.example.authentication.credentials.EmailCredential
+import com.example.authentication.results.ResultOfPasswordRecoveryProcess
 import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
@@ -132,6 +134,41 @@ internal class FirebaseAuthentication @Inject constructor(
                         else {
 
                             continuation.resume(value = ResultOfSignInProcess.UnidentifiedException)
+                        }
+                    }
+                }
+        }
+    }
+
+    override suspend fun sendPasswordRecoveryEmail(email: EmailCredential): ResultOfPasswordRecoveryProcess {
+
+        return suspendCoroutine { continuation ->
+
+            firebaseAuth.sendPasswordResetEmail(email.email)
+                .addOnCompleteListener { task ->
+
+                    if (task.isSuccessful) {
+
+                        continuation.resume(value = ResultOfPasswordRecoveryProcess.Ok)
+                    }
+
+                    else {
+
+                        when (task.exception) {
+
+                            is FirebaseAuthInvalidCredentialsException -> {
+
+                                continuation.resume(
+                                    value = ResultOfPasswordRecoveryProcess.InvalidEmailFormat
+                                )
+                            }
+
+                            else -> {
+
+                                continuation.resume(
+                                    value = ResultOfPasswordRecoveryProcess.UnidentifiedException
+                                )
+                            }
                         }
                     }
                 }
