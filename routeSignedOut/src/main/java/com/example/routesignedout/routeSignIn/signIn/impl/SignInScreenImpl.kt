@@ -69,9 +69,9 @@ internal fun NavGraphBuilder.signInScreenImpl(navHostController: NavHostControll
 
                 onRecoverPassword = {
 
-//                    navHostController.navigate(
-//                        route = Navigation.SignedOut.SignIn.RecoverYourPasswordScreen
-//                    )
+                    navHostController.navigate(
+                        route = Navigation.SignedOut.SignIn.RecoverYourPasswordScreen
+                    )
                 }
             )
         }

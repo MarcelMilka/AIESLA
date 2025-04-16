@@ -15,7 +15,7 @@ import com.example.routesignedout.routeSignUp.signUp.ui.signUpScreen
 import com.example.routesignedout.routeSignUp.signUp.vm.SignUpScreenViewModel
 import kotlinx.coroutines.delay
 
-fun NavGraphBuilder.signUpScreenImpl(navHostController: NavHostController) {
+internal fun NavGraphBuilder.signUpScreenImpl(navHostController: NavHostController) {
 
     composable<Navigation.SignedOut.SignUp.SignUpScreen>(
 

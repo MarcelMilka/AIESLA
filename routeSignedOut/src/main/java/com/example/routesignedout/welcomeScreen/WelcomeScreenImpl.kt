@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.navigation.Navigation
 
-fun NavGraphBuilder.welcomeScreenImpl(navigationController: NavHostController) {
+internal fun NavGraphBuilder.welcomeScreenImpl(navigationController: NavHostController) {
 
     composable<Navigation.SignedOut.WelcomeScreen>(
 

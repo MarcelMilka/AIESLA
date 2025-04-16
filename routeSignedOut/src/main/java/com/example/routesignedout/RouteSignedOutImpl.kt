@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import com.example.navigation.Navigation
+import com.example.routesignedout.routeSignIn.recoverYourPassword.impl.recoverYourPasswordImpl
 import com.example.routesignedout.routeSignIn.signIn.impl.signInScreenImpl
 import com.example.routesignedout.routeSignUp.signUp.impl.signUpScreenImpl
 import com.example.routesignedout.routeSignUp.signUpEmailInformation.impl.signUpEmailInformationScreenImpl
@@ -25,6 +26,8 @@ fun NavGraphBuilder.routeSignedOutImpl(navigationController: NavHostController) 
         this.navigation<Navigation.SignedOut.SignIn.RouteSignIn>(startDestination = Navigation.SignedOut.SignIn.SignInScreen) {
 
             this.signInScreenImpl(navigationController)
+
+            this.recoverYourPasswordImpl(navigationController)
         }
     }
 }
