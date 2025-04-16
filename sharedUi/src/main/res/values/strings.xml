@@ -3,6 +3,7 @@
 
     <string name="sign_in">Sign in.</string>
     <string name="sign_up">Sign up.</string>
+    <string name="recover_your_password">recover your password</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
