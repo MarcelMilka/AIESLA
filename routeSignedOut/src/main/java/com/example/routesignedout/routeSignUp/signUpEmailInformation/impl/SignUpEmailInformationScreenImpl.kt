@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.navigation.Navigation
 import com.example.routesignedout.routeSignUp.signUpEmailInformation.ui.signUpEmailInformationScreen
 
-fun NavGraphBuilder.signUpEmailInformationImpl(navHostController: NavHostController) {
+fun NavGraphBuilder.signUpEmailInformationScreenImpl(navHostController: NavHostController) {
 
     composable<Navigation.SignedOut.SignUp.SignUpEmailInformationScreen> (
 

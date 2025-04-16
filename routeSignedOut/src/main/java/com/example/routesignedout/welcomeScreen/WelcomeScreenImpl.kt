@@ -20,9 +20,9 @@ fun NavGraphBuilder.welcomeScreenImpl(navigationController: NavHostController) {
             welcomeScreen(
                 onSignIn = {
 
-//                    navigationController.navigate(
-//                        route = Navigation.SignedOut.SignIn.RouteSignIn
-//                    )
+                    navigationController.navigate(
+                        route = Navigation.SignedOut.SignIn.RouteSignIn
+                    )
                 },
 
                 onSignUp = {
