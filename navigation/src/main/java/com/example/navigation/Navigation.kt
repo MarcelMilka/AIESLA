@@ -26,6 +26,9 @@ sealed class Navigation {
 
             @Serializable
             data object RecoverYourPasswordScreen: SignIn()
+
+            @Serializable
+            data object PasswordRecoveryEmailInformationScreen: SignIn()
         }
 
         sealed class SignUp: SignedOut() {
