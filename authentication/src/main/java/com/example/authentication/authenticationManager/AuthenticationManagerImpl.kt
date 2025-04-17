@@ -335,6 +335,8 @@ internal class AuthenticationManagerImpl @Inject constructor(
         coroutineScope.launch {
 
             _signUpProcess.emit(value = SignUpProcess.Idle)
+            _signInProcess.emit(value = SignInProcess.Idle)
+            _passwordRecoveryProcess.emit(value = PasswordRecoveryProcess.Idle)
         }
     }
 }
