@@ -22,7 +22,7 @@ import com.example.sharedui.sharedUiElements.button.ButtonProceedViewState
 import com.example.sharedui.sharedUiElements.button.buttonProceed
 import com.example.sharedui.sharedUiElements.divider.verticalDivider10
 import com.example.sharedui.sharedUiElements.divider.verticalDivider20
-import com.example.sharedui.textField.passwordTextField
+import com.example.sharedui.sharedUiElements.textField.passwordTextField
 import com.example.sharedui.theme.Background
 import com.example.sharedui.R
 import com.example.sharedui.sharedUiElements.button.authenticationTextButton

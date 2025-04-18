@@ -1,4 +1,4 @@
-package com.example.sharedui.textField
+package com.example.sharedui.sharedUiElements.textField
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width

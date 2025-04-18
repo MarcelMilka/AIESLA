@@ -50,4 +50,5 @@ dependencies {
 
     implementation(libs.navigation.compose)
     implementation(project(":navigation"))
+    implementation(project(":sharedUi"))
 }

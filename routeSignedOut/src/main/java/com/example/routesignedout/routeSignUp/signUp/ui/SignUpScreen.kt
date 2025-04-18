@@ -25,7 +25,7 @@ import com.example.sharedui.sharedUiElements.divider.verticalDivider20
 import com.example.sharedui.sharedUiElements.textField.emailTextField
 import com.example.sharedui.theme.Background
 import com.example.sharedui.R.string
-import com.example.sharedui.textField.passwordTextField
+import com.example.sharedui.sharedUiElements.textField.passwordTextField
 
 @Composable
 internal fun signUpScreen(

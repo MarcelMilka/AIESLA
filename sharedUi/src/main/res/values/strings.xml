@@ -23,4 +23,7 @@
 
     <string name="verify_your_email">A verification email has been sent to your email address.</string>
     <string name="check_your_email">A password recovery instruction has been sent to your email.</string>
+
+    <string name="whoops" translatable="false">Whoops...</string>
+    <string name="initialization_process_error_information">An error occurred during the initialization process."</string>
 </resources>
