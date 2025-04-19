@@ -1,4 +1,4 @@
-package com.example.routesignedin
+package com.example.routesignedin.routeHome
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

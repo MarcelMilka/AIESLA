@@ -52,10 +52,19 @@ sealed class Navigation {
         sealed class Home: SignedIn() {
 
             @Serializable
-            data object RouteHomeScreen: Home()
+            data object RouteHome: Home()
 
             @Serializable
             data object HomeScreen: Home()
+        }
+
+        sealed class Study: SignedIn() {
+
+            @Serializable
+            data object RouteStudy: Home()
+
+            @Serializable
+            data object SubjectsScreen: Home()
         }
     }
 
