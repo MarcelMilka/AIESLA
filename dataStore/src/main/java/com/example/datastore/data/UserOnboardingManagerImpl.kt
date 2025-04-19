@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.firstOrNull
 import java.io.IOException
 import javax.inject.Inject
 
-class OnboardingRepository @Inject constructor(
+internal class UserOnboardingManagerImpl @Inject constructor(
     private val dataStoreUserOnboardingState : DataStore<UserOnboardingState>
-) {
+): UserOnboardingManager {
 
-    suspend fun checkOnboardingState(): UserOnboardingState? {
+    override suspend fun checkOnboardingState(): UserOnboardingState? {
 
         return try {
 
@@ -22,7 +22,7 @@ class OnboardingRepository @Inject constructor(
         catch (e: IOException) { null }
     }
 
-    suspend fun setOnboardingStateToFalse() {
+    override suspend fun setOnboardingStateToFalse() {
 
         dataStoreUserOnboardingState.updateData {
             it.copy(firstLaunchEver = false)

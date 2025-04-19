@@ -1,7 +1,8 @@
 package com.example.datastore.di
 
 import android.content.Context
-import com.example.datastore.data.OnboardingRepository
+import com.example.datastore.data.UserOnboardingManager
+import com.example.datastore.data.UserOnboardingManagerImpl
 import com.example.datastore.data.dataStoreUserOnboardingState
 import dagger.Module
 import dagger.Provides
@@ -12,14 +13,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class OnboardingRepositoryProvider {
+class UserOnboardingManagerProvider {
 
     @Provides
     @Singleton
-    fun provideOnboardingRepository(
+    fun provideUserOnboardingManager(
         @ApplicationContext context: Context
-    ): OnboardingRepository =
-        OnboardingRepository(
-            dataStoreUserOnboardingState = context.dataStoreUserOnboardingState
-        )
+    ): UserOnboardingManager =
+        UserOnboardingManagerImpl(dataStoreUserOnboardingState = context.dataStoreUserOnboardingState)
 }

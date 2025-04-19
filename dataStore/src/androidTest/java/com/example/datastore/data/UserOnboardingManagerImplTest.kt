@@ -16,7 +16,7 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class OnboardingRepositoryTest {
+class UserOnboardingManagerImplTest {
 
     private val testContext: Context = ApplicationProvider.getApplicationContext()
 
@@ -25,7 +25,7 @@ class OnboardingRepositoryTest {
 
     private lateinit var testDataStore: DataStore<UserOnboardingState>
 
-    private lateinit var repository: OnboardingRepository
+    private lateinit var repository: UserOnboardingManagerImpl
 
     @Before
     fun before() {
@@ -37,7 +37,7 @@ class OnboardingRepositoryTest {
                 produceFile = { testContext.filesDir.resolve("fake-user-onboarding-state.json") }
             )
 
-        repository = OnboardingRepository(testDataStore)
+        repository = UserOnboardingManagerImpl(testDataStore)
     }
 
     @After

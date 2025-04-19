@@ -5,7 +5,7 @@ import com.example.authentication.authentication.Authentication
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.results.*
-import com.example.datastore.data.OnboardingRepository
+import com.example.datastore.data.UserOnboardingManager
 import com.example.datastore.model.UserOnboardingState
 import io.mockk.*
 import junit.framework.TestCase.assertEquals
@@ -23,12 +23,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class AuthenticationManagerImplTest {
+class
+AuthenticationManagerImplTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var onboardingRepository: OnboardingRepository
+    private lateinit var userOnboardingManagerImpl: UserOnboardingManager
     private lateinit var firebaseAuthentication: Authentication
     private lateinit var roomAuthentication: Authentication
 
@@ -37,12 +38,12 @@ class AuthenticationManagerImplTest {
     @Before
     fun before() {
 
-        onboardingRepository = mockk()
+        userOnboardingManagerImpl = mockk()
         firebaseAuthentication = mockk()
         roomAuthentication = mockk()
 
         authenticationManager = AuthenticationManagerImpl(
-            onboardingRepository = onboardingRepository,
+            userOnboardingManager = userOnboardingManagerImpl,
             firebaseAuthentication = firebaseAuthentication,
             roomAuthentication = roomAuthentication,
             coroutineScope = CoroutineScope(StandardTestDispatcher())
@@ -62,7 +63,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState is true - SignedIn`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns UserOnboardingState(true)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(true)
 
         // test
         authenticationManager.authenticationState.test {
@@ -75,7 +76,7 @@ class AuthenticationManagerImplTest {
         }
 
         // verification
-        coVerify(exactly = 1) { onboardingRepository.checkOnboardingState() }
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
         confirmVerified()
         checkUnnecessaryStub()
     }
@@ -84,7 +85,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is true - SignedIn`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns UserOnboardingState(false)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
         every { firebaseAuthentication.isSignedIn() } returns true
 
         // test
@@ -100,7 +101,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
             firebaseAuthentication.isSignedIn()
         }
         confirmVerified()
@@ -111,7 +112,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is false, roomAuthentication is true - SignedIn`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns UserOnboardingState(false)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
         every { firebaseAuthentication.isSignedIn() } returns false
         every { roomAuthentication.isSignedIn() } returns true
 
@@ -128,7 +129,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
             firebaseAuthentication.isSignedIn()
             roomAuthentication.isSignedIn()
         }
@@ -140,7 +141,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is false, roomAuthentication is false - SignedOut`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns UserOnboardingState(false)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
         every { firebaseAuthentication.isSignedIn() } returns false
         every { roomAuthentication.isSignedIn() } returns false
 
@@ -157,7 +158,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState is null - UnsuccessfulInitializationCause, Null`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns null
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns null
 
         // test
         authenticationManager.authenticationState.test {
@@ -172,7 +173,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
         }
         confirmVerified()
         checkUnnecessaryStub()
@@ -182,7 +183,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - UserOnboardingState contains null - UnsuccessfulInitializationCause, Null`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } returns UserOnboardingState(null)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(null)
 
         // test
         authenticationManager.authenticationState.test {
@@ -197,7 +198,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
         }
         confirmVerified()
         checkUnnecessaryStub()
@@ -207,7 +208,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - takes more than 10s - UnsuccessfulInitializationCause, UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } coAnswers {
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } coAnswers {
 
             delay(10500)
             UserOnboardingState(true)
@@ -226,7 +227,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
         }
         confirmVerified()
         checkUnnecessaryStub()
@@ -236,7 +237,7 @@ class AuthenticationManagerImplTest {
     fun `checkAuthenticationState - throws RuntimeException - UnsuccessfulInitializationCause, UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
         // stubbing
-        coEvery { onboardingRepository.checkOnboardingState() } throws RuntimeException("")
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } throws RuntimeException("")
 
         // test
         authenticationManager.authenticationState.test {
@@ -251,7 +252,7 @@ class AuthenticationManagerImplTest {
         // verification
         coVerifySequence {
 
-            onboardingRepository.checkOnboardingState()
+            userOnboardingManagerImpl.checkOnboardingState()
         }
         confirmVerified()
         checkUnnecessaryStub()

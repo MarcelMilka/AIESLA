@@ -6,16 +6,15 @@ import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.di.FirebaseAuthenticationQ
 import com.example.authentication.di.RoomAuthenticationQ
 import com.example.authentication.results.*
-import com.example.datastore.data.OnboardingRepository
+import com.example.datastore.data.UserOnboardingManager
 import com.example.datastore.model.UserOnboardingState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 internal class AuthenticationManagerImpl @Inject constructor(
-    val onboardingRepository: OnboardingRepository,
+    val userOnboardingManager: UserOnboardingManager,
     @FirebaseAuthenticationQ val firebaseAuthentication: Authentication,
     @RoomAuthenticationQ val roomAuthentication: Authentication,
     val coroutineScope: CoroutineScope
@@ -48,14 +47,14 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
                     withTimeout(timeout) {
 
-                        val onboardingState = onboardingRepository.checkOnboardingState() ?:UserOnboardingState(firstLaunchEver = null)
+                        val onboardingState = userOnboardingManager.checkOnboardingState() ?:UserOnboardingState(firstLaunchEver = null)
 
                         val authenticationState =
                             when (onboardingState.firstLaunchEver) {
 
                                 true -> {
 
-                                    onboardingRepository.setOnboardingStateToFalse()
+                                    userOnboardingManager.setOnboardingStateToFalse()
                                     AuthenticationState.SignedIn
                                 }
 
