@@ -1,5 +1,6 @@
 package com.example.authentication.authentication
 
+import com.example.authentication.credentials.CloudUid
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.results.ResultOfPasswordRecoveryProcess
@@ -15,6 +16,23 @@ internal class RoomAuthentication @Inject constructor(
 ): Authentication {
 
     override fun isSignedIn(): Boolean = this.metadataDAO.isSignedIn()
+
+    override suspend fun getCloudUid(): CloudUid? {
+
+        return try {
+
+            val metadata = metadataDAO.getMetadata()
+
+            if (metadata != null) CloudUid(uid = metadata.relatedUUID)
+
+            else null
+        }
+
+        catch (e: Exception) {
+
+            null
+        }
+    }
 
     override suspend fun signUp(credentials: EmailAndPasswordCredentials): ResultOfSignUpProcess {
 

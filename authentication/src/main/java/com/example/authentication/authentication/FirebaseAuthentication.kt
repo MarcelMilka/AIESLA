@@ -1,5 +1,6 @@
 package com.example.authentication.authentication
 
+import com.example.authentication.credentials.CloudUid
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.results.ResultOfPasswordRecoveryProcess
@@ -19,6 +20,20 @@ internal class FirebaseAuthentication @Inject constructor(
 
     override fun isSignedIn(): Boolean =
         firebaseAuth.currentUser != null && firebaseAuth.currentUser!!.isEmailVerified
+
+    override suspend fun getCloudUid(): CloudUid {
+
+        return try {
+
+            val uid = firebaseAuth.currentUser?.uid
+            CloudUid(uid = uid)
+        }
+
+        catch (e: Exception) {
+
+            CloudUid(uid = null)
+        }
+    }
 
     override suspend fun signUp(credentials: EmailAndPasswordCredentials): ResultOfSignUpProcess {
 

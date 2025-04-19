@@ -1,5 +1,6 @@
 package com.example.authentication.authentication
 
+import com.example.authentication.credentials.CloudUid
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.results.ResultOfPasswordRecoveryProcess
@@ -7,6 +8,7 @@ import com.example.authentication.results.ResultOfSendingSignUpVerificationEmail
 import com.example.authentication.results.ResultOfSignInProcess
 import com.example.authentication.results.ResultOfSignUpProcess
 import com.example.roomlocaldatabase.dao.MetadataDAO
+import com.example.roomlocaldatabase.entity.MetadataEntity
 import io.mockk.*
 import junit.framework.TestCase.*
 import kotlinx.coroutines.test.runTest
@@ -55,6 +57,60 @@ class RoomAuthenticationTest {
 
         // test
         assertFalse(roomAuthentication.isSignedIn())
+    }
+
+
+
+    @Test
+    fun `getCloudUid - MetadataEntity is not null, uid is not null - CloudUid with uid is returned`() = runTest {
+
+        val metadataEntity = MetadataEntity(0, "SomeUUID", true)
+        val cloudUid = CloudUid(metadataEntity.relatedUUID)
+
+        // stubbing
+        coEvery { metadataDAO.getMetadata() } returns metadataEntity
+
+        // test
+        assertEquals(
+            cloudUid,
+            roomAuthentication.getCloudUid()
+        )
+    }
+
+    @Test
+    fun `getCloudUid - MetadataEntity is not null, uid is null - CloudUid with null is returned`() = runTest {
+
+        val metadataEntity = MetadataEntity(0, null, true)
+        val cloudUid = CloudUid(metadataEntity.relatedUUID)
+
+        // stubbing
+        coEvery { metadataDAO.getMetadata() } returns metadataEntity
+
+        // test
+        assertEquals(
+            cloudUid,
+            roomAuthentication.getCloudUid()
+        )
+    }
+
+    @Test
+    fun `getCloudUid - MetadataEntity is null - null is returned`() = runTest {
+
+        // stubbing
+        coEvery { metadataDAO.getMetadata() } returns null
+
+        // test
+        assertNull(roomAuthentication.getCloudUid())
+    }
+
+    @Test
+    fun `getCloudUid - Exception is thrown - null is returned`() = runTest {
+
+        // stubbing
+        coEvery { metadataDAO.getMetadata() } throws Exception()
+
+        // test
+        assertNull(roomAuthentication.getCloudUid())
     }
 
 

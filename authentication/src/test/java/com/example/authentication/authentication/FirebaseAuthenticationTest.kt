@@ -1,5 +1,6 @@
 package com.example.authentication.authentication
 
+import com.example.authentication.credentials.CloudUid
 import com.example.authentication.credentials.EmailAndPasswordCredentials
 import com.example.authentication.credentials.EmailCredential
 import com.example.authentication.results.ResultOfPasswordRecoveryProcess
@@ -79,6 +80,44 @@ class FirebaseAuthenticationTest {
 
         // testing
         assertFalse(firebaseAuthentication.isSignedIn())
+    }
+
+
+
+    @Test
+    fun `getCloudUid - returns UID when user is signed in`() = runTest {
+
+        val expectedUid = "test_uid"
+
+        // stubbing
+        every { firebaseAuth.currentUser } returns firebaseUser
+        every { firebaseUser.uid } returns expectedUid
+
+        // testing
+        val result = firebaseAuthentication.getCloudUid()
+        assertEquals(CloudUid(uid = expectedUid), result)
+    }
+
+    @Test
+    fun `getCloudUid - returns null when no user is signed in`() = runTest {
+
+        // stubbing
+        every { firebaseAuth.currentUser } returns null
+
+        // testing
+        val result = firebaseAuthentication.getCloudUid()
+        assertEquals(CloudUid(uid = null), result)
+    }
+
+    @Test
+    fun `getCloudUid - returns null when exception is thrown`() = runTest {
+
+        // stubbing
+        every { firebaseAuth.currentUser } throws RuntimeException("Unexpected error")
+
+        // testing
+        val result = firebaseAuthentication.getCloudUid()
+        assertEquals(CloudUid(uid = null), result)
     }
 
 
