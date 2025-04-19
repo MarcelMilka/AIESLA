@@ -1,0 +1,3 @@
+package com.example.databases
+
+interface DataStorageManager
