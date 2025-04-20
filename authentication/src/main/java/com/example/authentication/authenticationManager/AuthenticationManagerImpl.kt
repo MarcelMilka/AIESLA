@@ -52,11 +52,7 @@ internal class AuthenticationManagerImpl @Inject constructor(
                         val authenticationState =
                             when (onboardingState.firstLaunchEver) {
 
-                                true -> {
-
-                                    userOnboardingManager.setOnboardingStateToFalse()
-                                    AuthenticationState.SignedIn
-                                }
+                                true -> AuthenticationState.SignedIn
 
                                 false -> {
 

@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.applicationscaffold.applicationScaffold
 import com.example.authentication.authenticationManager.AuthenticationManager
+import com.example.databases.dataStorageManager.DataStorageManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject lateinit var authenticationManager: AuthenticationManager
+    @Inject lateinit var dataStorageManager: DataStorageManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

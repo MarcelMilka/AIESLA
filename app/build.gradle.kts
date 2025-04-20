@@ -63,6 +63,7 @@ dependencies {
 
     implementation(project(":applicationScaffold"))
     implementation(project(":authentication"))
+    implementation(project(":databases"))
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 }
