@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.example.navigation.Navigation
 import com.example.routesignedin.routeHome.homeScreenImpl
-import com.example.routesignedin.routeStudy.subjectsScreenImpl
+import com.example.routesignedin.routeStudy.subjects.impl.subjectsScreenImpl
 
 fun NavGraphBuilder.routeSignedInImpl(navigationController: NavHostController) {
 

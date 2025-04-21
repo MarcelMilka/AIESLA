@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.applicationscaffold.applicationScaffold
 import com.example.authentication.authenticationManager.AuthenticationManager
 import com.example.databases.dataStorageManager.DataStorageManager

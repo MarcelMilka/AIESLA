@@ -1,4 +1,4 @@
-package com.example.routesignedin.routeStudy
+package com.example.routesignedin.routeStudy.subjects.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
