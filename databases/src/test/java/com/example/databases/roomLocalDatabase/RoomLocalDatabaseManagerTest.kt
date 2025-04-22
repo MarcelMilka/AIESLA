@@ -1,7 +1,8 @@
 package com.example.databases.roomLocalDatabase
 
+import app.cash.turbine.test
 import com.example.databases.common.DatabaseManager
-import com.example.databases.common.ResultOfDataInitialization
+import com.example.databases.common.StateOfDataInitialization
 import com.example.datastore.data.UserOnboardingManager
 import com.example.datastore.model.UserOnboardingState
 import com.example.roomlocaldatabase.dao.MetadataDAO
@@ -98,6 +99,33 @@ class RoomLocalDatabaseManagerTest {
     }
 
     @Test
+    fun `dataMustBeInitialized - UserOnboardingState is not null, firstLaunchEver is null - StateOfDataInitialization is Unsuccessful`() = runTest {
+
+        // stubbing
+        coEvery { userOnboardingManager.checkOnboardingState() } returns UserOnboardingState(null)
+
+        // testing
+        databaseManager.stateOfDataInitialization.test {
+
+            assertEquals(StateOfDataInitialization.Idle,this.awaitItem())
+
+            databaseManager.dataMustBeInitialized()
+
+            assertEquals(StateOfDataInitialization.Unsuccessful,this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
+
+        // verifying
+        coVerify(exactly = 1) {
+
+            userOnboardingManager.checkOnboardingState()
+        }
+        confirmVerified()
+        checkUnnecessaryStub()
+    }
+
+    @Test
     fun `dataMustBeInitialized - UserOnboardingState is null - null is returned`() = runTest {
 
         // stubbing
@@ -115,20 +143,55 @@ class RoomLocalDatabaseManagerTest {
         checkUnnecessaryStub()
     }
 
+    @Test
+    fun `dataMustBeInitialized - UserOnboardingState is null - StateOfDataInitialization is Unsuccessful`() = runTest {
+
+        // stubbing
+        coEvery { userOnboardingManager.checkOnboardingState() } returns null
+
+        // testing
+        databaseManager.stateOfDataInitialization.test {
+
+            assertEquals(StateOfDataInitialization.Idle,this.awaitItem())
+
+            databaseManager.dataMustBeInitialized()
+
+            assertEquals(StateOfDataInitialization.Unsuccessful,this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
+
+        // verifying
+        coVerify(exactly = 1) {
+
+            userOnboardingManager.checkOnboardingState()
+        }
+        confirmVerified()
+        checkUnnecessaryStub()
+    }
+
 
 
     @Test
-    fun `initializeData - methods initializeMetadata and setOnboardingStateToFalse are properly executed - Successful ResultOfDataInitialization is returned`() = runTest {
+    fun `initializeData - methods initializeMetadata and setOnboardingStateToFalse are properly executed - StateOfDataInitialization is Pending, then Successful`() = runTest {
 
         // stubbing
         coEvery { metadataDAO.initializeMetadata(metadataEntity = metadataEntity) } just Runs
         coEvery { userOnboardingManager.setOnboardingStateToFalse() } just Runs
 
         // testing
-        assertEquals(
-            ResultOfDataInitialization.Successful,
+        databaseManager.stateOfDataInitialization.test {
+
+            assertEquals(StateOfDataInitialization.Idle,this.awaitItem())
+
             databaseManager.initializeData()
-        )
+
+            assertEquals(StateOfDataInitialization.Pending,this.awaitItem())
+
+            assertEquals(StateOfDataInitialization.Successful,this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
 
         // verifying
         coVerify(exactly = 1) {
@@ -141,16 +204,24 @@ class RoomLocalDatabaseManagerTest {
     }
 
     @Test
-    fun `initializeData - initializeMetadata throws error - Unsuccessful ResultOfDataInitialization is returned`() = runTest {
+    fun `initializeData - initializeMetadata throws error - StateOfDataInitialization is Pending, then Unsuccessful`() = runTest {
 
         // stubbing
         coEvery { metadataDAO.initializeMetadata(metadataEntity = metadataEntity) } throws RuntimeException()
 
         // testing
-        assertEquals(
-            ResultOfDataInitialization.Unsuccessful,
+        databaseManager.stateOfDataInitialization.test {
+
+            assertEquals(StateOfDataInitialization.Idle,this.awaitItem())
+
             databaseManager.initializeData()
-        )
+
+            assertEquals(StateOfDataInitialization.Pending,this.awaitItem())
+
+            assertEquals(StateOfDataInitialization.Unsuccessful,this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
 
         // verifying
         coVerify(exactly = 1) {
@@ -162,17 +233,25 @@ class RoomLocalDatabaseManagerTest {
     }
 
     @Test
-    fun `initializeData - setOnboardingStateToFalse throws error - Unsuccessful ResultOfDataInitialization is returned`() = runTest {
+    fun `initializeData - setOnboardingStateToFalse throws error - StateOfDataInitialization is Pending, then Unsuccessful`() = runTest {
 
         // stubbing
         coEvery { metadataDAO.initializeMetadata(metadataEntity = metadataEntity) } just Runs
         coEvery { userOnboardingManager.setOnboardingStateToFalse() } throws RuntimeException()
 
         // testing
-        assertEquals(
-            ResultOfDataInitialization.Unsuccessful,
+        databaseManager.stateOfDataInitialization.test {
+
+            assertEquals(StateOfDataInitialization.Idle,this.awaitItem())
+
             databaseManager.initializeData()
-        )
+
+            assertEquals(StateOfDataInitialization.Pending,this.awaitItem())
+
+            assertEquals(StateOfDataInitialization.Unsuccessful,this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
 
         // verifying
         coVerify(exactly = 1) {

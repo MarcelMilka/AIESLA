@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.navigation.Navigation
 import com.example.routesignedin.routeStudy.subjects.ui.subjectsScreen
-import com.example.routesignedin.routeStudy.subjects.vm.SharedStudyViewModel
+import com.example.routesignedin.routeStudy.sharedData.vm.SharedStudyViewModel
 
 internal fun NavGraphBuilder.subjectsScreenImpl(navigationController: NavHostController) {
 

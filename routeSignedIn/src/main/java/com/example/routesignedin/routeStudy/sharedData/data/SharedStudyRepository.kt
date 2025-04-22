@@ -1,9 +1,9 @@
-package com.example.routesignedin.routeStudy.subjects.data
+package com.example.routesignedin.routeStudy.sharedData.data
 
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SharedStudyRepository @Inject constructor(
+internal class SharedStudyRepository @Inject constructor(
     val sharedStudyRepositoryBinder: SharedStudyRepositoryBinder
 )

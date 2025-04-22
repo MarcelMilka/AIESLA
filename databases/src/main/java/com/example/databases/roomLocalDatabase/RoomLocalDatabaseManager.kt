@@ -1,16 +1,23 @@
 package com.example.databases.roomLocalDatabase
 
 import com.example.databases.common.DatabaseManager
-import com.example.databases.common.ResultOfDataInitialization
+import com.example.databases.common.StateOfDataInitialization
 import com.example.datastore.data.UserOnboardingManager
 import com.example.roomlocaldatabase.dao.MetadataDAO
 import com.example.roomlocaldatabase.entity.MetadataEntity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class RoomLocalDatabaseManager @Inject constructor(
     val userOnboardingManager: UserOnboardingManager,
     val metadataDAO: MetadataDAO
 ): DatabaseManager {
+
+    private var _stateOfDataInitialization = MutableStateFlow(StateOfDataInitialization.Idle)
+    override val stateOfDataInitialization = _stateOfDataInitialization.asStateFlow()
 
     override suspend fun dataMustBeInitialized(): Boolean? {
 
@@ -21,19 +28,26 @@ internal class RoomLocalDatabaseManager @Inject constructor(
             when(firstLaunchEver) {
                 true -> true
                 false -> false
-                null -> null
+                null -> {
+
+                    _stateOfDataInitialization.emit(value = StateOfDataInitialization.Unsuccessful)
+                    null
+                }
             }
         }
 
         catch (e: Exception) {
 
+            _stateOfDataInitialization.emit(value = StateOfDataInitialization.Unsuccessful)
             null
         }
     }
 
-    override suspend fun initializeData(): ResultOfDataInitialization {
+    override suspend fun initializeData() {
 
-        return try {
+        try {
+
+            _stateOfDataInitialization.emit(value = StateOfDataInitialization.Pending)
 
             val metadataEntity = MetadataEntity(
                 index = 0,
@@ -44,12 +58,12 @@ internal class RoomLocalDatabaseManager @Inject constructor(
             metadataDAO.initializeMetadata(metadataEntity)
             userOnboardingManager.setOnboardingStateToFalse()
 
-            ResultOfDataInitialization.Successful
+            _stateOfDataInitialization.emit(value = StateOfDataInitialization.Successful)
         }
 
         catch (e: Exception) {
 
-            ResultOfDataInitialization.Unsuccessful
+            _stateOfDataInitialization.emit(value = StateOfDataInitialization.Unsuccessful)
         }
     }
 }

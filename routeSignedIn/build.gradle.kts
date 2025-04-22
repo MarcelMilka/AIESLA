@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(project(":navigation"))
     implementation(project(":sharedUi"))
+    implementation(project(":databases"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
