@@ -8,9 +8,7 @@ import com.example.roomlocaldatabase.entity.MetadataEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class RoomLocalDatabaseManager @Inject constructor(
     val userOnboardingManager: UserOnboardingManager,
     val metadataDAO: MetadataDAO

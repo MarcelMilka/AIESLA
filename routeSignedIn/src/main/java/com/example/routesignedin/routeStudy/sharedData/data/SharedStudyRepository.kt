@@ -6,4 +6,7 @@ import javax.inject.Singleton
 @Singleton
 internal class SharedStudyRepository @Inject constructor(
     val sharedStudyRepositoryBinder: SharedStudyRepositoryBinder
-)
+) {
+
+    suspend fun checkIfLocalDatabaseMustBeInitialized() = sharedStudyRepositoryBinder.checkIfLocalDatabaseMustBeInitialized()
+}
