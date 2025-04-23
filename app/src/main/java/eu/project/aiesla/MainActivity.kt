@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             applicationScaffold(
-                authenticationState = authenticationManager.authenticationState.collectAsState().value
+                authenticationState = authenticationManager.initialAuthenticationState.collectAsState().value
             )
         }
     }

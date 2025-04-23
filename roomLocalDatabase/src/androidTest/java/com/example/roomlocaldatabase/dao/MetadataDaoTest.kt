@@ -160,6 +160,12 @@ class MetadataDaoTest {
         assertTrue(room.metadataDAO().isSignedIn())
     }
 
+    @Test
+    fun `isSignedIn - returns false when row with index equal to 0 does not exist`() = runTest {
+
+        assertFalse(room.metadataDAO().isSignedIn())
+    }
+
 
 
     @Test

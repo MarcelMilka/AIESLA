@@ -20,8 +20,8 @@ internal class AuthenticationManagerImpl @Inject constructor(
     val coroutineScope: CoroutineScope
 ): AuthenticationManager {
 
-    private var _authenticationState = MutableStateFlow<AuthenticationState>(AuthenticationState.SignedOut)
-    override val authenticationState = _authenticationState.asStateFlow()
+    private var _initialAuthenticationState = MutableStateFlow<InitialAuthenticationState>(InitialAuthenticationState.SignedOut)
+    override val initialAuthenticationState = _initialAuthenticationState.asStateFlow()
 
     private var _signUpProcess = MutableStateFlow<SignUpProcess>(SignUpProcess.Idle)
     override val signUpProcess = _signUpProcess.asStateFlow()
@@ -52,28 +52,34 @@ internal class AuthenticationManagerImpl @Inject constructor(
                         val authenticationState =
                             when (onboardingState.firstLaunchEver) {
 
-                                true -> AuthenticationState.SignedIn
+                                true -> InitialAuthenticationState.SignedIn
 
                                 false -> {
 
                                     when (firebaseAuthentication.isSignedIn()) {
 
-                                        true -> AuthenticationState.SignedIn
-                                        false -> AuthenticationState.SignedOut
+                                        true -> InitialAuthenticationState.SignedIn
+                                        false -> {
+
+                                            when(roomAuthentication.isSignedIn()) {
+                                                true -> InitialAuthenticationState.SignedIn
+                                                false -> InitialAuthenticationState.SignedOut
+                                            }
+                                        }
                                     }
                                 }
 
-                                null -> AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null)
+                                null -> InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null)
                             }
 
-                        _authenticationState.emit(value = authenticationState)
+                        _initialAuthenticationState.emit(value = authenticationState)
                     }
                 }
 
                 catch (e: TimeoutCancellationException) {
 
-                    _authenticationState.emit(
-                        value = AuthenticationState.Unsuccessful(
+                    _initialAuthenticationState.emit(
+                        value = InitialAuthenticationState.Unsuccessful(
                             cause = UnsuccessfulInitializationCause.Timeout
                         )
                     )
@@ -81,8 +87,8 @@ internal class AuthenticationManagerImpl @Inject constructor(
 
                 catch (e: Exception) {
 
-                    _authenticationState.emit(
-                        value = AuthenticationState.Unsuccessful(
+                    _initialAuthenticationState.emit(
+                        value = InitialAuthenticationState.Unsuccessful(
                             cause = UnsuccessfulInitializationCause.UnidentifiedException
                         )
                     )

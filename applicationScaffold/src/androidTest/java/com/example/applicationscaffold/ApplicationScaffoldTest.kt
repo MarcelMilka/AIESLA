@@ -3,7 +3,7 @@ package com.example.applicationscaffold
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import com.example.authentication.results.AuthenticationState
+import com.example.authentication.results.InitialAuthenticationState
 import com.example.authentication.results.UnsuccessfulInitializationCause
 import org.junit.Rule
 import org.junit.Test
@@ -19,7 +19,7 @@ class ApplicationScaffoldTest {
         // preparation
         ctr.setContent {
 
-            applicationScaffold(AuthenticationState.SignedOut)
+            applicationScaffold(InitialAuthenticationState.SignedOut)
         }
 
         // test
@@ -32,7 +32,7 @@ class ApplicationScaffoldTest {
         // preparation
         ctr.setContent {
 
-            applicationScaffold(AuthenticationState.SignedIn)
+            applicationScaffold(InitialAuthenticationState.SignedIn)
         }
 
         // test
@@ -45,7 +45,7 @@ class ApplicationScaffoldTest {
         // preparation
         ctr.setContent {
 
-            applicationScaffold(AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null))
+            applicationScaffold(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null))
         }
 
         // test

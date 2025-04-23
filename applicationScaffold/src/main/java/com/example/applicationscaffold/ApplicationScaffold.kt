@@ -7,13 +7,13 @@ import androidx.compose.ui.Modifier
 import com.example.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.authentication.results.AuthenticationState
+import com.example.authentication.results.InitialAuthenticationState
 import com.example.routesignedin.routeSignedInImpl
 import com.example.routesignedout.routeSignedOutImpl
 import com.example.routeunsuccessfulinitialization.routeUnsuccessfulInitializationImpl
 
 @Composable
-fun applicationScaffold(authenticationState: AuthenticationState) {
+fun applicationScaffold(authenticationState: InitialAuthenticationState) {
 
     val navigationController = rememberNavController()
 
@@ -29,9 +29,9 @@ fun applicationScaffold(authenticationState: AuthenticationState) {
                 navController = navigationController,
                 startDestination = when(authenticationState) {
 
-                    AuthenticationState.SignedIn -> Navigation.SignedIn.RouteSignedIn
-                    AuthenticationState.SignedOut -> Navigation.SignedOut.RouteSignedOut
-                    is AuthenticationState.Unsuccessful -> Navigation.UnsuccessfulAuthentication.RouteUnsuccessfulAuthentication
+                    InitialAuthenticationState.SignedIn -> Navigation.SignedIn.RouteSignedIn
+                    InitialAuthenticationState.SignedOut -> Navigation.SignedOut.RouteSignedOut
+                    is InitialAuthenticationState.Unsuccessful -> Navigation.UnsuccessfulAuthentication.RouteUnsuccessfulAuthentication
                 },
                 builder = {
 

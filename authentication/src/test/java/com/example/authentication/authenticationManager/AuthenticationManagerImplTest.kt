@@ -9,7 +9,6 @@ import com.example.datastore.data.UserOnboardingManager
 import com.example.datastore.model.UserOnboardingState
 import io.mockk.*
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -41,95 +40,113 @@ AuthenticationManagerImplTest {
         userOnboardingManagerImpl = mockk()
         firebaseAuthentication = mockk()
         roomAuthentication = mockk()
-
-        authenticationManager = AuthenticationManagerImpl(
-            userOnboardingManager = userOnboardingManagerImpl,
-            firebaseAuthentication = firebaseAuthentication,
-            roomAuthentication = roomAuthentication,
-            coroutineScope = CoroutineScope(StandardTestDispatcher())
-        )
     }
 
     @After
     fun after() {
 
+        clearMocks(userOnboardingManagerImpl)
         clearMocks(firebaseAuthentication)
+        clearMocks(roomAuthentication)
         unmockkAll()
     }
 
     private val emailAndPasswordCredentials = EmailAndPasswordCredentials("email", "password")
 
+
+
     @Test
-    fun `checkAuthenticationState - UserOnboardingState is true - SignedIn`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - UserOnboardingState is not null, firstLaunchEver is true - InitialAuthenticationState is SignedIn`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(true)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = true)
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.SignedIn, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedIn, this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
+        // verifying
         coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
         confirmVerified()
         checkUnnecessaryStub()
     }
 
     @Test
-    fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is true - SignedIn`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - UserOnboardingState is not null, firstLaunchEver is false, firebase signedIn is true  - InitialAuthenticationState is SignedIn`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = false)
         every { firebaseAuthentication.isSignedIn() } returns true
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.SignedIn, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedIn, this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
-        coVerifySequence {
-
-            userOnboardingManagerImpl.checkOnboardingState()
-            firebaseAuthentication.isSignedIn()
-        }
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        verify (exactly = 1) { firebaseAuthentication.isSignedIn() }
         confirmVerified()
         checkUnnecessaryStub()
     }
 
     @Test
-    fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is false, roomAuthentication is true - SignedIn`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - UserOnboardingState is not null, firstLaunchEver is false, firebase signedIn is false, room signedIn is true  - InitialAuthenticationState is SignedIn`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = false)
         every { firebaseAuthentication.isSignedIn() } returns false
         every { roomAuthentication.isSignedIn() } returns true
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.SignedIn, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedIn, this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
-        coVerifySequence {
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        verify (exactly = 1) {
 
-            userOnboardingManagerImpl.checkOnboardingState()
             firebaseAuthentication.isSignedIn()
             roomAuthentication.isSignedIn()
         }
@@ -138,121 +155,193 @@ AuthenticationManagerImplTest {
     }
 
     @Test
-    fun `checkAuthenticationState - UserOnboardingState is false, firebaseAuthentication is false, roomAuthentication is false - SignedOut`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - UserOnboardingState is not null, firstLaunchEver is null - InitialAuthenticationState is Unsuccessful Null`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(false)
-        every { firebaseAuthentication.isSignedIn() } returns false
-        every { roomAuthentication.isSignedIn() } returns false
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = null)
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
+
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null), this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
+
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        confirmVerified()
+        checkUnnecessaryStub()
     }
 
     @Test
-    fun `checkAuthenticationState - UserOnboardingState is null - UnsuccessfulInitializationCause, Null`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - UserOnboardingState is null - InitialAuthenticationState is Unsuccessful Null`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns null
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null), this.awaitItem())
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null), this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
-        coVerifySequence {
-
-            userOnboardingManagerImpl.checkOnboardingState()
-        }
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
         confirmVerified()
         checkUnnecessaryStub()
     }
 
     @Test
-    fun `checkAuthenticationState - UserOnboardingState contains null - UnsuccessfulInitializationCause, Null`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - process takes more than 10 seconds - InitialAuthenticationState is Unsuccessful Timeout`() = runTest(StandardTestDispatcher()) {
 
-        // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(null)
-
-        // test
-        authenticationManager.authenticationState.test {
-
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
-
-            assertEquals(AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Null), this.awaitItem())
-
-            this.ensureAllEventsConsumed()
-        }
-
-        // verification
-        coVerifySequence {
-
-            userOnboardingManagerImpl.checkOnboardingState()
-        }
-        confirmVerified()
-        checkUnnecessaryStub()
-    }
-
-    @Test
-    fun `checkAuthenticationState - takes more than 10s - UnsuccessfulInitializationCause, UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { userOnboardingManagerImpl.checkOnboardingState() } coAnswers {
 
             delay(10500)
-            UserOnboardingState(true)
+            null
         }
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Timeout), this.awaitItem())
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.Timeout), this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
-        coVerifySequence {
-
-            userOnboardingManagerImpl.checkOnboardingState()
-        }
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
         confirmVerified()
         checkUnnecessaryStub()
     }
 
     @Test
-    fun `checkAuthenticationState - throws RuntimeException - UnsuccessfulInitializationCause, UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+    fun `checkAuthenticationState - checkOnboardingState throws Exception - InitialAuthenticationState is Unsuccessful UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
-        coEvery { userOnboardingManagerImpl.checkOnboardingState() } throws RuntimeException("")
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } throws RuntimeException()
 
-        // test
-        authenticationManager.authenticationState.test {
+        // testing
+        authenticationManager.initialAuthenticationState.test {
 
-            assertEquals(AuthenticationState.SignedOut, this.awaitItem())
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
 
-            assertEquals(AuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.UnidentifiedException), this.awaitItem())
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.UnidentifiedException), this.awaitItem())
 
             this.ensureAllEventsConsumed()
         }
 
-        // verification
-        coVerifySequence {
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        confirmVerified()
+        checkUnnecessaryStub()
+    }
 
-            userOnboardingManagerImpl.checkOnboardingState()
+    @Test
+    fun `checkAuthenticationState - firebase isSignedIn throws Exception - InitialAuthenticationState is Unsuccessful UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
+        // stubbing
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = false)
+        every { firebaseAuthentication.isSignedIn() } throws  RuntimeException()
+
+        // testing
+        authenticationManager.initialAuthenticationState.test {
+
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
+
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.UnidentifiedException), this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
+
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        coVerify(exactly = 1) { firebaseAuthentication.isSignedIn() }
+        confirmVerified()
+        checkUnnecessaryStub()
+    }
+
+    @Test
+    fun `checkAuthenticationState - room isSignedIn throws Exception - InitialAuthenticationState is Unsuccessful UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
+        // stubbing
+        coEvery { userOnboardingManagerImpl.checkOnboardingState() } returns UserOnboardingState(firstLaunchEver = false)
+        every { firebaseAuthentication.isSignedIn() } returns false
+        every { roomAuthentication.isSignedIn() } throws RuntimeException()
+
+        // testing
+        authenticationManager.initialAuthenticationState.test {
+
+            assertEquals(InitialAuthenticationState.SignedOut, this.awaitItem())
+
+            assertEquals(InitialAuthenticationState.Unsuccessful(UnsuccessfulInitializationCause.UnidentifiedException), this.awaitItem())
+
+            this.ensureAllEventsConsumed()
+        }
+
+        // verifying
+        coVerify(exactly = 1) { userOnboardingManagerImpl.checkOnboardingState() }
+        coVerify(exactly = 1) {
+
+            firebaseAuthentication.isSignedIn()
+            roomAuthentication.isSignedIn()
         }
         confirmVerified()
         checkUnnecessaryStub()
@@ -261,7 +350,15 @@ AuthenticationManagerImplTest {
 
 
     @Test
-    fun `signUp - signUpProcess is Idle by default`() = runTest {
+    fun `signUp - signUpProcess is Idle by default`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         authenticationManager.signUpProcess.test {
 
@@ -274,6 +371,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signUp - signUpProcess is Successful when ResultOfSignUpProcess is Ok and ResultOfSendingSignUpVerificationEmail is Ok`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } returns ResultOfSignUpProcess.Ok
@@ -308,6 +413,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `signUp - signUpProcess is Unsuccessful - UnidentifiedException when ResultOfSignUpProcess is Ok and ResultOfSendingSignUpVerificationEmail is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } returns ResultOfSignUpProcess.Ok
         coEvery { firebaseAuthentication.sendSignUpVerificationEmail() } returns ResultOfSendingSignUpVerificationEmail.UnidentifiedException
@@ -341,6 +454,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `signUp - signUpProcess is Unsuccessful - InvalidEmailFormat when ResultOfSignUpProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } returns ResultOfSignUpProcess.InvalidEmailFormat
 
@@ -372,7 +493,15 @@ AuthenticationManagerImplTest {
     @Test
     fun `signUp - signUpProcess is EmailIsAlreadyInUse - InvalidEmailFormat when ResultOfSignUpProcess is EmailIsAlreadyInUse`() = runTest(StandardTestDispatcher()) {
 
-        // set up the test
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
+        // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } returns ResultOfSignUpProcess.EmailIsAlreadyInUse
 
         // testing
@@ -402,6 +531,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signUp - signUpProcess is UnidentifiedException - InvalidEmailFormat when ResultOfSignUpProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } returns ResultOfSignUpProcess.UnidentifiedException
@@ -433,6 +570,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signUp - signUpProcess is Unsuccessful - Timeout when it takes more than 10 seconds to sign in`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signUp(credentials = any()) } coAnswers {
@@ -470,6 +615,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `signIn - signInProcess is Idle by default`() = runTest {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         authenticationManager.signInProcess.test {
 
             assertEquals(SignInProcess.Idle, this.awaitItem())
@@ -481,6 +634,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signIn - signInProcess is Successful when ResultOfSignInProcess is Ok`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.Ok
@@ -512,6 +673,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `signIn - signInProcess is Unsuccessful - InvalidEmailFormat when ResultOfSignInProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // stubbing
         coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.InvalidEmailFormat
 
@@ -541,6 +710,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signIn - signInProcess is Unsuccessful - PasswordIsIncorrect when ResultOfSignInProcess is PasswordIsIncorrect`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.PasswordIsIncorrect
@@ -572,6 +749,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `signIn - signInProcess is Unsuccessful - UnidentifiedException when ResultOfSignInProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // stubbing
         coEvery { firebaseAuthentication.signIn(credentials = any()) } returns ResultOfSignInProcess.UnidentifiedException
 
@@ -601,6 +786,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `signIn - signInProcess is Unsuccessful - Timeout when it takes more than 10 seconds to sign in`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // stubbing
         coEvery { firebaseAuthentication.signIn(credentials = any()) } coAnswers {
@@ -635,7 +828,15 @@ AuthenticationManagerImplTest {
 
 
     @Test
-    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Idle by default`() = runTest {
+    fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Idle by default`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         authenticationManager.passwordRecoveryProcess.test {
 
@@ -648,6 +849,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Successful when ResultOfPasswordRecoveryProcess is Ok`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // set up the test
         coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.Ok
@@ -678,6 +887,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - InvalidEmailFormat when ResultOfPasswordRecoveryProcess is InvalidEmailFormat`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // set up the test
         coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.InvalidEmailFormat
         authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
@@ -707,6 +924,14 @@ AuthenticationManagerImplTest {
     @Test
     fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - UnidentifiedException when ResultOfPasswordRecoveryProcess is UnidentifiedException`() = runTest(StandardTestDispatcher()) {
 
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
+
         // set up the test
         coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } returns ResultOfPasswordRecoveryProcess.UnidentifiedException
         authenticationManager.sendPasswordRecoveryEmail(email = EmailCredential("email"))
@@ -735,6 +960,14 @@ AuthenticationManagerImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `sendPasswordRecoveryEmail - passwordRecoveryProcess is Unsuccessful - Timeout when it takes more than 10 seconds`() = runTest(StandardTestDispatcher()) {
+
+        // initialization
+        authenticationManager = AuthenticationManagerImpl(
+            userOnboardingManager = userOnboardingManagerImpl,
+            firebaseAuthentication = firebaseAuthentication,
+            roomAuthentication = roomAuthentication,
+            coroutineScope = this
+        )
 
         // set up the test
         coEvery { firebaseAuthentication.sendPasswordRecoveryEmail(email = EmailCredential("email")) } coAnswers {
